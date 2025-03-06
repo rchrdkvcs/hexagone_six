@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+body {
+  background: url(../assets/images/bg-layer-1.png) 100% 0 no-repeat fixed,
+  url(../assets/images/bg-layer-2.png) 0 0 no-repeat fixed,
+  url(../assets/images/bg-layer-3.png) 100% 100% no-repeat fixed,
+  url(../assets/images/bg-layer-4.png) 0 100% no-repeat fixed,
+  url("../assets/images/background.jpg") 50% 50% repeat-y fixed;
+}
+
+
+.font-roboto {
+  font-family: 'Roboto', sans-serif;
+}
