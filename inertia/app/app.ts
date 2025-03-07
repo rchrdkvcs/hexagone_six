@@ -1,32 +1,29 @@
 /// <reference path="../../adonisrc.ts" />
 /// <reference path="../../config/inertia.ts" />
 
-import type {DefineComponent} from 'vue'
-import {createApp, h} from 'vue'
-import {createInertiaApp} from '@inertiajs/vue3'
+import type { DefineComponent } from 'vue'
+import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
 import '../styles/fonts.css'
 import '../styles/main.css'
-import DefaultLayout from "~/layouts/DefaultLayout.vue";
+import DefaultLayout from '~/layouts/DefaultLayout.vue'
 
 const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
 
 createInertiaApp({
-  progress: {color: '#5468FF'},
+  progress: { color: '#5468FF' },
 
   title: (title) => `${title} - ${appName}`,
 
   resolve: (name) => {
-    const pages = import.meta.glob<DefineComponent>('../pages/**/*.vue', {eager: true})
+    const pages = import.meta.glob<DefineComponent>('../pages/**/*.vue', { eager: true })
     let page = pages[`../pages/${name}.vue`]
     page.default.layout = page.default.layout || DefaultLayout
     return page
   },
 
-
-  setup({el, App, props, plugin}) {
-
-    createApp({render: () => h(App, props)})
-
+  setup({ el, App, props, plugin }) {
+    createApp({ render: () => h(App, props) })
       .use(plugin)
       .mount(el)
   },

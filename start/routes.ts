@@ -9,7 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 
-import MapsController from "#controllers/maps_controller";
+const MapsController = () => import('#controllers/maps_controller')
 
 router.on('/').renderInertia('home')
 
