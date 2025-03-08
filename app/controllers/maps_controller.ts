@@ -6,6 +6,6 @@ export default class MapsController {
   }
 
   show({ inertia, params }: HttpContext) {
-    return inertia.render('maps/show', { name: params.name })
+    return inertia.render('maps/show', { id: params.id })
   }
 }

@@ -8,12 +8,10 @@ import DefaultLayout from '~/layouts/DefaultLayout.vue'
 import 'virtual:uno.css'
 import '../styles/fonts.css'
 
-const appName = import.meta.env.VITE_APP_NAME || 'AdonisJS'
-
 createInertiaApp({
-  progress: { color: '#5468FF' },
+  progress: { color: '#00ffe5' },
 
-  title: (title) => `${title} - ${appName}`,
+  title: (title) => `R6Calls | ${title}`,
 
   resolve: (name) => {
     const pages = import.meta.glob<DefineComponent>('../pages/**/*.vue', { eager: true })
