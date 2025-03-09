@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
   <Link
     :href="props.href"
-    class="relative text-black transition-all ease-in-out duration-300 group after:(content-[''] w-full h-1/2 opacity-0 bg-gradient-to-t from-#00ffe5/75 to-#00ffe5/0 hover:opacity-75 bottom-44px left-0 absolute transition-all ease-in-out duration-300)"
+    class="relative text-black transition-all ease-in-out duration-300 group after:(content-[''] bg-gradient-to-t from-[#00ffe5] to-transparent w-full h-1/2 opacity-0 hover:opacity-75 bottom-44px left-0 absolute transition-all ease-in-out duration-300)"
   >
     <img :src="props.imageSrc" alt="" />
     <div

@@ -125,7 +125,7 @@ const toggleFullscreen = async () => {
   >
     <img
       ref="image"
-      :src="'/inertia/assets/images/maps/' + props.id + '/' + props.currentImageIndex + '.jpg'"
+      :src="'/images/maps/' + props.id + '/' + props.currentImageIndex + '.jpg'"
       :style="imageStyle"
       alt=""
       class=""

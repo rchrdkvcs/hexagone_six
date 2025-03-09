@@ -71,7 +71,7 @@ const filteredMaps = computed<MapData[]>(() => {
     <MapCard
       v-for="map in filteredMaps"
       :href="`/cartes/${map.id}`"
-      :image-src="`/inertia/assets/images/maps/${map.id}/thumbnail.jpg`"
+      :image-src="`/images/maps/${map.id}/thumbnail.jpg`"
       :name="map.name"
     />
   </div>
