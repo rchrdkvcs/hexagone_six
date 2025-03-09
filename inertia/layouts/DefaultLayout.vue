@@ -72,11 +72,11 @@ import { Link } from '@inertiajs/vue3'
 
 body {
   background:
-    url(/public/images/bg-layer-1.png) 100% 0 no-repeat fixed,
-    url(/public/images/bg-layer-2.png) 0 0 no-repeat fixed,
-    url(/public/images/bg-layer-3.png) 100% 100% no-repeat fixed,
-    url(/public/images/bg-layer-4.png) 0 100% no-repeat fixed,
-    url('/public/images/background.jpg') 50% 50% repeat-y fixed;
+    url(/images/bg-layer-1.png) 100% 0 no-repeat fixed,
+    url(/images/bg-layer-2.png) 0 0 no-repeat fixed,
+    url(/images/bg-layer-3.png) 100% 100% no-repeat fixed,
+    url(/images/bg-layer-4.png) 0 100% no-repeat fixed,
+    url('/images/background.jpg') 50% 50% repeat-y fixed;
 }
 
 .font-roboto {
