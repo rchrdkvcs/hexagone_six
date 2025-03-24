@@ -5,22 +5,22 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email'],
+  uids: ['userName'],
   passwordColumnName: 'password',
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
   @column()
-  declare fullName: string | null
-
-  @column()
-  declare email: string
+  declare userName: string | null
 
   @column({ serializeAs: null })
   declare password: string
+
+  @column()
+  declare role: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
