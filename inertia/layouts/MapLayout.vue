@@ -16,11 +16,10 @@ const loadImage = (index: number) => {
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-    <!-- Header -->
+  <div class="flex flex-col h-screen w-full">
     <header
       v-if="$slots.header || totalImages !== undefined"
-      class="fixed top-0 left-0 pl-8 w-full h-16 bg-#24262A/75 flex justify-between items-center backdrop-blur-lg z-100"
+      class="fixed top-0 left-0 pl-8 w-full h-16 bg-#24262A/75 flex justify-between items-center backdrop-blur-lg z-999"
     >
       <Link class="hover:scale-105 transition-all ease-in-out duration-300" href="/">
         <LogoIcon />
@@ -46,7 +45,6 @@ const loadImage = (index: number) => {
       </div>
     </header>
 
-    <!-- Contenu principal -->
     <main class="flex-1 flex flex-col items-center justify-center overflow-hidden">
       <slot />
     </main>
