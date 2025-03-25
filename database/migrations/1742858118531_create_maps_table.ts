@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table.string('name').notNullable()
-      table.string('ref').notNullable()
+      table.string('slug').notNullable()
       table.integer('stage_count').notNullable()
       table.uuid('playlist_id').references('id').inTable('playlists').onDelete('CASCADE')
     })

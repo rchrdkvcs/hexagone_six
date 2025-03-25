@@ -12,7 +12,7 @@ export default class Map extends BaseModel {
   declare name: string
 
   @column()
-  declare ref: string
+  declare slug: string
 
   @column()
   declare stageCount: number
