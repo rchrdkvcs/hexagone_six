@@ -1,4 +1,7 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, manyToMany } from '@adonisjs/lucid/orm'
+import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import Map from '#models/map'
+import crypto from 'node:crypto'
 
 export default class Playlist extends BaseModel {
   @column({ isPrimary: true })
@@ -6,4 +9,12 @@ export default class Playlist extends BaseModel {
 
   @column()
   declare label: string
+
+  @manyToMany(() => Map)
+  declare maps: ManyToMany<typeof Map>
+
+  @beforeCreate()
+  static generateUuid(playlist: Playlist) {
+    playlist.id = crypto.randomUUID()
+  }
 }

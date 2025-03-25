@@ -10,9 +10,7 @@ export default class extends BaseSchema {
       table.integer('x').notNullable()
       table.integer('y').notNullable()
       table.integer('stage').notNullable()
-
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.uuid('map_id').nullable()
     })
   }
 
