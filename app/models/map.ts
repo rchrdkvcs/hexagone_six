@@ -17,9 +17,6 @@ export default class Map extends BaseModel {
   @column()
   declare stageCount: number
 
-  @column()
-  declare playlistId: string | null
-
   @hasMany(() => Marker)
   declare markers: HasMany<typeof Marker>
 

@@ -9,7 +9,6 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.string('slug').notNullable()
       table.integer('stage_count').notNullable()
-      table.uuid('playlist_id').references('id').inTable('playlists').onDelete('CASCADE')
     })
   }
 
