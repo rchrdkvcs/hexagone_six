@@ -8,9 +8,8 @@ interface Marker {
   id: number | string
   x: number
   y: number
-  tooltip?: string
-  popup?: string
-  data?: any
+  label: string
+  stage: number
 }
 
 const props = defineProps({
@@ -32,7 +31,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['marker-click'])
+const emit = defineEmits(['map-click'])
 
 const map = ref(null)
 const crs = L.CRS.Simple
@@ -67,15 +66,15 @@ const createTextIcon = (text: string): L.DivIcon => {
 }
 
 const getMarkerIcon = (marker: Marker): L.DivIcon => {
-  return createTextIcon(marker.tooltip || marker.id.toString())
+  return createTextIcon(marker.label || marker.id.toString())
 }
 
 const onMapReady = (mapInstance: any) => {
   mapInstance.fitBounds(bounds.value)
 }
 
-const handleMarkerClick = (marker: Marker) => {
-  emit('marker-click', marker)
+const handleMapClick = (event: L.LeafletMouseEvent) => {
+  emit('map-click', { x: event.latlng.lng, y: event.latlng.lat })
 }
 
 onMounted(() => {
@@ -103,6 +102,7 @@ onMounted(() => {
       :min-zoom="minZoom"
       :options="mapOptions"
       :zoom="zoom"
+      @click="handleMapClick"
       @ready="onMapReady"
     >
       <l-image-overlay :bounds="bounds" :url="imageUrl" />
@@ -112,7 +112,6 @@ onMounted(() => {
         :key="marker.id"
         :icon="getMarkerIcon(marker) as unknown as L.Icon"
         :lat-lng="[marker.y, marker.x]"
-        @click="handleMarkerClick(marker)"
       />
     </l-map>
   </div>

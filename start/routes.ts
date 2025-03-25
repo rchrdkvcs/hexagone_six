@@ -15,3 +15,4 @@ router.on('/').renderInertia('home')
 
 router.get('/cartes', [MapsController, 'index'])
 router.get('/cartes/:slug', [MapsController, 'show'])
+router.post('/markers', [MapsController, 'store'])
