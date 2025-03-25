@@ -189,7 +189,7 @@ onMounted(() => {
         @map-click="handleMapClick"
       />
 
-      <div class="absolute top-20 right-8 z-100 flex gap-2">
+      <div class="absolute top-20 right-8 z-999 flex gap-2">
         <button
           v-if="!isEditMode"
           class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700"

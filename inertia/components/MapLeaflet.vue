@@ -164,5 +164,7 @@ onMounted(() => {
   position: absolute;
   transform: translate(-50%, -50%);
   text-align: center;
+  background: #00000050;
+  padding: 0.25rem 0.5rem;
 }
 </style>
