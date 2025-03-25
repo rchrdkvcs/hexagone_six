@@ -14,4 +14,4 @@ const MapsController = () => import('#controllers/maps_controller')
 router.on('/').renderInertia('home')
 
 router.get('/cartes', [MapsController, 'index'])
-router.get('/cartes/:id', [MapsController, 'show'])
+router.get('/cartes/:slug', [MapsController, 'show'])
