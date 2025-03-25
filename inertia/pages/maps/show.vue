@@ -1,25 +1,17 @@
 <script lang="ts" setup>
-import { Head, router } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import { computed, onMounted, ref } from 'vue'
 import MapLeaflet from '~/components/MapLeaflet.vue'
 import MapLayout from '~/layouts/MapLayout.vue'
+import MarkerEditor from '~/components/MarkerEditor.vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import MapsController from '#controllers/maps_controller'
+import { type Marker, use_markers } from '~/composables/use_markers'
 
 defineOptions({
   layout: MapLayout,
 })
 
-interface Marker {
-  id: number | string
-  label: string
-  x: number
-  y: number
-  stage: number
-  mapId?: string
-}
-
-// Update the prop type to include the markers array
 const props = defineProps<{
   map: InferPageProps<MapsController, 'show'>['map'] & {
     markers: Marker[]
@@ -28,138 +20,57 @@ const props = defineProps<{
 
 const totalImages = ref(0)
 const currentImageIndex = ref(1)
-const isLoading = ref(false)
-const saveSuccess = ref(false)
-const saveError = ref<string | null>(null)
-
 const imageUrl = computed(() => `/images/maps/${props.map.slug}/${currentImageIndex.value}.jpg`)
-
 const imageWidth = ref(1600)
 const imageHeight = ref(900)
 
-// Convert to computed property to reactively update when currentImageIndex changes
-const markers = computed(() =>
-  props.map.markers.filter((marker: Marker) => marker.stage === currentImageIndex.value)
-)
-
-// Add edit mode and popup state
+// Edit mode state
 const isEditMode = ref(false)
-const newMarkers = ref<Marker[]>([])
-let nextMarkerId = -1 // Temporary IDs for new markers
 
 // Popup state
 const showPopup = ref(false)
 const tempMarkerPosition = ref<{ x: number; y: number } | null>(null)
-const markerName = ref('')
+const selectedMarker = ref<Marker | null>(null)
 
-// Handle map clicks when in edit mode
+// Use markers composable with auto-save
+const getCurrentStage = () => currentImageIndex.value
+const { isLoading, saveSuccess, saveError, stageMarkers, addMarker, updateMarker, deleteMarker } =
+  use_markers(props.map.markers, props.map.id, getCurrentStage, true) // Pass true for autoSave
+
+// Handle map clicks
 const handleMapClick = (coordinates: { x: number; y: number }) => {
   if (!isEditMode.value) return
 
-  // Store coordinates and show popup instead of creating marker immediately
   tempMarkerPosition.value = coordinates
-  markerName.value = `Marker ${Math.abs(nextMarkerId)}`
+  selectedMarker.value = null
   showPopup.value = true
 }
 
-// Function to create marker after name is confirmed
-const createMarker = () => {
-  if (!tempMarkerPosition.value) return
+// Handle edit marker
+const handleEditMarker = (marker: Marker) => {
+  if (!isEditMode.value) return
 
-  const newMarker: Marker = {
-    id: nextMarkerId--,
-    x: tempMarkerPosition.value.x,
-    y: tempMarkerPosition.value.y,
-    label: markerName.value,
-    stage: currentImageIndex.value,
+  selectedMarker.value = marker
+  tempMarkerPosition.value = null
+  showPopup.value = true
+}
+
+// Close popup and reset states
+const closePopup = () => {
+  showPopup.value = false
+  tempMarkerPosition.value = null
+  selectedMarker.value = null
+}
+
+// Toggle edit mode
+const toggleEditMode = () => {
+  isEditMode.value = !isEditMode.value
+  if (!isEditMode.value) {
+    closePopup()
   }
-
-  newMarkers.value.push(newMarker)
-
-  // Log the new marker data
-  console.log('New marker added:', newMarker)
-  console.log('All new markers:', newMarkers.value)
-
-  // Reset popup state
-  showPopup.value = false
-  tempMarkerPosition.value = null
-  markerName.value = ''
 }
 
-// Function to cancel marker creation
-const cancelMarkerCreation = () => {
-  showPopup.value = false
-  tempMarkerPosition.value = null
-  markerName.value = ''
-}
-
-// Combine existing and new markers for the current stage only
-const displayedMarkers = computed(() => {
-  const currentStageNewMarkers = newMarkers.value.filter(
-    (marker) => marker.stage === currentImageIndex.value
-  )
-  return [...markers.value, ...currentStageNewMarkers]
-})
-
-// Function to save markers using Inertia
-const saveMarkers = () => {
-  isLoading.value = true
-  saveError.value = null
-
-  // Prepare the data to send (remove temporary IDs)
-  const markersToSave = newMarkers.value.map((marker) => ({
-    label: marker.label,
-    x: marker.x,
-    y: marker.y,
-    stage: marker.stage,
-    mapId: props.map.id,
-  }))
-
-  console.log('Markers to save:', markersToSave)
-
-  router.post(
-    '/markers',
-    {
-      markers: markersToSave,
-    },
-    {
-      onSuccess: () => {
-        // On success, clear new markers and exit edit mode
-        newMarkers.value = []
-        isEditMode.value = false
-        isLoading.value = false
-        saveSuccess.value = true
-
-        // Hide success message after 3 seconds
-        setTimeout(() => {
-          saveSuccess.value = false
-        }, 3000)
-
-        // Reload markers from server
-        router.reload({ only: ['map'] })
-      },
-      onError: (errors) => {
-        isLoading.value = false
-        saveError.value = 'Failed to save markers: ' + Object.values(errors).join(', ')
-        console.error('Error saving markers:', errors)
-
-        // Hide error message after 5 seconds
-        setTimeout(() => {
-          saveError.value = null
-        }, 5000)
-      },
-    }
-  )
-}
-
-// Function to cancel editing
-const cancelEditing = () => {
-  isEditMode.value = false
-  newMarkers.value = []
-  showPopup.value = false
-  tempMarkerPosition.value = null
-}
-
+// Navigation between stages
 const loadImage = (index: number) => {
   if (index >= 1 && index <= totalImages.value) {
     currentImageIndex.value = index
@@ -185,36 +96,51 @@ onMounted(() => {
         :imageHeight="imageHeight"
         :imageUrl="imageUrl"
         :imageWidth="imageWidth"
-        :markers="displayedMarkers"
+        :is-edit-mode="isEditMode"
+        :markers="stageMarkers"
         @map-click="handleMapClick"
+        @edit-marker="handleEditMarker"
       />
 
       <div class="absolute top-20 right-8 z-999 flex gap-2">
         <button
-          v-if="!isEditMode"
-          class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700"
-          @click="isEditMode = true"
+          :class="{
+            'px-4 py-2 rounded-md shadow-md': true,
+            'bg-blue-600 text-white hover:bg-blue-700': !isEditMode,
+            'bg-yellow-600 text-white hover:bg-yellow-700': isEditMode,
+          }"
+          @click="toggleEditMode"
         >
-          Edit Markers
+          {{ isEditMode ? 'Exit Edit Mode' : 'Edit Markers' }}
         </button>
+      </div>
 
-        <template v-else>
-          <button
-            :disabled="isLoading"
-            class="px-4 py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700"
-            @click="saveMarkers"
-          >
-            <span v-if="isLoading">Saving...</span>
-            <span v-else>Save</span>
-          </button>
-          <button
-            :disabled="isLoading"
-            class="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700"
-            @click="cancelEditing"
-          >
-            Cancel
-          </button>
-        </template>
+      <!-- Loading indicator -->
+      <div
+        v-if="isLoading"
+        class="absolute top-32 right-8 z-100 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md flex items-center gap-2"
+      >
+        <svg
+          class="animate-spin h-4 w-4 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            fill="currentColor"
+          ></path>
+        </svg>
+        Saving...
       </div>
 
       <!-- Success message -->
@@ -222,7 +148,7 @@ onMounted(() => {
         v-if="saveSuccess"
         class="absolute top-32 right-8 z-100 px-4 py-2 bg-green-500 text-white rounded-md shadow-md"
       >
-        Markers saved successfully!
+        Changes saved
       </div>
 
       <!-- Error message -->
@@ -237,43 +163,19 @@ onMounted(() => {
         v-if="isEditMode"
         class="absolute bottom-4 left-4 z-10 px-4 py-2 bg-yellow-500 text-white rounded-md shadow-md"
       >
-        Click on the map to add markers
+        Click on the map to add markers or click on existing markers to edit
       </div>
 
-      <div
-        v-if="showPopup"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-999"
-      >
-        <div class="bg-white rounded-lg p-6 w-80 shadow-xl">
-          <h3 class="text-lg font-semibold mb-4">New Marker</h3>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="markerName"
-              >Marker Name</label
-            >
-            <input
-              id="markerName"
-              v-model="markerName"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              type="text"
-              @keyup.enter="createMarker"
-            />
-          </div>
-          <div class="flex justify-end gap-2">
-            <button
-              class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-              @click="cancelMarkerCreation"
-            >
-              Cancel
-            </button>
-            <button
-              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              @click="createMarker"
-            >
-              Add Marker
-            </button>
-          </div>
-        </div>
-      </div>
+      <MarkerEditor
+        :is-edit-mode="isEditMode"
+        :selected-marker="selectedMarker"
+        :show-popup="showPopup"
+        :temp-marker-position="tempMarkerPosition"
+        @add-marker="addMarker"
+        @update-marker="updateMarker"
+        @delete-marker="deleteMarker"
+        @close-popup="closePopup"
+      />
     </div>
   </MapLayout>
 </template>

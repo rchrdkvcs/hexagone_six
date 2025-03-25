@@ -29,9 +29,13 @@ const props = defineProps({
     type: Array as () => Marker[],
     default: () => [],
   },
+  isEditMode: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const emit = defineEmits(['map-click'])
+const emit = defineEmits(['map-click', 'edit-marker'])
 
 const map = ref(null)
 const crs = L.CRS.Simple
@@ -77,6 +81,12 @@ const handleMapClick = (event: L.LeafletMouseEvent) => {
   emit('map-click', { x: event.latlng.lng, y: event.latlng.lat })
 }
 
+const handleMarkerClick = (marker: Marker) => {
+  if (props.isEditMode) {
+    emit('edit-marker', marker)
+  }
+}
+
 onMounted(() => {
   const iconRetinaUrl = new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href
   const iconUrl = new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href
@@ -112,6 +122,7 @@ onMounted(() => {
         :key="marker.id"
         :icon="getMarkerIcon(marker) as unknown as L.Icon"
         :lat-lng="[marker.y, marker.x]"
+        @click="() => handleMarkerClick(marker)"
       />
     </l-map>
   </div>
