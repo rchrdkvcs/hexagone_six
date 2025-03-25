@@ -7,8 +7,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table.string('label').notNullable()
-      table.integer('x').notNullable()
-      table.integer('y').notNullable()
+      table.float('x').notNullable()
+      table.float('y').notNullable()
       table.integer('stage').notNullable()
       table.uuid('map_id').nullable()
     })
