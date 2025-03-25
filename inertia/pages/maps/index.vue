@@ -1,18 +1,30 @@
 <script lang="ts" setup>
 import { Head } from '@inertiajs/vue3'
 import MapCard from '~/components/MapCard.vue'
-import { MapData, mapsData } from '~/data/maps'
 import { computed, ref } from 'vue'
+import { InferPageProps } from '@adonisjs/inertia/types'
+import MapsController from '#controllers/maps_controller'
 
-const selectedFilter = ref<'all' | 'Casual' | 'Classé' | 'Non classé'>('all')
+interface Playlist {
+  id: string
+  label: string
+}
 
-// Filtrage des cartes
-const filteredMaps = computed<MapData[]>(() => {
+const props = defineProps<{
+  maps: InferPageProps<MapsController, 'index'>['maps']
+  playlists: InferPageProps<MapsController, 'index'>['playlists']
+}>()
+
+const selectedFilter = ref<'all' | string>('all')
+
+const filteredMaps = computed(() => {
   if (selectedFilter.value === 'all') {
-    return mapsData
+    return props.maps
   }
 
-  return mapsData.filter((map) => map.playlist.includes(selectedFilter.value))
+  return props.maps.filter((map) =>
+    map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
+  )
 })
 </script>
 
@@ -42,25 +54,13 @@ const filteredMaps = computed<MapData[]>(() => {
         Voir tout
       </label>
       <label
-        :class="{ 'bg-white/75 text-black': selectedFilter === 'Casual' }"
+        v-for="playlist in props.playlists"
+        :key="playlist.id"
+        :class="{ 'bg-white/75 text-black': selectedFilter === playlist.label }"
         class="relative uppercase text-sm px-2 py-1 flex justify-center items-center border border-white hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer"
       >
-        <input v-model="selectedFilter" class="hidden" type="radio" value="Casual" />
-        Simple
-      </label>
-      <label
-        :class="{ 'bg-white/75 text-black': selectedFilter === 'Non classé' }"
-        class="relative uppercase text-sm px-2 py-1 flex justify-center items-center border border-white hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer"
-      >
-        <input v-model="selectedFilter" class="hidden" type="radio" value="Non classé" />
-        Non classé
-      </label>
-      <label
-        :class="{ 'bg-white/75 text-black': selectedFilter === 'Classé' }"
-        class="relative uppercase text-sm px-2 py-1 flex justify-center items-center border border-white hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer"
-      >
-        <input v-model="selectedFilter" class="hidden" type="radio" value="Classé" />
-        Classé
+        <input v-model="selectedFilter" :value="playlist.label" class="hidden" type="radio" />
+        {{ playlist.label }}
       </label>
     </div>
   </div>
@@ -70,8 +70,8 @@ const filteredMaps = computed<MapData[]>(() => {
   >
     <MapCard
       v-for="map in filteredMaps"
-      :href="`/cartes/${map.id}`"
-      :image-src="`/images/maps/${map.id}/thumbnail.jpg`"
+      :href="`/cartes/${map.slug}`"
+      :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
       :name="map.name"
     />
   </div>
