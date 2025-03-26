@@ -35,8 +35,8 @@ const goBack = () => {
         <button
           :class="[
             index === currentImageIndex
-              ? 'after:(content-[\'\'] absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full) color-white/100'
-              : 'color-white/75',
+              ? 'bg-white/15 color-white/100'
+              : 'color-white/80 bg-transparent',
           ]"
           class="px-3 py-2 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
           @click="loadImage(index)"

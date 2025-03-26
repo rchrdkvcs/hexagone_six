@@ -16,9 +16,7 @@ const page = usePage()
       <li>
         <Link
           :class="[
-            page.url === '/'
-              ? 'after:(content-[\'\'] absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full) color-white/100'
-              : 'color-white/80',
+            page.url === '/' ? 'bg-white/15 color-white/100' : 'color-white/80 bg-transparent',
           ]"
           class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
           href="/"
@@ -30,8 +28,8 @@ const page = usePage()
         <Link
           :class="[
             page.url.startsWith('/cartes')
-              ? 'after:(content-[\'\'] absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full) color-white/100'
-              : 'color-white/80',
+              ? 'bg-white/15 color-white/100'
+              : 'color-white/80 bg-transparent',
           ]"
           class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
           href="/cartes"
