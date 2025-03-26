@@ -67,7 +67,7 @@ const filteredMaps = computed(() => {
   </div>
 
   <div
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-4 md:mx-8 lg:mx-16 xl:mx-24"
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-4 md:mx-8 lg:mx-8"
   >
     <MapCard
       v-for="map in filteredMaps"
