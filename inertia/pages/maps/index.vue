@@ -18,13 +18,14 @@ const props = defineProps<{
 const selectedFilter = ref<'all' | string>('all')
 
 const filteredMaps = computed(() => {
-  if (selectedFilter.value === 'all') {
-    return props.maps
-  }
+  let maps =
+    selectedFilter.value === 'all'
+      ? [...props.maps]
+      : [...props.maps].filter((map) =>
+          map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
+        )
 
-  return props.maps.filter((map) =>
-    map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
-  )
+  return maps.sort((a, b) => a.name.localeCompare(b.name))
 })
 </script>
 
