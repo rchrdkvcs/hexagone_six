@@ -74,7 +74,7 @@ const closePopup = () => {
     @keyup.esc="closePopup"
   >
     <div
-      class="bg-#24262A/75 backdrop-blur-lg rounded-xl w-1/3 border border-white/15 shadow-lg color-white flex items-center justify-center gap-4 px-4"
+      class="bg-#24262A/50 backdrop-blur-lg rounded-xl w-1/3 border border-white/15 shadow-lg color-white flex items-center justify-center gap-4 px-4"
     >
       <TextIcon class="w-5 min-w-5 h-5" />
       <input
@@ -89,7 +89,7 @@ const closePopup = () => {
 
       <button
         v-if="selectedMarker"
-        class="text-white/75 rounded-full px-3 py-0.5 border border-transparent hover:(bg-red-6 border-white/25 text-white) transition-colors duration-300 ease-in-out"
+        class="text-white/75 rounded-full px-3 py-0.5 border border-transparent hover:(color-red-6 font-medium) transition-all duration-300 ease-in-out transform-gpu hover:scale-105"
         @click="handleDeleteMarker"
       >
         Supprimer

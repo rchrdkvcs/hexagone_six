@@ -14,13 +14,17 @@ const props = defineProps({
 <template>
   <Link
     :href="props.href"
-    class="relative text-black transition-all ease-in-out duration-300 group after:(content-[''] bg-gradient-to-t from-[#00ffe5] to-transparent w-full h-1/2 opacity-0 hover:opacity-75 bottom-44px left-0 absolute transition-all ease-in-out duration-300)"
+    class="relative text-black transition ease-in-out duration-300 group rounded-xl overflow-hidden border border-white/15 hover:(scale-105 z-100) z-10"
   >
-    <img :src="props.imageSrc" alt="" />
+    <img
+      :alt="props.name"
+      :src="props.imageSrc"
+      class="group-hover:scale-115 transition ease-in-out duration-600"
+    />
     <div
-      class="w-full bg-white/75 group-hover:bg-#00ffe5 py-2 backdrop-blur-sm flex justify-center items-center transition ease-in-out duration-300"
+      class="w-full bg-#24262A/50 group-hover:(bg-white color-black) py-2 backdrop-blur-md flex justify-center items-center transition ease-in-out duration-300 color-white/80"
     >
-      <p class="uppercase italic text-2xl font-scoutcond">{{ props.name }}</p>
+      <p class="text-xl font-medium">{{ props.name }}</p>
     </div>
   </Link>
 </template>

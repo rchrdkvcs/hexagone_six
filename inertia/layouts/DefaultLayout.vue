@@ -1,35 +1,46 @@
 <script lang="ts" setup>
-import GhostButton from '~/components/Buttons/GhostButton.vue'
-import LogoIcon from '~/components/Icones/LogoIcon.vue'
-import DefaultButton from '~/components/Buttons/DefaultButton.vue'
 import TwitterIcon from '~/components/Icones/TwitterIcon.vue'
 import TwitchIcon from '~/components/Icones/TwitchIcon.vue'
 import InstagramIcon from '~/components/Icones/InstagramIcon.vue'
 import DiscordIcon from '~/components/Icones/DiscordIcon.vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+
+const page = usePage()
 </script>
 
 <template>
-  <header
-    class="fixed top-0 left-0 w-full h-16 bg-#24262A/75 flex justify-between items-center pl-8 backdrop-blur-lg z-100"
+  <nav
+    class="top-4 left-1/2 -translate-x-1/2 fixed z-999 h-16 w-fit bg-#24262A/50 backdrop-blur-lg flex justify-center items-center gap-4 border border-white/15 rounded-xl p-2"
   >
-    <Link class="hover:scale-105 transition-all ease-in-out duration-300" href="/">
-      <LogoIcon />
-    </Link>
-    <nav class="h-full">
-      <ul class="h-full flex justify-center items-center">
-        <li class="h-full">
-          <GhostButton href="/a-propos" label="A Propos" />
-        </li>
-        <li class="h-full">
-          <GhostButton href="/cartes" label="Cartes" />
-        </li>
-      </ul>
-    </nav>
-    <div class="h-full">
-      <DefaultButton href="/donations" label="Faire un don" />
-    </div>
-  </header>
+    <ul class="h-full flex justify-center items-center gap-2">
+      <li>
+        <Link
+          :class="[
+            page.url === '/'
+              ? 'after:(content-[\'\'] absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full) color-white/100'
+              : 'color-white/80',
+          ]"
+          class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
+          href="/"
+        >
+          Accueil
+        </Link>
+      </li>
+      <li>
+        <Link
+          :class="[
+            page.url.startsWith('/cartes')
+              ? 'after:(content-[\'\'] absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full) color-white/100'
+              : 'color-white/80',
+          ]"
+          class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
+          href="/cartes"
+        >
+          Cartes
+        </Link>
+      </li>
+    </ul>
+  </nav>
 
   <main class="pt-16 min-h-screen h-full w-full text-white">
     <slot />

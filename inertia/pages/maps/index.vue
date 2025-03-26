@@ -33,7 +33,7 @@ const filteredMaps = computed(() => {
 
   <div class="my-16 flex flex-col justify-center items-center gap-8">
     <div class="flex flex-col justify-center items-center gap-4">
-      <h1 class="text-6xl md:text-7xl uppercase italic font-scoutcond">Cartes</h1>
+      <h1 class="text-5xl md:text-6xl uppercase italic font-semibold">Cartes</h1>
       <h3 class="font-sans max-w-4/5 text-center">
         Vous êtes nouveau dans le jeu, ou vous avez encore du mal à apprendre les cartes et à savoir
         où concentrer votre attention ? Consultez ces guides de cartes pour vous aider à faire vos
@@ -41,14 +41,14 @@ const filteredMaps = computed(() => {
       </h3>
     </div>
 
-    <h2 class="md:text-4xl text-5xl uppercase italic text-center font-scoutcond">
+    <h2 class="text-xl uppercase italic text-center">
       OPÉRATION PREP PHASE - FILTRES DE PLAYLISTES
     </h2>
 
     <div class="flex justify-center items-center gap-4">
       <label
-        :class="{ 'bg-white/75 text-black': selectedFilter === 'all' }"
-        class="relative uppercase text-sm px-2 py-1 flex justify-center items-center border border-white hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer"
+        :class="{ 'bg-white/80 text-black': selectedFilter === 'all' }"
+        class="relative uppercase text-sm px-3 py-2 flex justify-center items-center border border-white/15 hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer rounded-full bg-#24262A/50 backdrop-blur-md z-10"
       >
         <input v-model="selectedFilter" class="hidden" type="radio" value="all" />
         Voir tout
@@ -56,8 +56,8 @@ const filteredMaps = computed(() => {
       <label
         v-for="playlist in props.playlists"
         :key="playlist.id"
-        :class="{ 'bg-white/75 text-black': selectedFilter === playlist.label }"
-        class="relative uppercase text-sm px-2 py-1 flex justify-center items-center border border-white hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer"
+        :class="{ 'bg-white/80 text-black': selectedFilter === playlist.label }"
+        class="relative uppercase text-sm px-3 py-2 flex justify-center items-center border border-white/15 hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer rounded-full bg-#24262A/50 backdrop-blur-md z-10"
       >
         <input v-model="selectedFilter" :value="playlist.label" class="hidden" type="radio" />
         {{ playlist.label }}

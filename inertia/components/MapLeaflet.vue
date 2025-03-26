@@ -164,18 +164,43 @@ onMounted(() => {
   top: 0;
 }
 
+:deep(.leaflet-image-layer) {
+  border-radius: 16px;
+  border: 1px solid #ffffff15;
+}
+
 :deep(.marker-text) {
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
   color: white;
   font-size: 1rem;
-  letter-spacing: 0.1rem;
   white-space: nowrap;
-  cursor: grab;
   position: absolute;
   transform: translate(-50%, -50%);
   text-align: center;
-  background: #00000050;
-  padding: 0.25rem 0.5rem;
+  background: rgba(36, 38, 42, 0.5);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 1;
+}
+
+:deep(.marker-text:hover) {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  z-index: 1000 !important;
+}
+
+:deep(.leaflet-marker-pane .leaflet-marker-icon:hover) {
+  z-index: 1000 !important;
 }
 </style>

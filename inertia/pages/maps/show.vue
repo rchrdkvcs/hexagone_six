@@ -93,7 +93,7 @@ onMounted(() => {
     :totalImages="totalImages"
     @loadImage="loadImage"
   >
-    <div class="relative w-full h-full bg-black/25 backdrop-blur-xl">
+    <div class="relative w-full h-full bg-black/50 backdrop-blur-xl">
       <MapLeaflet
         ref="map"
         :imageHeight="imageHeight"
@@ -105,23 +105,23 @@ onMounted(() => {
         @edit-marker="handleEditMarker"
       />
 
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-999 flex gap-2">
+      <div class="fixed top-4 right-4 z-999 flex gap-2">
         <button
           v-if="isEditMode"
-          class="py-2 px-3 bg-#24262A/75 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-red-600 transition-colors duration-300 ease-in-out"
+          class="py-2 px-3 bg-#24262A/50 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-red-600 transition-colors duration-300 ease-in-out color-white/80 hover:color-white"
           @click="toggleEditMode"
         >
-          <CloseIcon class="w-6 h-6 color-white" />
-          <span class="color-white">Quitter le mode editeur</span>
+          <CloseIcon class="w-6 h-6" />
+          <span>Quitter le mode editeur</span>
         </button>
 
         <button
           v-else
-          class="py-2 px-3 bg-#24262A/75 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-#2499FF transition-colors duration-300 ease-in-out"
+          class="py-2 px-3 bg-#24262A/50 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-white transition-colors duration-300 ease-in-out color-white/80 hover:color-black"
           @click="toggleEditMode"
         >
-          <PenIcon class="w-6 h-6 color-white" />
-          <span class="color-white">Mode editeur</span>
+          <PenIcon class="w-6 h-6" />
+          <span>Mode editeur</span>
         </button>
       </div>
 

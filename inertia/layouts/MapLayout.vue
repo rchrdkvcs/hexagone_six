@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { Link } from '@inertiajs/vue3'
-import LogoIcon from '~/components/Icones/LogoIcon.vue'
-import DefaultButton from '~/components/Buttons/DefaultButton.vue'
+import BackIcone from '~/components/Icones/BackIcone.vue'
 
 defineProps<{
   totalImages?: number
@@ -13,42 +11,43 @@ const emit = defineEmits(['loadImage'])
 const loadImage = (index: number) => {
   emit('loadImage', index)
 }
+
+const goBack = () => {
+  window.history.back()
+}
 </script>
 
 <template>
-  <div class="flex flex-col h-screen w-full">
-    <header
-      v-if="$slots.header || totalImages !== undefined"
-      class="fixed top-0 left-0 pl-8 w-full h-16 bg-#24262A/75 flex justify-between items-center backdrop-blur-lg z-100"
-    >
-      <Link class="hover:scale-105 transition-all ease-in-out duration-300" href="/">
-        <LogoIcon />
-      </Link>
-      <nav v-if="totalImages !== undefined" class="h-full">
-        <ul slot="nav" class="h-full flex justify-center items-center">
-          <li v-for="index in totalImages" :key="index" class="h-full">
-            <button
-              :class="{
-                'before:h-5px': currentImageIndex === index,
-                'before:h-0': currentImageIndex !== index,
-              }"
-              class="relative px-8 flex justify-center items-center h-full group before:(content-[''] w-full hover:h-5px bg-#00ffe5 bottom-0 left-0 absolute transition-all ease-in-out duration-300) after:(content-[''] w-full h-0 bg-gradient-to-t from-[#00ffe5] to-transparent hover:h-1/2 bottom-0 left-0 absolute transition-all ease-in-out duration-300)"
-              @click="loadImage(index)"
-            >
-              <span class="uppercase text-white text-xl font-bold font-scoutcond"
-                >Etage {{ index }}</span
-              >
-            </button>
-          </li>
-        </ul>
-      </nav>
-      <div class="h-full flex justify-center items-center">
-        <DefaultButton href="/cartes" label="Retour" />
-      </div>
-    </header>
+  <button
+    class="fixed top-4 left-4 px-3 py-2 border border-transparent hover:(bg-white text-black border-white/15) rounded-xl transition-colors duration-300 ease-in-out z-999 color-white/80 bg-#24262A/50 border border-white/15 flex items-center gap-2 backdrop-blur-lg"
+    @click="goBack"
+  >
+    <BackIcone class="w-6 h-6" />
+    <span>Retour</span>
+  </button>
 
-    <main class="flex-1 flex flex-col items-center justify-center overflow-hidden">
-      <slot />
-    </main>
-  </div>
+  <nav
+    v-if="totalImages !== undefined"
+    class="fixed z-999 top-4 left-1/2 -translate-x-1/2 h-fit w-fit bg-#24262A/50 backdrop-blur-xl rounded-xl border border-white/15 p-2"
+  >
+    <ul class="h-full flex justify-center items-center gap-2">
+      <li v-for="index in totalImages" :key="index" class="h-full relative">
+        <button
+          :class="[
+            index === currentImageIndex
+              ? 'after:(content-[\'\'] absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full) color-white/100'
+              : 'color-white/75',
+          ]"
+          class="px-3 py-2 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
+          @click="loadImage(index)"
+        >
+          <span class="">Etage {{ index }}</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="w-full h-screen overflow-hidden">
+    <slot />
+  </main>
 </template>
