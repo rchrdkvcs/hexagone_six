@@ -40,7 +40,7 @@ const page = usePage()
     </ul>
   </nav>
 
-  <main class="pt-16 min-h-screen h-full w-full text-white">
+  <main class="pt-16 min-h-screen h-full w-full text-white max-w-screen-2xl mx-auto">
     <slot />
   </main>
 
@@ -86,6 +86,7 @@ body {
     url(/images/bg-layer-3.png) 100% 100% no-repeat fixed,
     url(/images/bg-layer-4.png) 0 100% no-repeat fixed,
     url('/images/background.jpg') 50% 50% repeat-y fixed;
+  background-size: cover;
 }
 
 * > * {
