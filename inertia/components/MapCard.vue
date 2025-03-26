@@ -20,7 +20,7 @@ const props = defineProps({
     <div
       class="w-full bg-white/75 group-hover:bg-#00ffe5 py-2 backdrop-blur-sm flex justify-center items-center transition ease-in-out duration-300"
     >
-      <p class="uppercase italic text-2xl">{{ props.name }}</p>
+      <p class="uppercase italic text-2xl font-scoutcond">{{ props.name }}</p>
     </div>
   </Link>
 </template>

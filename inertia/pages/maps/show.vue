@@ -7,6 +7,9 @@ import MarkerEditor from '~/components/MarkerEditor.vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import MapsController from '#controllers/maps_controller'
 import { type Marker, use_markers } from '~/composables/use_markers'
+import PenIcon from '~/components/Icones/PenIcon.vue'
+import CloseIcon from '~/components/Icones/CloseIcon.vue'
+import AttentionIcon from '~/components/Icones/AttentionIcon.vue'
 
 defineOptions({
   layout: MapLayout,
@@ -102,16 +105,23 @@ onMounted(() => {
         @edit-marker="handleEditMarker"
       />
 
-      <div class="absolute top-20 right-8 z-999 flex gap-2">
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-999 flex gap-2">
         <button
-          :class="{
-            'px-4 py-2 rounded-md shadow-md': true,
-            'bg-blue-600 text-white hover:bg-blue-700': !isEditMode,
-            'bg-yellow-600 text-white hover:bg-yellow-700': isEditMode,
-          }"
+          v-if="isEditMode"
+          class="py-2 px-3 bg-#24262A/75 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-red-600 transition-colors duration-300 ease-in-out"
           @click="toggleEditMode"
         >
-          {{ isEditMode ? 'Exit Edit Mode' : 'Edit Markers' }}
+          <CloseIcon class="w-6 h-6 color-white" />
+          <span class="color-white">Quitter le mode editeur</span>
+        </button>
+
+        <button
+          v-else
+          class="py-2 px-3 bg-#24262A/75 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-#2499FF transition-colors duration-300 ease-in-out"
+          @click="toggleEditMode"
+        >
+          <PenIcon class="w-6 h-6 color-white" />
+          <span class="color-white">Mode editeur</span>
         </button>
       </div>
 
@@ -161,9 +171,10 @@ onMounted(() => {
 
       <div
         v-if="isEditMode"
-        class="absolute bottom-4 left-4 z-10 px-4 py-2 bg-yellow-500 text-white rounded-md shadow-md"
+        class="absolute top-20 left-1/2 -translate-x-1/2 z-999 py-1 px-3 bg-red-600 rounded-full border border-white/25 color-white flex items-center gap-2"
       >
-        Click on the map to add markers or click on existing markers to edit
+        <AttentionIcon class="w-5 h-5" />
+        <span>Mode editeur activé</span>
       </div>
 
       <MarkerEditor

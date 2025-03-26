@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import type { Marker } from '~/composables/use_markers'
+import TextIcon from '~/components/Icones/TextIcon.vue'
 
 const props = defineProps<{
   isEditMode: boolean
@@ -17,8 +18,8 @@ const emit = defineEmits<{
 }>()
 
 const markerName = ref('')
+const inputRef = ref<HTMLInputElement | null>(null)
 
-// Update marker name when selectedMarker changes
 watch(
   () => props.selectedMarker,
   (newMarker) => {
@@ -31,77 +32,68 @@ watch(
   { immediate: true }
 )
 
-// Handle save
+watch(
+  () => props.showPopup,
+  (isVisible) => {
+    if (!isVisible) {
+      markerName.value = ''
+    } else {
+      // Focus the input when the popup opens
+      nextTick(() => {
+        inputRef.value?.focus()
+      })
+    }
+  }
+)
+
 const saveMarker = () => {
   if (props.selectedMarker) {
-    // Update existing marker
     emit('update-marker', props.selectedMarker, markerName.value)
   } else if (props.tempMarkerPosition) {
-    // Create new marker
     emit('add-marker', props.tempMarkerPosition.x, props.tempMarkerPosition.y, markerName.value)
   }
 
   emit('close-popup')
 }
 
-// Handle delete
 const handleDeleteMarker = () => {
   if (!props.selectedMarker) return
-
-  if (confirm('Are you sure you want to delete this marker?')) {
-    emit('delete-marker', props.selectedMarker.id)
-    emit('close-popup')
-  }
+  emit('delete-marker', props.selectedMarker.id)
+  emit('close-popup')
 }
 
-// Close popup
 const closePopup = () => {
   emit('close-popup')
 }
 </script>
 
 <template>
-  <!-- Marker Popup -->
-  <div v-if="showPopup" class="fixed inset-0 bg-black/50 flex items-center justify-center z-999">
-    <div class="bg-white rounded-lg p-6 w-80 shadow-xl">
-      <h3 class="text-lg font-semibold mb-4">
-        {{ selectedMarker ? 'Edit Marker' : 'New Marker' }}
-      </h3>
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="markerName">
-          Marker Name
-        </label>
-        <input
-          id="markerName"
-          v-model="markerName"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          type="text"
-          @keyup.enter="saveMarker"
-        />
-      </div>
-      <div class="flex justify-between">
-        <button
-          v-if="selectedMarker"
-          class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-          @click="handleDeleteMarker"
-        >
-          Delete
-        </button>
-        <div class="flex justify-end gap-2 ml-auto">
-          <button
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-            @click="closePopup"
-          >
-            Cancel
-          </button>
-          <button
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            @click="saveMarker"
-          >
-            {{ selectedMarker ? 'Update' : 'Add' }}
-          </button>
-        </div>
-      </div>
+  <div
+    v-if="showPopup"
+    class="fixed inset-0 flex items-center justify-center z-999"
+    @keyup.esc="closePopup"
+  >
+    <div
+      class="bg-#24262A/75 backdrop-blur-lg rounded-xl w-1/3 border border-white/15 shadow-lg color-white flex items-center justify-center gap-4 px-4"
+    >
+      <TextIcon class="w-5 min-w-5 h-5" />
+      <input
+        id="markerName"
+        ref="inputRef"
+        v-model="markerName"
+        class="w-full h-full bg-transparent ring-none focus:ring-0 focus:outline-none text-lg py-2"
+        placeholder="Ajouter un marqueur"
+        type="text"
+        @keyup.enter="saveMarker"
+      />
+
+      <button
+        v-if="selectedMarker"
+        class="text-white/75 rounded-full px-3 py-0.5 border border-transparent hover:(bg-red-6 border-white/25 text-white) transition-colors duration-300 ease-in-out"
+        @click="handleDeleteMarker"
+      >
+        Supprimer
+      </button>
     </div>
   </div>
 </template>

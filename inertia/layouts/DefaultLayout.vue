@@ -79,7 +79,7 @@ body {
     url('/images/background.jpg') 50% 50% repeat-y fixed;
 }
 
-.font-roboto {
+* > * {
   font-family: 'Roboto', sans-serif;
 }
 </style>

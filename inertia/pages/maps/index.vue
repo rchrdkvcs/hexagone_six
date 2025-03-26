@@ -33,7 +33,7 @@ const filteredMaps = computed(() => {
 
   <div class="my-16 flex flex-col justify-center items-center gap-8">
     <div class="flex flex-col justify-center items-center gap-4">
-      <h1 class="text-6xl md:text-7xl uppercase italic">Cartes</h1>
+      <h1 class="text-6xl md:text-7xl uppercase italic font-scoutcond">Cartes</h1>
       <h3 class="font-sans max-w-4/5 text-center">
         Vous êtes nouveau dans le jeu, ou vous avez encore du mal à apprendre les cartes et à savoir
         où concentrer votre attention ? Consultez ces guides de cartes pour vous aider à faire vos
@@ -41,7 +41,7 @@ const filteredMaps = computed(() => {
       </h3>
     </div>
 
-    <h2 class="md:text-4xl text-5xl uppercase italic text-center">
+    <h2 class="md:text-4xl text-5xl uppercase italic text-center font-scoutcond">
       OPÉRATION PREP PHASE - FILTRES DE PLAYLISTES
     </h2>
 
