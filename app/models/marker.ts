@@ -20,10 +20,31 @@ export default class Marker extends BaseModel {
   declare stage: number
 
   @column()
+  declare isSuggestion: boolean
+
+  @column()
+  declare isDisplayed: boolean
+
+  @column()
+  declare isApproved: boolean
+
+  @column()
+  declare upVote: boolean
+
+  @column()
+  declare downVote: boolean
+
+  @column()
   declare mapId: string
 
   @belongsTo(() => Map)
   declare map: BelongsTo<typeof Map>
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: Date
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: Date
 
   @beforeCreate()
   static generateUuid(marker: Marker) {
