@@ -3,7 +3,6 @@
 
 import { createApp, DefineComponent, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
-import '~/styles/fonts.css'
 import 'virtual:uno.css'
 import '@unocss/reset/tailwind.css'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'

@@ -67,7 +67,7 @@ const filteredMaps = computed(() => {
   </div>
 
   <TransitionGroup
-    class="flex flex-wrap w-full gap-4 mx-4 md:mx-8 lg:mx-8 justify-center items-center"
+    class="flex flex-wrap w-full gap-4 justify-center items-center"
     name="map-list"
     tag="div"
   >

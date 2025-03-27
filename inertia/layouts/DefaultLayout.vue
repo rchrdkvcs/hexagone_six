@@ -40,7 +40,7 @@ const page = usePage()
     </ul>
   </nav>
 
-  <main class="pt-16 min-h-screen h-full w-full text-white max-w-[1440px] mx-auto">
+  <main class="pt-16 min-h-screen h-full w-full text-white mx-auto max-w-[1920px]">
     <slot />
   </main>
 

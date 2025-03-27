@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
   <a
     :href="props.href"
-    class="relative text-black transition ease-in-out duration-300 group rounded-xl overflow-hidden border border-white/15 hover:(scale-105 z-100) z-10 max-w-312px"
+    class="relative text-black transition ease-in-out duration-300 group rounded-xl overflow-hidden border border-white/15 hover:(scale-105 z-100) z-10 max-w-400px"
   >
     <img :alt="props.name" :src="props.imageSrc" />
     <div
