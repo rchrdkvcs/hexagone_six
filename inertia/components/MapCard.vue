@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { Link } from '@inertiajs/vue3'
-
 const props = defineProps({
   name: String,
   href: {
@@ -12,19 +10,15 @@ const props = defineProps({
 </script>
 
 <template>
-  <Link
+  <a
     :href="props.href"
-    class="relative text-black transition ease-in-out duration-300 group rounded-xl overflow-hidden border border-white/15 hover:(scale-105 z-100) z-10"
+    class="relative text-black transition ease-in-out duration-300 group rounded-xl overflow-hidden border border-white/15 hover:(scale-105 z-100) z-10 max-w-312px"
   >
-    <img
-      :alt="props.name"
-      :src="props.imageSrc"
-      class="group-hover:scale-115 transition ease-in-out duration-600"
-    />
+    <img :alt="props.name" :src="props.imageSrc" />
     <div
       class="w-full bg-#24262A/50 group-hover:(bg-white color-black) py-2 backdrop-blur-md flex justify-center items-center transition ease-in-out duration-300 color-white/80"
     >
       <p class="text-xl font-medium">{{ props.name }}</p>
     </div>
-  </Link>
+  </a>
 </template>

@@ -66,14 +66,52 @@ const filteredMaps = computed(() => {
     </div>
   </div>
 
-  <div
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-4 md:mx-8 lg:mx-8"
+  <TransitionGroup
+    class="flex flex-wrap w-full gap-4 mx-4 md:mx-8 lg:mx-8 justify-center items-center"
+    name="map-list"
+    tag="div"
   >
     <MapCard
       v-for="map in filteredMaps"
+      :key="map.id"
       :href="`/cartes/${map.slug}`"
       :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
       :name="map.name"
     />
-  </div>
+  </TransitionGroup>
 </template>
+
+<style scoped>
+.map-list-move {
+  transition: transform 0.5s ease;
+}
+
+.map-list-enter-active,
+.map-list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.map-list-enter-from {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.map-list-leave-to {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.map-list-leave-active {
+  position: absolute;
+  z-index: 0;
+}
+
+.map-list-enter-active {
+  z-index: 1;
+}
+
+/* Make the flex container position relative for absolute children */
+.flex {
+  position: relative;
+}
+</style>
