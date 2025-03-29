@@ -10,8 +10,8 @@ defineProps<{
   title: string
   suggestions: Suggestion[]
   total?: number
-  class?: string
-  'title-class'?: string
+  customClass?: string
+  titleClass?: string
 }>()
 
 const emit = defineEmits(['suggestion-updated'])
@@ -22,8 +22,8 @@ const handleSuggestionUpdate = (suggestion: Suggestion) => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3" :class="class">
-    <h2 class="text-white/75 text-lg font-medium flex items-center gap-2" :class="titleClass">
+  <div :class="customClass" class="flex flex-col gap-3">
+    <h2 :class="titleClass" class="text-white/75 text-lg font-medium flex items-center gap-2">
       <span class="h-1.5 w-1.5 rounded-full bg-white/50"></span>
       <span>
         {{ title }}

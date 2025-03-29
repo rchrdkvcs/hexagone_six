@@ -132,14 +132,14 @@ watch([showAllSuggestions, suggestions], updateContainerHeight, { deep: true })
         <div v-else key="top-suggestions" ref="topSuggestionsPanel" class="panel">
           <SuggestionList
             :suggestions="topSuggestions"
-            class="border-b border-white/10 pb-6"
+            custom-class="border-b border-white/10 pb-6"
             title="Top 3"
             @suggestion-updated="handleSuggestionUpdate"
           />
 
           <SuggestionList
             :suggestions="latestSuggestions"
-            class="border-b border-white/10 py-6"
+            custom-class="border-b border-white/10 py-6"
             title="Dernières suggestions"
             @suggestion-updated="handleSuggestionUpdate"
           />
