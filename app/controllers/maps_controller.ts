@@ -12,7 +12,9 @@ export default class MapsController {
 
   async show({ inertia, params }: HttpContext) {
     const map = await Map.findByOrFail('slug', params.slug)
-    await map.load('markers')
+    await map.load('markers', (query) => {
+      query.preload('suggestions')
+    })
 
     return inertia.render('maps/show', { map })
   }

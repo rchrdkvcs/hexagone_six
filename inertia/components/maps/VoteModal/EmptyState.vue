@@ -1,0 +1,18 @@
+<script lang="ts" setup>
+import ListIcon from '~/components/Icones/ListIcon.vue'
+</script>
+
+<template>
+  <div class="flex flex-col gap-6 items-center">
+    <div class="flex flex-col items-center gap-2">
+      <div class="w-12 h-12 rounded-full bg-white/05 flex items-center justify-center mb-2">
+        <ListIcon class="w-6 h-6 text-white/70" />
+      </div>
+      <h2 class="text-white font-medium text-lg">Aucune suggestion</h2>
+    </div>
+    <p class="text-white/60 text-base leading-relaxed max-w-xs text-center">
+      Il n'y a pas encore de suggestions pour cet emplacement.
+      <span class="block mt-2 font-medium text-white/80">Soyez le premier à en faire une !</span>
+    </p>
+  </div>
+</template>

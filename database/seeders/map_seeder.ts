@@ -111,7 +111,7 @@ export default class extends BaseSeeder {
       },
       {
         slug: 'plane',
-        name: 'Avion présslugentiel',
+        name: 'Avion Présidentiel',
         stageCount: 4,
       },
       {

@@ -17,6 +17,8 @@ interface MarkerResponse {
   error?: string
 }
 
+type PendingChange = { type: 'add' | 'update' | 'delete'; marker: Marker } | null
+
 export function use_markers(
   initialMarkers: Marker[],
   mapId: string,
@@ -24,11 +26,7 @@ export function use_markers(
   autoSave = false
 ) {
   const markers = ref<Marker[]>([...initialMarkers])
-  const pendingChanges = ref<{
-    type: 'add' | 'update' | 'delete'
-    marker: Marker
-  } | null>(null)
-
+  const pendingChanges = ref<PendingChange>(null)
   const isLoading = ref(false)
   const saveSuccess = ref(false)
   const saveError = ref<string | null>(null)
@@ -36,21 +34,30 @@ export function use_markers(
   let nextTempId = -1
   let saveTimeout: NodeJS.Timeout | null = null
 
-  // Get only markers for the current stage
   const stageMarkers = computed(() => {
-    const currentStage = getCurrentStage()
-    return markers.value.filter((m) => m.stage === currentStage)
+    return markers.value.filter((m) => m.stage === getCurrentStage())
   })
 
-  // Save changes to the server using REST principles
-  const saveMarkerChange = (change: { type: 'add' | 'update' | 'delete'; marker: Marker }) => {
-    if (saveTimeout) {
-      clearTimeout(saveTimeout)
+  const handleApiResponse = (successCallback: () => void, error: any) => {
+    isLoading.value = false
+
+    if (error) {
+      saveError.value = 'Failed to save: ' + (error.response?.data?.error || 'Unknown error')
+      setTimeout(() => (saveError.value = null), 5000)
+      return
     }
+
+    saveSuccess.value = true
+    pendingChanges.value = null
+    successCallback()
+    setTimeout(() => (saveSuccess.value = false), 2000)
+  }
+
+  const saveMarkerChange = (change: { type: 'add' | 'update' | 'delete'; marker: Marker }) => {
+    if (saveTimeout) clearTimeout(saveTimeout)
 
     pendingChanges.value = change
 
-    // Add a small delay to prevent too many requests
     saveTimeout = setTimeout(() => {
       isLoading.value = true
       saveError.value = null
@@ -63,87 +70,43 @@ export function use_markers(
         mapId,
       }
 
-      // Use appropriate REST method based on operation type
+      const updateLocalId = () => {
+        if (typeof change.marker.id === 'number' && change.marker.id < 0) {
+          const index = markers.value.findIndex((m) => m.id === change.marker.id)
+          if (index !== -1) {
+            markers.value[index].id = pendingChanges.value?.marker?.id || change.marker.id
+          }
+        }
+      }
+
       switch (change.type) {
         case 'add':
           axios
             .post<MarkerResponse>('/markers', markerData)
             .then((response) => {
-              isLoading.value = false
-              saveSuccess.value = true
-              pendingChanges.value = null
-
-              // Pour une création, mettre à jour l'ID temporaire avec l'ID réel
-              if (typeof change.marker.id === 'number' && change.marker.id < 0) {
-                const index = markers.value.findIndex((m) => m.id === change.marker.id)
-                if (index !== -1) {
-                  markers.value[index].id = response.data.marker.id
-                }
-              }
-
-              setTimeout(() => {
-                saveSuccess.value = false
-              }, 2000)
+              pendingChanges.value = { ...change, marker: response.data.marker }
+              handleApiResponse(updateLocalId, null)
             })
-            .catch((error) => {
-              isLoading.value = false
-              saveError.value =
-                'Failed to save: ' + (error.response?.data?.error || 'Unknown error')
-
-              setTimeout(() => {
-                saveError.value = null
-              }, 5000)
-            })
+            .catch(handleApiResponse.bind(null, () => {}))
           break
+
         case 'update':
           axios
-            .put<MarkerResponse>(`/markers/${change.marker.id}`, markerData)
-            .then(() => {
-              isLoading.value = false
-              saveSuccess.value = true
-              pendingChanges.value = null
-
-              setTimeout(() => {
-                saveSuccess.value = false
-              }, 2000)
-            })
-            .catch((error) => {
-              isLoading.value = false
-              saveError.value =
-                'Failed to save: ' + (error.response?.data?.error || 'Unknown error')
-
-              setTimeout(() => {
-                saveError.value = null
-              }, 5000)
-            })
+            .patch<MarkerResponse>(`/markers/${change.marker.id}`, markerData)
+            .then(() => handleApiResponse(() => {}, null))
+            .catch(handleApiResponse.bind(null, () => {}))
           break
+
         case 'delete':
           axios
             .delete<MarkerResponse>(`/markers/${change.marker.id}`)
-            .then(() => {
-              isLoading.value = false
-              saveSuccess.value = true
-              pendingChanges.value = null
-
-              setTimeout(() => {
-                saveSuccess.value = false
-              }, 2000)
-            })
-            .catch((error) => {
-              isLoading.value = false
-              saveError.value =
-                'Failed to save: ' + (error.response?.data?.error || 'Unknown error')
-
-              setTimeout(() => {
-                saveError.value = null
-              }, 5000)
-            })
+            .then(() => handleApiResponse(() => {}, null))
+            .catch(handleApiResponse.bind(null, () => {}))
           break
       }
-    }, 500) // 500ms delay to debounce changes
+    }, 500)
   }
 
-  // Add a new marker
   const addMarker = (x: number, y: number, label: string) => {
     const newMarker: Marker = {
       id: nextTempId--,
@@ -155,38 +118,24 @@ export function use_markers(
     }
 
     markers.value.push(newMarker)
-
-    if (autoSave) {
-      saveMarkerChange({ type: 'add', marker: newMarker })
-    }
-
+    if (autoSave) saveMarkerChange({ type: 'add', marker: newMarker })
     return newMarker
   }
 
-  // Update an existing marker
   const updateMarker = (marker: Marker, newLabel: string) => {
     const index = markers.value.findIndex((m) => m.id === marker.id)
     if (index !== -1) {
       markers.value[index].label = newLabel
-
-      if (autoSave) {
-        saveMarkerChange({ type: 'update', marker: markers.value[index] })
-      }
+      if (autoSave) saveMarkerChange({ type: 'update', marker: markers.value[index] })
     }
   }
 
-  // Delete a marker
   const deleteMarker = (markerId: number | string) => {
     const index = markers.value.findIndex((m) => m.id === markerId)
     if (index !== -1) {
       const markerToDelete = markers.value[index]
-
-      // Remove from local array
       markers.value.splice(index, 1)
-
-      if (autoSave) {
-        saveMarkerChange({ type: 'delete', marker: markerToDelete })
-      }
+      if (autoSave) saveMarkerChange({ type: 'delete', marker: markerToDelete })
     }
   }
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { LImageOverlay, LMap, LMarker } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
@@ -12,42 +12,27 @@ interface Marker {
   stage: number
 }
 
-const props = defineProps({
-  imageUrl: {
-    type: String,
-    required: true,
-  },
-  imageWidth: {
-    type: Number,
-    required: true,
-  },
-  imageHeight: {
-    type: Number,
-    required: true,
-  },
-  markers: {
-    type: Array as () => Marker[],
-    default: () => [],
-  },
-  isEditMode: {
-    type: Boolean,
-    default: false,
-  },
-})
+const props = defineProps<{
+  imageUrl: string
+  imageWidth: number
+  imageHeight: number
+  markers: Marker[]
+  isEditMode: boolean
+  voteModal: boolean
+}>()
 
-const emit = defineEmits(['map-click', 'edit-marker'])
-
+const emit = defineEmits(['map-click', 'edit-marker', 'marker-click'])
+const selectedMarkerId = ref<number | string | null>(null)
 const map = ref(null)
 const crs = L.CRS.Simple
-const bounds = ref<L.LatLngBoundsExpression>([
+const bounds = ref([
   [0, 0],
   [props.imageHeight, props.imageWidth],
 ])
-const center = ref<[number, number]>([props.imageHeight / 1, props.imageWidth / 1])
+const center = ref([props.imageHeight, props.imageWidth])
 const zoom = ref(0)
 const minZoom = ref(-0.5)
 const maxZoom = ref(4)
-
 const mapOptions = ref({
   attributionControl: false,
   zoomControl: false,
@@ -60,32 +45,33 @@ const mapOptions = ref({
   zoomSnap: 0.1,
 })
 
-const createTextIcon = (text: string): L.DivIcon => {
+const toCapitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+
+const getMarkerIcon = (marker: Marker) => {
+  const isSelected = props.voteModal && marker.id === selectedMarkerId.value
+  const modalClass = isSelected ? 'modal-open' : ''
   return L.divIcon({
-    html: `<div class="marker-text">${text}</div>`,
+    html: `<div class="marker-text ${modalClass}">${toCapitalize(marker.label || marker.id.toString())}</div>`,
     className: 'text-marker-icon',
     iconSize: undefined,
     iconAnchor: [0, 0],
   })
 }
 
-const getMarkerIcon = (marker: Marker): L.DivIcon => {
-  return createTextIcon(marker.label || marker.id.toString())
-}
-
-const onMapReady = (mapInstance: any) => {
-  mapInstance.fitBounds(bounds.value)
-}
-
-const handleMapClick = (event: L.LeafletMouseEvent) => {
+const onMapReady = (mapInstance: any) => mapInstance.fitBounds(bounds.value)
+const handleMapClick = (event: L.LeafletMouseEvent) =>
   emit('map-click', { x: event.latlng.lng, y: event.latlng.lat })
+const handleMarkerClick = (marker: Marker) => {
+  selectedMarkerId.value = marker.id
+  emit(props.isEditMode ? 'edit-marker' : 'marker-click', marker)
 }
 
-const handleMarkerClick = (marker: Marker) => {
-  if (props.isEditMode) {
-    emit('edit-marker', marker)
+watch(
+  () => props.voteModal,
+  (newValue) => {
+    if (!newValue) selectedMarkerId.value = null
   }
-}
+)
 
 onMounted(() => {
   const iconRetinaUrl = new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href
@@ -93,11 +79,7 @@ onMounted(() => {
   const shadowUrl = new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href
 
   delete (L.Icon.Default.prototype as any)._getIconUrl
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl,
-    iconUrl,
-    shadowUrl,
-  })
+  L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 })
 </script>
 
@@ -116,10 +98,9 @@ onMounted(() => {
       @ready="onMapReady"
     >
       <l-image-overlay :bounds="bounds" :url="imageUrl" />
-
       <l-marker
         v-for="marker in markers"
-        :key="marker.id"
+        :key="`${marker.id}-${voteModal}-${selectedMarkerId}`"
         :icon="getMarkerIcon(marker) as unknown as L.Icon"
         :lat-lng="[marker.y, marker.x]"
         @click="() => handleMarkerClick(marker)"
@@ -127,31 +108,18 @@ onMounted(() => {
     </l-map>
   </div>
 </template>
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+<style scoped>
 .image-map-container {
   width: 100%;
   height: 100vh;
   background: transparent;
 }
 
-:deep(.leaflet-container) {
-  background: transparent;
-}
-
-:deep(.leaflet-pane) {
-  background: transparent;
-}
-
-:deep(.leaflet-map-pane canvas) {
-  background: transparent;
-}
-
-:deep(.leaflet-tile-pane) {
-  background: transparent;
-}
-
+:deep(.leaflet-container),
+:deep(.leaflet-pane),
+:deep(.leaflet-map-pane canvas),
+:deep(.leaflet-tile-pane),
 :deep(.leaflet-overlay-pane) {
   background: transparent;
 }
@@ -189,7 +157,8 @@ onMounted(() => {
   z-index: 1;
 }
 
-:deep(.marker-text:hover) {
+:deep(.marker-text:hover),
+:deep(.marker-text.modal-open) {
   background: rgba(255, 255, 255, 0.9);
   color: #000;
   transform: translate(-50%, -50%) scale(1.05);

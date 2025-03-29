@@ -10,12 +10,7 @@ export default class extends BaseSchema {
       table.float('x').notNullable()
       table.float('y').notNullable()
       table.integer('stage').notNullable()
-      table.uuid('map_id').nullable()
-      table.boolean('is_suggestion').defaultTo(false)
-      table.boolean('is_displayed').defaultTo(false)
-      table.boolean('is_approved').defaultTo(false)
-      table.integer('up_vote').defaultTo(0)
-      table.integer('down_vote').defaultTo(0)
+      table.uuid('map_id').references('maps.id').onDelete('CASCADE')
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

@@ -18,7 +18,7 @@ const page = usePage()
           :class="[
             page.url === '/' ? 'bg-white/15 color-white/100' : 'color-white/80 bg-transparent',
           ]"
-          class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
+          class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition duration-300 ease-in-out"
           href="/"
         >
           Accueil
@@ -31,7 +31,7 @@ const page = usePage()
               ? 'bg-white/15 color-white/100'
               : 'color-white/80 bg-transparent',
           ]"
-          class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition-colors duration-300 ease-in-out"
+          class="relative px-3 py-3 font-medium border border-transparent hover:(bg-white text-black border-white/15) rounded-lg transition duration-300 ease-in-out"
           href="/cartes"
         >
           Cartes

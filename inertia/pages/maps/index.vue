@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { Head } from '@inertiajs/vue3'
-import MapCard from '~/components/MapCard.vue'
+import MapCard from '~/components/maps/MapCard.vue'
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import MapsController from '#controllers/maps_controller'
+import FilterLabel from '~/components/maps/FilterLabel.vue'
 
 interface Playlist {
   id: string
@@ -18,15 +19,19 @@ const props = defineProps<{
 const selectedFilter = ref<'all' | string>('all')
 
 const filteredMaps = computed(() => {
-  let maps =
+  const maps =
     selectedFilter.value === 'all'
-      ? [...props.maps]
-      : [...props.maps].filter((map) =>
+      ? props.maps
+      : props.maps.filter((map) =>
           map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
         )
 
   return maps.sort((a, b) => a.name.localeCompare(b.name))
 })
+
+const toggleFilter = (filter: string) => {
+  selectedFilter.value = selectedFilter.value === filter ? 'all' : filter
+}
 </script>
 
 <template>
@@ -47,22 +52,21 @@ const filteredMaps = computed(() => {
     </h2>
 
     <div class="flex justify-center items-center gap-4">
-      <label
-        :class="{ 'bg-white/80 text-black': selectedFilter === 'all' }"
-        class="relative uppercase text-sm px-3 py-2 flex justify-center items-center border border-white/15 hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer rounded-full bg-#24262A/50 backdrop-blur-md z-10"
-      >
-        <input v-model="selectedFilter" class="hidden" type="radio" value="all" />
-        Voir tout
-      </label>
-      <label
+      <FilterLabel
+        :is-selected="selectedFilter === 'all'"
+        label="Voir tout"
+        value="all"
+        @update:filter="toggleFilter($event)"
+      />
+
+      <FilterLabel
         v-for="playlist in props.playlists"
         :key="playlist.id"
-        :class="{ 'bg-white/80 text-black': selectedFilter === playlist.label }"
-        class="relative uppercase text-sm px-3 py-2 flex justify-center items-center border border-white/15 hover:(bg-white text-black) transition duration-300 ease-in-out w-fit h-fit font-roboto cursor-pointer rounded-full bg-#24262A/50 backdrop-blur-md z-10"
-      >
-        <input v-model="selectedFilter" :value="playlist.label" class="hidden" type="radio" />
-        {{ playlist.label }}
-      </label>
+        :is-selected="selectedFilter === playlist.label"
+        :label="playlist.label"
+        :value="playlist.label"
+        @update:filter="toggleFilter($event)"
+      />
     </div>
   </div>
 
@@ -110,7 +114,6 @@ const filteredMaps = computed(() => {
   z-index: 1;
 }
 
-/* Make the flex container position relative for absolute children */
 .flex {
   position: relative;
 }
