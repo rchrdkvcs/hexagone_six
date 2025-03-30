@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.string('user_name').nullable().unique()
       table.string('password').notNullable()
-      table.string('role').notNullable().defaultTo('user')
+      table.uuid('role_id').references('id').inTable('roles').onDelete('CASCADE')
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
