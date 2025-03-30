@@ -13,7 +13,12 @@ const inertiaConfig = defineConfig({
    */
   sharedData: {
     user: async (ctx) => {
-      const user = ctx.auth.getUserOrFail()
+      const user = ctx.auth ? ctx.auth.user : null
+
+      if (!user) {
+        return null
+      }
+
       await user.load('role')
       return user
     },

@@ -26,25 +26,29 @@ router.post('/login', [LoginController, 'execute'])
 router.get('/register', [RegistersController, 'render'])
 router.post('/register', [RegistersController, 'execute'])
 
-router.get('/cartes', [MapsController, 'index'])
-router.get('/cartes/:slug', [MapsController, 'show']).use(middleware.silentAuth())
-
 router
   .group(() => {
-    router.post('/markers', [MarkersController, 'store'])
-    router.patch('/markers/:id', [MarkersController, 'update'])
-    router.delete('/markers/:id', [MarkersController, 'destroy'])
-  })
-  .use([middleware.auth(), middleware.userRole()])
+    router.get('/cartes', [MapsController, 'index'])
+    router.get('/cartes/:slug', [MapsController, 'show'])
 
-router.get('/markers/suggestions', [SuggestionsController, 'index'])
-router.post('/markers/suggestions', [SuggestionsController, 'store'])
-router.patch('/markers/suggestions/:id', [SuggestionsController, 'update'])
-router.delete('/markers/suggestions/:id', [SuggestionsController, 'destroy'])
+    router
+      .group(() => {
+        router.post('/markers', [MarkersController, 'store'])
+        router.patch('/markers/:id', [MarkersController, 'update'])
+        router.delete('/markers/:id', [MarkersController, 'destroy'])
+      })
+      .use([middleware.auth(), middleware.userRole()])
 
-router
-  .group(() => {
-    router.get('/', [AdminController, 'index'])
+    router.get('/markers/suggestions', [SuggestionsController, 'index'])
+    router.post('/markers/suggestions', [SuggestionsController, 'store'])
+    router.patch('/markers/suggestions/:id', [SuggestionsController, 'update'])
+    router.delete('/markers/suggestions/:id', [SuggestionsController, 'destroy'])
+
+    router
+      .group(() => {
+        router.get('/', [AdminController, 'index'])
+      })
+      .prefix('admin')
+      .use([middleware.auth(), middleware.userRole()])
   })
-  .prefix('admin')
-  .use([middleware.auth(), middleware.userRole()])
+  .use(middleware.silentAuth())
