@@ -50,7 +50,8 @@ const handleVote = async (voteType: 'up' | 'down') => {
   } catch (error) {
     localSuggestion.value[voteProperty] = previousValue
     localSuggestion.value.voteRatio = localSuggestion.value.upVote - localSuggestion.value.downVote
-    voteError.value = 'Impossible de voter pour le moment'
+    voteError.value =
+      error.response.data.message || 'Une erreur est survenue lors de la mise à jour du vote.'
     console.error(`Error updating ${voteProperty}:`, error)
   } finally {
     isVoting.value = false
