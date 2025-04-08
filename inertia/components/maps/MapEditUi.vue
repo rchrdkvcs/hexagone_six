@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import PenIcon from '~/components/Icones/PenIcon.vue'
-import CloseIcon from '~/components/Icones/CloseIcon.vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { SharedProps } from '@adonisjs/inertia/types'
 
@@ -37,7 +35,7 @@ const toggleEditMode = () => emit('toggle-edit-mode')
         class="py-2 px-3 bg-#24262A/50 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-red-600 transition-colors duration-300 ease-in-out color-white/80 hover:color-white"
         @click="toggleEditMode"
       >
-        <CloseIcon class="w-6 h-6" />
+        <i class="i-mdi:close size-6" />
         <span>Quitter le mode editeur</span>
       </button>
 
@@ -46,7 +44,7 @@ const toggleEditMode = () => emit('toggle-edit-mode')
         class="py-2 px-3 bg-#24262A/50 backdrop-blur-lg border border-white/15 rounded-xl flex items-center gap-2 hover:bg-white transition-colors duration-300 ease-in-out color-white/80 hover:color-black"
         @click="toggleEditMode"
       >
-        <PenIcon class="w-6 h-6" />
+        <i class="i-mdi:edit size-6" />
         <span>Mode editeur</span>
       </button>
     </div>

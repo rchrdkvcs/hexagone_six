@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import UpArrowIcon from '~/components/Icones/UpArrowIcon.vue'
-import DownArrowIcon from '~/components/Icones/DownArrowIcon.vue'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type MarkerSuggest from '#models/marker_suggest'
@@ -81,7 +79,7 @@ const handleDownVote = () => handleVote('down')
           class="flex items-center justify-center p-1 rounded-full color-white/50 hover:(bg-green-6/25 color-green-6) transition duration-300 ease-in-out"
           @click="handleUpVote"
         >
-          <UpArrowIcon class="h-4 w-4" />
+          <i class="i-mdi:arrow-up size-6" />
         </button>
         <span
           :class="[
@@ -97,7 +95,7 @@ const handleDownVote = () => handleVote('down')
           class="flex items-center justify-center p-1 rounded-full color-white/50 hover:(bg-red-6/25 color-red-6) transition duration-300 ease-in-out"
           @click="handleDownVote"
         >
-          <DownArrowIcon class="h-4 w-4" />
+          <i class="i-mdi:arrow-down size-6" />
         </button>
       </div>
     </div>

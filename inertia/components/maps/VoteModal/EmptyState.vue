@@ -1,12 +1,10 @@
-<script lang="ts" setup>
-import ListIcon from '~/components/Icones/ListIcon.vue'
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="flex flex-col gap-6 items-center">
     <div class="flex flex-col items-center gap-2">
       <div class="w-12 h-12 rounded-full bg-white/05 flex items-center justify-center mb-2">
-        <ListIcon class="w-6 h-6 text-white/70" />
+        <i class="i-mdi:format-list-bulleted size-6 color-white/50" />
       </div>
       <h2 class="text-white font-medium text-lg">Aucune suggestion</h2>
     </div>

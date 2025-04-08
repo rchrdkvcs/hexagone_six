@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
-import TextIcon from '~/components/Icones/TextIcon.vue'
 
 const emit = defineEmits(['close', 'add-suggestion'])
 
@@ -39,7 +38,7 @@ onUnmounted(() => {
     <div
       class="bg-#24262A/50 backdrop-blur-lg rounded-xl w-1/2 xl:w-1/3 border border-white/15 shadow-lg color-white flex items-center justify-center gap-4 px-4"
     >
-      <TextIcon class="w-5 min-w-5 h-5" />
+      <i class="i-mdi:format-text size-6" />
       <input
         ref="suggestionInputRef"
         v-model="newSuggestionText"

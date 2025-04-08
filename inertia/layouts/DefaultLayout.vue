@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-import TwitterIcon from '~/components/Icones/TwitterIcon.vue'
-import TwitchIcon from '~/components/Icones/TwitchIcon.vue'
-import InstagramIcon from '~/components/Icones/InstagramIcon.vue'
-import DiscordIcon from '~/components/Icones/DiscordIcon.vue'
 import { Link, usePage } from '@inertiajs/vue3'
 
 const page = usePage()
@@ -50,28 +46,28 @@ const page = usePage()
       class="flex justify-center items-center p-1 rounded-full bg-white hover:bg-[#2499FF] transition-colors duration-300 ease-in-out"
       href="/"
     >
-      <TwitterIcon class="text-black size-6" />
+      <i class="i-mdi:twitter size-6" />
     </Link>
 
     <Link
       class="flex justify-center items-center p-1 rounded-full bg-white hover:bg-[#2499FF] transition-colors duration-300 ease-in-out"
       href="/"
     >
-      <InstagramIcon class="text-black size-6" />
+      <i class="i-mdi:instagram size-6" />
     </Link>
 
     <Link
       class="flex justify-center items-center p-1 rounded-full bg-white hover:bg-[#2499FF] transition-colors duration-300 ease-in-out"
       href="/"
     >
-      <TwitchIcon class="text-black size-6" />
+      <i class="i-mdi:twitch size-6" />
     </Link>
 
     <Link
       class="flex justify-center items-center p-1 rounded-full bg-white hover:bg-[#2499FF] transition-colors duration-300 ease-in-out"
       href="/"
     >
-      <DiscordIcon class="text-black size-6" />
+      <i class="i-mdi:discord size-6" />
     </Link>
   </footer>
 </template>

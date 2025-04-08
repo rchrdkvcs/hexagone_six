@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import BackIcone from '~/components/Icones/BackIcone.vue'
-
 defineProps<{
   totalImages?: number
   currentImageIndex?: number
@@ -22,7 +20,7 @@ const goBack = () => {
     class="fixed top-4 left-4 px-3 py-2 border border-transparent hover:(bg-white text-black border-white/15) rounded-xl transition-colors duration-300 ease-in-out z-999 color-white/80 bg-#24262A/50 border border-white/15 flex items-center gap-2 backdrop-blur-lg"
     @click="goBack"
   >
-    <BackIcone class="w-6 h-6" />
+    <i class="i-mdi:arrow-left size-6" />
     <span>Retour</span>
   </button>
 
