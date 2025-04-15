@@ -33,7 +33,7 @@ const toggleUserMenu = () => {
       <!-- Logo -->
       <div class="flex items-center justify-start">
         <a href="/">
-          <img alt="logo" class="size-10" src="../../../public/images/logo.png" />
+          <img alt="logo" class="size-10" src="/images/logo.png" />
         </a>
       </div>
 
