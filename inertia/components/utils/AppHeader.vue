@@ -32,11 +32,8 @@ const toggleUserMenu = () => {
     <div class="max-w-7xl mx-auto px-4 h-full grid grid-cols-3 items-center">
       <!-- Logo -->
       <div class="flex items-center justify-start">
-        <a
-          class="color-2xl font-bold color-white tracking-tight hover:color-white/90 transition-colors"
-          href="/"
-        >
-          R6Calls
+        <a href="/">
+          <img alt="logo" class="size-10" src="../../../public/images/logo.png" />
         </a>
       </div>
 
