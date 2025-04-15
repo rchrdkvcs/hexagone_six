@@ -26,7 +26,7 @@ const toggleUserMenu = () => {
 </script>
 
 <template>
-  <header
+  <div
     class="fixed top-0 z-50 w-full h-16 backdrop-blur-md bg-primary-800/50 border-b border-white/5 shadow-sm"
   >
     <div class="max-w-7xl mx-auto px-4 h-full grid grid-cols-3 items-center">
@@ -99,5 +99,5 @@ const toggleUserMenu = () => {
         <AppButton v-else href="/login" icon="i-mdi:login" label="Se connecter" />
       </div>
     </div>
-  </header>
+  </div>
 </template>
