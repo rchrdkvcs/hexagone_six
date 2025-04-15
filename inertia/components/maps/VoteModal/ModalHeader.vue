@@ -1,23 +1,25 @@
 <script lang="ts" setup>
+import AppButton from '~/components/utils/AppButton.vue'
+
 defineProps<{
   showAllSuggestions: boolean
 }>()
 
-const emit = defineEmits(['close', 'back'])
+defineEmits(['close', 'back'])
 </script>
 
 <template>
-  <button
-    class="absolute top-4 right-4 z-10 p-1 rounded-lg color-white/75 hover:(bg-red-600 color-white/100) transition-colors duration-300"
+  <AppButton
+    class="!w-fit absolute top-4 right-4 !p-1 z-10"
+    icon="i-mdi:close"
+    variant="ghost"
     @click="$emit('close')"
-  >
-    <i class="i-mdi:close min-size-6 size-6" />
-  </button>
-  <button
+  />
+  <AppButton
     v-if="showAllSuggestions"
-    class="absolute top-4 left-4 z-10 p-1 rounded-lg color-white/80 hover:(bg-white color-black) transition-colors duration-300"
+    class="!w-fit absolute top-4 left-4 !p-1 z-10"
+    icon="i-mdi:arrow-left"
+    variant="ghost"
     @click="$emit('back')"
-  >
-    <i class="i-mdi:arrow-left size-6" />
-  </button>
+  />
 </template>

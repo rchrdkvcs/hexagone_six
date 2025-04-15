@@ -10,6 +10,8 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
+const OauthController = () => import('#controllers/auth/oauth_controller')
+
 const AdminController = () => import('#controllers/admin/admin_controller')
 
 const SuggestionsController = () => import('#controllers/suggestions_controller')
@@ -18,16 +20,21 @@ const MarkersController = () => import('#controllers/markers_controller')
 const LoginController = () => import('#controllers/auth/login_controller')
 const RegistersController = () => import('#controllers/auth/registers_controller')
 
-router.on('/').renderInertia('home')
-
 router.get('/login', [LoginController, 'render'])
 router.post('/login', [LoginController, 'execute'])
 
 router.get('/register', [RegistersController, 'render'])
 router.post('/register', [RegistersController, 'execute'])
 
+router.get('/:provider/redirect', [OauthController, 'render'])
+router.get('/:provider/callback', [OauthController, 'execute'])
+
+router.get('/logout', [LoginController, 'logout'])
+
 router
   .group(() => {
+    router.on('/').renderInertia('home')
+
     router.get('/cartes', [MapsController, 'index'])
     router.get('/cartes/:slug', [MapsController, 'show'])
 

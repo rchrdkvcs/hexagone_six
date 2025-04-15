@@ -2,14 +2,12 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { afterCreate, BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import crypto from 'node:crypto'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Role from '#models/role'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['userName'],
+  uids: ['email'],
   passwordColumnName: 'password',
 })
 
@@ -18,16 +16,22 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare id: string
 
   @column()
-  declare userName: string | null
+  declare email: string
+
+  @column()
+  declare userName: string
 
   @column({ serializeAs: null })
   declare password: string
 
   @column()
-  declare roleId: string
+  declare provider: string
 
-  @belongsTo(() => Role)
-  declare role: BelongsTo<typeof Role>
+  @column()
+  declare provider_id: string
+
+  @column()
+  declare roles: string[]
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -38,13 +42,5 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @beforeCreate()
   static generateUuid(user: User) {
     user.id = crypto.randomUUID()
-  }
-
-  @afterCreate()
-  static async assignUserRole(user: User) {
-    const userRole = await Role.findBy('name', 'user')
-    if (userRole) {
-      await user.related('role').associate(userRole)
-    }
   }
 }

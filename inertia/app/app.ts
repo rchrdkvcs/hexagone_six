@@ -4,9 +4,9 @@
 import { createApp, DefineComponent, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import 'virtual:uno.css'
-import '@unocss/reset/tailwind.css'
+import '../assets/styles/main.css'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
-import DefaultLayout from '~/layouts/DefaultLayout.vue'
+import Default from '~/layouts/default.vue'
 
 createInertiaApp({
   progress: { color: '#00ffe5' },
@@ -19,7 +19,7 @@ createInertiaApp({
       import.meta.glob<DefineComponent>('../pages/**/*.vue')
     ).then((page) => {
       if (!page.default.layout) {
-        page.default.layout = DefaultLayout
+        page.default.layout = Default
       }
       return page
     })

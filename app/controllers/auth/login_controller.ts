@@ -19,4 +19,10 @@ export default class LoginController {
 
     return response.redirect('/')
   }
+
+  public async logout({ auth, response }: HttpContext) {
+    await auth.use('web').logout()
+
+    return response.redirect('/')
+  }
 }

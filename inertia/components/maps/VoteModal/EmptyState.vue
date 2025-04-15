@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div class="flex flex-col gap-6 items-center">
+  <div class="flex flex-col gap-6 items-center my-8">
     <div class="flex flex-col items-center gap-2">
       <div class="w-12 h-12 rounded-full bg-white/05 flex items-center justify-center mb-2">
         <i class="i-mdi:format-list-bulleted size-6 color-white/50" />

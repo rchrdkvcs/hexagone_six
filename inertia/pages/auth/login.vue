@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import { Head, useForm } from '@inertiajs/vue3'
 import AuthLayout from '~/layouts/AuthLayout.vue'
+import AppButton from '~/components/utils/AppButton.vue'
 
 defineOptions({
   layout: AuthLayout,
 })
 
 const form = useForm({
-  userName: '',
+  email: '',
   password: '',
 })
 
@@ -23,33 +24,79 @@ const submit = (e: Event) => {
 </script>
 
 <template>
-  <Head title="Login" />
+  <Head title="Connexion" />
 
-  <div class="w-full h-full flex justify-center items-center">
-    <form
-      class="w-450px h-fit p-6 bg-#24262A/50 rounded-2xl border border-white/15 backdrop-blur-lg flex flex-col items-center gap-4"
+  <div class="min-h-screen w-full flex justify-center items-center p-4">
+    <div
+      class="w-full max-w-md backdrop-blur-md bg-primary-800/50 rounded-2xl border border-white/10 shadow-xl overflow-hidden"
     >
-      <h1 class="text-4xl font-bold text-center text-white">Connexion</h1>
-      <div class="flex flex-col justify-center items-center gap-2 w-full">
-        <input
-          v-model="form.userName"
-          class="p-2 rounded-xl bg-#24262A/50 border border-white/15 focus:outline-none focus:ring-2 focus:ring-white transition duration-300 ease-in-out w-full"
-          placeholder="Username"
-          type="text"
-        />
-        <input
-          v-model="form.password"
-          class="p-2 rounded-xl bg-#24262A/50 border border-white/15 focus:outline-none focus:ring-2 focus:ring-white transition duration-300 ease-in-out w-full"
-          placeholder="Mot de passe"
-          type="password"
-        />
+      <div class="p-8">
+        <div class="text-center mb-6">
+          <h1 class="text-2xl font-bold text-white">Connectez-vous à R6Calls</h1>
+          <p class="text-white/60 text-sm mt-2">
+            Accédez à votre compte pour commencer l'aventure !
+          </p>
+        </div>
+
+        <form class="space-y-6" @submit.prevent="submit">
+          <div class="space-y-4">
+            <div>
+              <input
+                v-model="form.email"
+                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+                placeholder="Adresse email"
+                type="email"
+              />
+            </div>
+
+            <div>
+              <input
+                v-model="form.password"
+                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+                placeholder="Mot de passe"
+                type="password"
+              />
+            </div>
+          </div>
+
+          <div>
+            <AppButton class="w-full py-3" icon="i-mdi:email" label="Poursuivre avec mon e-mail" />
+          </div>
+
+          <div class="relative flex items-center my-6">
+            <div class="flex-grow border-t border-white/10"></div>
+            <span class="flex-shrink mx-4 text-white/60 text-sm">OU CONTINUER AVEC</span>
+            <div class="flex-grow border-t border-white/10"></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <a
+              class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-white transition-all duration-300"
+              href="/discord/redirect"
+            >
+              <i class="i-mdi:discord text-lg"></i>
+              <span>Discord</span>
+            </a>
+
+            <a
+              class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-white transition-all duration-300"
+              href="/google/redirect"
+            >
+              <i class="i-mdi:google text-lg"></i>
+              <span>Google</span>
+            </a>
+          </div>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-white/60 text-sm">
+            Vous n'avez pas de compte ?
+            <a class="color-white hover:color-secondary transition-colors" href="/register"
+              >S'inscrire</a
+            >
+          </p>
+        </div>
       </div>
-      <button
-        class="py-2 px-3 bg-white/15 border border-white/15 rounded-xl flex items-center gap-2 justify-center w-full color-white hover:(bg-white color-black) transition-colors duration-300"
-        @click.prevent="submit"
-      >
-        Se connecter
-      </button>
-    </form>
+    </div>
   </div>
 </template>

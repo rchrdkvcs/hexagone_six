@@ -1,18 +1,14 @@
 <script lang="ts" setup>
-import { Head } from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import MapLeaflet from '~/components/maps/MapLeaflet.vue'
-import MapLayout from '~/layouts/MapLayout.vue'
-import MarkerEditor from '~/components/maps/MarkerEditor.vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import MapsController from '#controllers/maps_controller'
 import { type Marker, use_markers } from '~/composables/use_markers'
+import AppButton from '~/components/utils/AppButton.vue'
 import VoteModal from '~/components/maps/VoteModal.vue'
-import MapEditUi from '~/components/maps/MapEditUi.vue'
-
-defineOptions({
-  layout: MapLayout,
-})
+import type User from '#models/user'
+import MarkerModal from '~/components/maps/MarkerModal.vue'
 
 const props = defineProps<{
   map: InferPageProps<MapsController, 'show'>['map']
@@ -30,6 +26,7 @@ const tempMarkerPosition = ref<{ x: number; y: number } | null>(null)
 const selectedMarker = ref<Marker | null>(null)
 const viewModalMarker = ref<Marker | null>(null)
 const showViewModal = ref(false)
+const user = usePage().props.user as User
 
 const { isLoading, saveSuccess, saveError, stageMarkers, addMarker, updateMarker, deleteMarker } =
   use_markers(props.map.markers, props.map.id, () => currentImageIndex.value, true)
@@ -87,51 +84,70 @@ const loadImage = (index: number) => {
 <template>
   <Head :title="props.map.name" />
 
-  <MapLayout
-    :currentImageIndex="currentImageIndex"
-    :totalImages="totalImages"
-    @loadImage="loadImage"
+  <div
+    class="fixed bottom-4 left-50% translate-x-[-50%] z-999 flex gap-2 backdrop-blur-md bg-primary-800/50 border border-white/5 rounded-full p-2 shadow-lg"
   >
-    <div class="relative w-full h-full bg-black/50 backdrop-blur-xl">
-      <MapLeaflet
-        ref="map"
-        :imageHeight="imageHeight"
-        :imageUrl="imageUrl"
-        :imageWidth="imageWidth"
-        :is-edit-mode="isEditMode"
-        :markers="stageMarkers"
-        :voteModal="showViewModal"
-        @map-click="handleMapClick"
-        @edit-marker="handleEditMarker"
-        @marker-click="handleMarkerClick"
-      />
+    <AppButton
+      v-for="index in totalImages"
+      :key="index"
+      :class="[
+        index === currentImageIndex
+          ? 'bg-white/15 color-white !rounded-full'
+          : 'color-white/80 bg-transparent',
+      ]"
+      :label="`Etage ${index}`"
+      class="!rounded-full"
+      variant="ghost"
+      @click="loadImage(index)"
+    />
 
-      <VoteModal
-        v-if="showViewModal"
-        :key="viewModalMarker?.id"
-        :map="map"
-        :marker="viewModalMarker"
-        @close="closeViewModal"
-      />
+    <AppButton
+      v-if="
+        user &&
+        (user.roles.includes('developer') ||
+          user.roles.includes('admin') ||
+          user.roles.includes('editor'))
+      "
+      :class="isEditMode ? 'bg-white/15 color-white' : 'color-white/80 bg-transparent'"
+      class="!rounded-full"
+      icon="i-mdi:pencil"
+      variant="ghost"
+      @click="toggleEditMode"
+    />
+  </div>
 
-      <MapEditUi
-        :is-edit-mode="isEditMode"
-        :is-loading="isLoading"
-        :save-error="saveError"
-        :save-success="saveSuccess"
-        @toggle-edit-mode="toggleEditMode"
-      />
+  <MarkerModal
+    :is-edit-mode="isEditMode"
+    :selected-marker="selectedMarker"
+    :show-popup="showPopup"
+    :temp-marker-position="tempMarkerPosition"
+    @close="closePopup"
+    @close-popup="closePopup"
+    @add-marker="addMarker"
+    @update-marker="updateMarker"
+    @delete-marker="deleteMarker"
+  />
 
-      <MarkerEditor
-        :is-edit-mode="isEditMode"
-        :selected-marker="selectedMarker"
-        :show-popup="showPopup"
-        :temp-marker-position="tempMarkerPosition"
-        @add-marker="addMarker"
-        @update-marker="updateMarker"
-        @delete-marker="deleteMarker"
-        @close-popup="closePopup"
-      />
-    </div>
-  </MapLayout>
+  <div class="relative bg-black/25 backdrop-blur-md overflow-hidden">
+    <MapLeaflet
+      ref="map"
+      :imageHeight="imageHeight"
+      :imageUrl="imageUrl"
+      :imageWidth="imageWidth"
+      :is-edit-mode="isEditMode"
+      :markers="stageMarkers"
+      :voteModal="showViewModal"
+      @map-click="handleMapClick"
+      @edit-marker="handleEditMarker"
+      @marker-click="handleMarkerClick"
+    />
+  </div>
+
+  <VoteModal
+    v-if="showViewModal"
+    :key="viewModalMarker?.id"
+    :map="map"
+    :marker="viewModalMarker"
+    @close="closeViewModal"
+  />
 </template>

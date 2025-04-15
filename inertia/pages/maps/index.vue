@@ -4,7 +4,7 @@ import MapCard from '~/components/maps/MapCard.vue'
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import MapsController from '#controllers/maps_controller'
-import FilterLabel from '~/components/maps/FilterLabel.vue'
+import AppButton from '~/components/utils/AppButton.vue'
 
 interface Playlist {
   id: string
@@ -37,41 +37,28 @@ const toggleFilter = (filter: string) => {
 <template>
   <Head title="Cartes" />
 
-  <div class="my-16 flex flex-col justify-center items-center gap-8">
-    <div class="flex flex-col justify-center items-center gap-4">
-      <h1 class="text-5xl md:text-6xl uppercase italic font-semibold">Cartes</h1>
-      <h3 class="font-sans max-w-4/5 text-center">
-        Vous êtes nouveau dans le jeu, ou vous avez encore du mal à apprendre les cartes et à savoir
-        où concentrer votre attention ? Consultez ces guides de cartes pour vous aider à faire vos
-        premiers pas dans Rainbow Six Siege !
-      </h3>
-    </div>
+  <div class="flex flex-wrap gap-2 py-3 justify-center items-center my-8 mt-24 max-w-3xl mx-auto">
+    <AppButton
+      :active="selectedFilter === 'all'"
+      label="Voir tout"
+      value="all"
+      variant="tag"
+      @click="toggleFilter('all')"
+    />
 
-    <h2 class="text-xl uppercase italic text-center">
-      OPÉRATION PREP PHASE - FILTRES DE PLAYLISTES
-    </h2>
-
-    <div class="flex justify-center items-center gap-4">
-      <FilterLabel
-        :is-selected="selectedFilter === 'all'"
-        label="Voir tout"
-        value="all"
-        @update:filter="toggleFilter($event)"
-      />
-
-      <FilterLabel
-        v-for="playlist in props.playlists"
-        :key="playlist.id"
-        :is-selected="selectedFilter === playlist.label"
-        :label="playlist.label"
-        :value="playlist.label"
-        @update:filter="toggleFilter($event)"
-      />
-    </div>
+    <AppButton
+      v-for="playlist in props.playlists"
+      :key="playlist.id"
+      :active="selectedFilter === playlist.label"
+      :label="playlist.label"
+      :value="playlist.label"
+      variant="tag"
+      @click="toggleFilter(playlist.label)"
+    />
   </div>
 
   <TransitionGroup
-    class="flex flex-wrap w-full gap-4 justify-center items-center"
+    class="w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
     name="map-list"
     tag="div"
   >

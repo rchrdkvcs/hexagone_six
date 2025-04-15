@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { InferPageProps } from '@adonisjs/inertia/types'
-import MapsController from '#controllers/maps_controller'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import EmptyState from '~/components/maps/VoteModal/EmptyState.vue'
@@ -8,6 +7,7 @@ import SuggestionList from '~/components/maps/VoteModal/SuggestionList.vue'
 import ActionButtons from '~/components/maps/VoteModal/ActionButtons.vue'
 import SuggestionPopup from '~/components/maps/VoteModal/SuggestionPopup.vue'
 import ModalHeader from '~/components/maps/VoteModal/ModalHeader.vue'
+import type MapsController from '#controllers/maps_controller'
 
 // Types and props
 type Marker = InferPageProps<MapsController, 'show'>['map']['markers']
@@ -98,68 +98,70 @@ watch([showAllSuggestions, suggestions], updateContainerHeight, { deep: true })
 </script>
 
 <template>
-  <aside
-    :class="[
-      'fixed top-1/2 -translate-y-1/2 w-350px bg-#24262A/75 backdrop-blur-lg p-4 rounded-2xl z-999 border border-white/15 shadow-lg flex flex-col gap-6 transition-all duration-300 ease-in-out',
-      isVisible ? 'right-8 opacity-100' : 'right-[-400px] opacity-0',
-    ]"
-  >
-    <ModalHeader
-      :show-all-suggestions="showAllSuggestions"
-      @back="showAllSuggestions = false"
-      @close="closeModal"
+  <teleport to="body">
+    <aside
+      :class="[
+        'fixed top-50% translate-y-[-50%] w-350px bg-#24262A/75 backdrop-blur-lg p-4 rounded-2xl z-999 border border-white/10 shadow-lg flex flex-col gap-6 transition-all duration-300 ease-in-out',
+        isVisible ? 'right-8 opacity-100' : 'right-[-400px] opacity-0',
+      ]"
+    >
+      <ModalHeader
+        :show-all-suggestions="showAllSuggestions"
+        @back="showAllSuggestions = false"
+        @close="closeModal"
+      />
+
+      <EmptyState v-if="suggestions.length === 0" />
+
+      <div v-else ref="panelsContainer" class="panels-container">
+        <Transition :name="showAllSuggestions ? 'suggest-panel-forward' : 'suggest-panel-backward'">
+          <div
+            v-if="showAllSuggestions"
+            key="all-suggestions"
+            ref="allSuggestionsPanel"
+            class="w-full"
+          >
+            <SuggestionList
+              :suggestions="allSuggestions"
+              :total="suggestions.length"
+              title="Suggestions"
+              title-class="pl-8"
+              @suggestion-updated="handleSuggestionUpdate"
+            />
+          </div>
+
+          <div v-else key="top-suggestions" ref="topSuggestionsPanel" class="panel">
+            <SuggestionList
+              :suggestions="topSuggestions"
+              custom-class="border-b border-white/10 pb-6"
+              title="Top 3"
+              @suggestion-updated="handleSuggestionUpdate"
+            />
+
+            <SuggestionList
+              :suggestions="latestSuggestions"
+              custom-class="border-b border-white/10 py-6"
+              title="Dernières suggestions"
+              @suggestion-updated="handleSuggestionUpdate"
+            />
+          </div>
+        </Transition>
+      </div>
+
+      <ActionButtons
+        :has-suggestions="suggestions.length > 0"
+        :show-all-suggestions="showAllSuggestions"
+        @view-all="showAllSuggestions = true"
+        @add-suggestion="showSuggestionPopup = true"
+      />
+    </aside>
+
+    <SuggestionPopup
+      v-if="showSuggestionPopup"
+      @close="showSuggestionPopup = false"
+      @add-suggestion="addNewSuggestion"
     />
-
-    <EmptyState v-if="suggestions.length === 0" />
-
-    <div v-else ref="panelsContainer" class="panels-container">
-      <Transition :name="showAllSuggestions ? 'suggest-panel-forward' : 'suggest-panel-backward'">
-        <div
-          v-if="showAllSuggestions"
-          key="all-suggestions"
-          ref="allSuggestionsPanel"
-          class="w-full"
-        >
-          <SuggestionList
-            :suggestions="allSuggestions"
-            :total="suggestions.length"
-            title="Suggestions"
-            title-class="pl-8"
-            @suggestion-updated="handleSuggestionUpdate"
-          />
-        </div>
-
-        <div v-else key="top-suggestions" ref="topSuggestionsPanel" class="panel">
-          <SuggestionList
-            :suggestions="topSuggestions"
-            custom-class="border-b border-white/10 pb-6"
-            title="Top 3"
-            @suggestion-updated="handleSuggestionUpdate"
-          />
-
-          <SuggestionList
-            :suggestions="latestSuggestions"
-            custom-class="border-b border-white/10 py-6"
-            title="Dernières suggestions"
-            @suggestion-updated="handleSuggestionUpdate"
-          />
-        </div>
-      </Transition>
-    </div>
-
-    <ActionButtons
-      :has-suggestions="suggestions.length > 0"
-      :show-all-suggestions="showAllSuggestions"
-      @view-all="showAllSuggestions = true"
-      @add-suggestion="showSuggestionPopup = true"
-    />
-  </aside>
-
-  <SuggestionPopup
-    v-if="showSuggestionPopup"
-    @close="showSuggestionPopup = false"
-    @add-suggestion="addNewSuggestion"
-  />
+  </teleport>
 </template>
 
 <style scoped>

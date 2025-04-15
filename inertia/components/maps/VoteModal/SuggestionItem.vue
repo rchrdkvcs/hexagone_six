@@ -76,7 +76,7 @@ const handleDownVote = () => handleVote('down')
         <button
           :class="{ 'opacity-50': isVoting }"
           :disabled="isVoting"
-          class="flex items-center justify-center p-1 rounded-full color-white/50 hover:(bg-green-6/25 color-green-6) transition duration-300 ease-in-out"
+          class="flex items-center justify-center p-1 rounded-full color-white/50 hover:(bg-green-600/25 color-green-600) transition duration-300 ease-in-out cursor-pointer"
           @click="handleUpVote"
         >
           <i class="i-mdi:arrow-up size-6" />
@@ -92,7 +92,7 @@ const handleDownVote = () => handleVote('down')
         <button
           :class="{ 'opacity-50': isVoting }"
           :disabled="isVoting"
-          class="flex items-center justify-center p-1 rounded-full color-white/50 hover:(bg-red-6/25 color-red-6) transition duration-300 ease-in-out"
+          class="flex items-center justify-center p-1 rounded-full color-white/50 hover:(bg-red-600/25 color-red-600) transition duration-300 ease-in-out cursor-pointer"
           @click="handleDownVote"
         >
           <i class="i-mdi:arrow-down size-6" />

@@ -19,7 +19,6 @@ const inertiaConfig = defineConfig({
         return null
       }
 
-      await user.load('role')
       return user
     },
   },
