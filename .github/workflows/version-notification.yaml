@@ -18,7 +18,7 @@ jobs:
         id: tag-details
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | tr -d '"' | tr '\n' ' ' | sed 's/$/\\n/g')
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | tr -d '"' | tr '\n' ' ')
           TAG_AUTHOR=$(git for-each-ref --format='%(taggername)' refs/tags/$TAG_NAME || git for-each-ref --format='%(committername)' refs/tags/$TAG_NAME)
           TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME}"
           COMMIT_SHA=$(git rev-list -n 1 $TAG_NAME)
@@ -26,9 +26,9 @@ jobs:
           PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
 
           if [ -n "$PREVIOUS_TAG" ]; then
-            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | tr '\n' ' ' | sed 's/$/\\n/g' | tr -d '"')
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | tr '\n' ' ' | tr -d '"')
           else
-            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | tr '\n' ' ' | sed 's/$/\\n/g' | tr -d '"')
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | tr '\n' ' ' | tr -d '"')
           fi
 
           echo "name=$TAG_NAME" >> $GITHUB_OUTPUT
@@ -64,41 +64,32 @@ jobs:
             PREVIOUS_TAG_DISPLAY="le début"
           fi
 
-          cat > payload.json << EOF
-          {
-            "username": "GitHub",
-            "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
-            "embeds": [
-              {
-                "title": "🏷️ Nouvelle version: ${{ steps.tag-details.outputs.name }}",
-                "url": "${{ steps.tag-details.outputs.url }}",
-                "color": 5814783,
-                "fields": [
-                  {
-                    "name": "Tag",
-                    "value": "\`${{ steps.tag-details.outputs.name }}\`",
-                    "inline": true
-                  },
-                  {
-                    "name": "Commits",
-                    "value": "${{ steps.tag-details.outputs.commit_count }} depuis $PREVIOUS_TAG_DISPLAY",
-                    "inline": true
-                  },
-                  {
-                    "name": "Notes de version",
-                    "value": "asd"
-                  }
-                ],
-                "author": {
-                  "name": "${{ github.event.repository.name }}"
-                },
-                "footer": {
-                  "text": "Publié par ${{ steps.tag-details.outputs.author }}"
-                },
-                "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-              }
-            ]
-          }
-          EOF
+          echo '{}' | jq \
+            --arg username "GitHub" \
+            --arg avatar_url "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" \
+            --arg title "🏷️ Nouvelle version: ${{ steps.tag-details.outputs.name }}" \
+            --arg url "${{ steps.tag-details.outputs.url }}" \
+            --arg color "5814783" \
+            --arg tag "\`${{ steps.tag-details.outputs.name }}\`" \
+            --arg commits "${{ steps.tag-details.outputs.commit_count }} depuis $PREVIOUS_TAG_DISPLAY" \
+            --arg notes "$MESSAGE" \
+            --arg author "${{ github.event.repository.name }}" \
+            --arg footer "Publié par ${{ steps.tag-details.outputs.author }}" \
+            --arg timestamp "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+            '.username = $username |
+             .avatar_url = $avatar_url |
+             .embeds = [{
+               "title": $title,
+               "url": $url,
+               "color": ($color | tonumber),
+               "fields": [
+                 {"name": "Tag", "value": $tag, "inline": true},
+                 {"name": "Commits", "value": $commits, "inline": true},
+                 {"name": "Notes de version", "value": $notes}
+               ],
+               "author": {"name": $author},
+               "footer": {"text": $footer},
+               "timestamp": $timestamp
+             }]' > payload.json
 
-          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
+          curl -H "Content-Type: application/json" -X POST $DISCORD_WEBHOOK -d @payload.json
