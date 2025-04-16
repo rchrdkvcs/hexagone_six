@@ -60,8 +60,10 @@ jobs:
           echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
 
       - name: Send Discord Notification
+        env:
+          MESSAGE: ${{ steps.tag-details.outputs.message }}
         run: |
-          cat > payload.json << EOF
+          cat > payload.json << 'EOF'
           {
             "username": "GitHub",
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
@@ -83,7 +85,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "${{ steps.tag-details.outputs.message }}"
+                    "value": "${MESSAGE}"
                   }
                 ],
                 "author": {
@@ -98,4 +100,5 @@ jobs:
           }
           EOF
 
+          sed -i 's/\\n/\n/g' payload.json
           curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
