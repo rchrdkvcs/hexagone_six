@@ -67,14 +67,14 @@ jobs:
           echo '{}' | jq \
             --arg username "GitHub" \
             --arg avatar_url "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" \
-            --arg title "🏷️ Nouvelle version: v1.3.0-dev" \
-            --arg url "https://github.com/rchrdkvcs/r6calls.fr/releases/tag/v1.3.0-dev" \
+            --arg title "🏷️ Nouvelle version: ${{ steps.tag-details.outputs.name }}" \
+            --arg url "${{ steps.tag-details.outputs.url }}" \
             --arg color "5814783" \
-            --arg tag "\`v1.3.0-dev\`" \
-            --arg commits "24 depuis $PREVIOUS_TAG_DISPLAY" \
-            --arg notes "Ceci est un message de test" \
-            --arg author "r6calls.fr" \
-            --arg footer "Publié par " \
+            --arg tag "\`${{ steps.tag-details.outputs.name }}\`" \
+            --arg commits "${{ steps.tag-details.outputs.commit_count }} depuis $PREVIOUS_TAG_DISPLAY" \
+            --arg notes "$MESSAGE" \
+            --arg author "${{ github.event.repository.name }}" \
+            --arg footer "Publié par ${{ steps.tag-details.outputs.author }}" \
             --arg timestamp "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
             '.username = $username |
              .avatar_url = $avatar_url |
