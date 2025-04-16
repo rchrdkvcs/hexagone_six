@@ -63,6 +63,8 @@ jobs:
         env:
           MESSAGE: ${{ steps.tag-details.outputs.message }}
         run: |
+          MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+
           cat > payload.json << 'EOF'
           {
             "username": "GitHub",
@@ -85,7 +87,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "$(echo "$MESSAGE" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')"
+                    "value": "$MESSAGE_ESCAPED"
                   }
                 ],
                 "author": {
