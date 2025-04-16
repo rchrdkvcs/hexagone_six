@@ -23,26 +23,21 @@ jobs:
           TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME}"
           COMMIT_SHA=$(git rev-list -n 1 $TAG_NAME)
 
-          # Trouver le dernier tag avant celui-ci
           PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
 
-          # Générer le message cumulatif de tous les commits entre les tags
           if [ -n "$PREVIOUS_TAG" ]; then
             COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | tr '\n' ' ' | sed 's/$/\\n/g' | tr -d '"')
           else
-            # Si pas de tag précédent, prendre tous les commits jusqu'au tag actuel
             COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | tr '\n' ' ' | sed 's/$/\\n/g' | tr -d '"')
           fi
 
           echo "name=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "message<<EOF" >> $GITHUB_OUTPUT
           if [ -n "$TAG_MESSAGE" ]; then
-            # Afficher le message du tag s'il existe
             echo "$TAG_MESSAGE" >> $GITHUB_OUTPUT
             echo "**Commits inclus:**\\n" >> $GITHUB_OUTPUT
             echo "$COMMITS_MESSAGES" >> $GITHUB_OUTPUT
           else
-            # Sinon utiliser uniquement le résumé des commits
             echo "**Commits inclus:**\\n" >> $GITHUB_OUTPUT
             echo "$COMMITS_MESSAGES" >> $GITHUB_OUTPUT
           fi
@@ -62,10 +57,16 @@ jobs:
       - name: Send Discord Notification
         env:
           MESSAGE: ${{ steps.tag-details.outputs.message }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed 's/"/\\"/g')
 
-          cat > payload.json << 'EOF'
+          PREVIOUS_TAG_DISPLAY=${{ steps.tag-details.outputs.previous_tag }}
+          if [ -z "$PREVIOUS_TAG_DISPLAY" ]; then
+            PREVIOUS_TAG_DISPLAY="le début"
+          fi
+
+          cat > payload.json << EOF
           {
             "username": "GitHub",
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
@@ -82,7 +83,7 @@ jobs:
                   },
                   {
                     "name": "Commits",
-                    "value": "${{ steps.tag-details.outputs.commit_count }} depuis ${{ steps.tag-details.outputs.previous_tag || 'le début' }}",
+                    "value": "${{ steps.tag-details.outputs.commit_count }} depuis $PREVIOUS_TAG_DISPLAY",
                     "inline": true
                   },
                   {
@@ -102,5 +103,4 @@ jobs:
           }
           EOF
 
-          sed -i 's/\\n/\n/g' payload.json
-          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
+          curl -H "Content-Type: application/json" -X POST $DISCORD_WEBHOOK -d @payload.json
