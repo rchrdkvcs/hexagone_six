@@ -39,13 +39,13 @@ jobs:
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [
               {
-                "title": "Nouveau commit sur ${{ github.event.repository.name }}",
+                "title": "${{ steps.commit-details.outputs.sha }}",
                 "url": "${{ steps.commit-details.outputs.commit_url }}",
                 "color": 5814783,
                 "fields": [
                   {
                     "name": "Branche",
-                    "value": "${{ github.ref_name }}",
+                    "value": "\`${{ github.ref_name }}\`",
                     "inline": true
                   },
                   {
@@ -54,7 +54,7 @@ jobs:
                   }
                 ],
                 "author": {
-                  "name": "[\`${{ steps.commit-details.outputs.sha }}\`](${{ steps.commit-details.outputs.commit_url }})"
+                  "name": "${{ github.event.repository.name }}"
                 },
                 "footer": {
                   "text": "${{ steps.commit-details.outputs.author }}"
