@@ -64,6 +64,9 @@ jobs:
             PREVIOUS_TAG_DISPLAY="le début"
           fi
 
+          # Échapper les caractères spéciaux dans MESSAGE
+          MESSAGE_ESCAPED=$(echo "$MESSAGE" | jq -Rsa .)
+
           echo '{}' | jq \
             --arg username "GitHub" \
             --arg avatar_url "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" \
@@ -72,7 +75,7 @@ jobs:
             --arg color "5814783" \
             --arg tag "\`${{ steps.tag-details.outputs.name }}\`" \
             --arg commits "${{ steps.tag-details.outputs.commit_count }} depuis $PREVIOUS_TAG_DISPLAY" \
-            --arg notes "$MESSAGE" \
+            --arg notes "$MESSAGE_ESCAPED" \
             --arg author "${{ github.event.repository.name }}" \
             --arg footer "Publié par ${{ steps.tag-details.outputs.author }}" \
             --arg timestamp "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
