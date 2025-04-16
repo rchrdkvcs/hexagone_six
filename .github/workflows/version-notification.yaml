@@ -1,0 +1,77 @@
+name: Discord Tag Notification
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get tag details
+        id: tag-details
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | sed ':a;N;$!ba;s/\n/\\n/g')
+          TAG_AUTHOR=$(git for-each-ref --format='%(taggername)' refs/tags/$TAG_NAME || git for-each-ref --format='%(committername)' refs/tags/$TAG_NAME)
+          TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME}"
+          COMMIT_SHA=$(git rev-list -n 1 $TAG_NAME)
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%B" $COMMIT_SHA | sed ':a;N;$!ba;s/\n/\\n/g')
+
+          echo "name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "message<<EOF" >> $GITHUB_OUTPUT
+          if [ -n "$TAG_MESSAGE" ]; then
+            echo "$TAG_MESSAGE" >> $GITHUB_OUTPUT
+          else
+            echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          fi
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "author=$TAG_AUTHOR" >> $GITHUB_OUTPUT
+          echo "url=$TAG_URL" >> $GITHUB_OUTPUT
+          echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Send Discord Notification
+        run: |
+          cat > payload.json << EOF
+          {
+            "username": "GitHub",
+            "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+            "embeds": [
+              {
+                "title": "🏷️ Nouvelle version: ${{ steps.tag-details.outputs.name }}",
+                "url": "${{ steps.tag-details.outputs.url }}",
+                "color": 5814783,
+                "fields": [
+                  {
+                    "name": "Tag",
+                    "value": "\`${{ steps.tag-details.outputs.name }}\`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Commit",
+                    "value": "\`${{ steps.tag-details.outputs.sha }}\`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Notes de version",
+                    "value": "${{ steps.tag-details.outputs.message }}"
+                  }
+                ],
+                "author": {
+                  "name": "${{ github.event.repository.name }}"
+                },
+                "footer": {
+                  "text": "Publié par ${{ steps.tag-details.outputs.author }}"
+                },
+                "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+              }
+            ]
+          }
+          EOF
+          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
