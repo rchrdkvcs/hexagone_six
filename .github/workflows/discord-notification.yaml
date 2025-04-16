@@ -39,13 +39,13 @@ jobs:
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [
               {
-                "title": "${{ github.repository }} - ${{ github.ref_name }}",
+                "title": "${{ github.repository }}",
                 "url": "${{ steps.commit-details.outputs.commit_url }}",
                 "color": 5814783,
                 "fields": [
                   {
                     "name": "Branche",
-                    "value": "`${{ github.ref_name }}`",
+                    "value": "${{ github.ref_name }}",
                     "inline": true
                   },
                   {
