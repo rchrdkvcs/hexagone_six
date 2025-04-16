@@ -28,10 +28,6 @@ jobs:
           echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
           echo "commit_url=$COMMIT_URL" >> $GITHUB_OUTPUT
-          echo "avatar=$AUTHOR_AVATAR" >> $GITHUB_OUTPUT
-          echo "files_changed<<EOF" >> $GITHUB_OUTPUT
-          echo "$FILES_CHANGED" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Discord Notification
         run: |
@@ -48,13 +44,13 @@ jobs:
                   {
                     "name": "Details du commit",
                     "value": "${{ steps.commit-details.outputs.message }}"
-                  },
+                  }
                 ],
                 "author": {
-                  "name": "${{ steps.commit-details.outputs.author }}",
+                  "name": "${{ steps.commit-details.outputs.author }}"
                 },
                 "footer": {
-                  "text": "${{ github.event.repository.name }}",
+                  "text": "${{ github.event.repository.name }}"
                 },
                 "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
               }
