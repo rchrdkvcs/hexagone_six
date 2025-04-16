@@ -14,11 +14,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Get tag details
         id: tag-details
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | sed ':a;N;$!ba;s/\n/\\n/g')
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | sed ':a;N;$!ba;s/\n/\\\\n/g')
           TAG_AUTHOR=$(git for-each-ref --format='%(taggername)' refs/tags/$TAG_NAME || git for-each-ref --format='%(committername)' refs/tags/$TAG_NAME)
           TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME}"
           COMMIT_SHA=$(git rev-list -n 1 $TAG_NAME)
@@ -28,10 +31,10 @@ jobs:
 
           # Générer le message cumulatif de tous les commits entre les tags
           if [ -n "$PREVIOUS_TAG" ]; then
-            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | sed ':a;N;$!ba;s/\n/\\n/g')
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | sed ':a;N;$!ba;s/\n/\\\\n/g')
           else
             # Si pas de tag précédent, prendre tous les commits jusqu'au tag actuel
-            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | sed ':a;N;$!ba;s/\n/\\n/g')
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | sed ':a;N;$!ba;s/\n/\\\\n/g')
           fi
 
           echo "name=$TAG_NAME" >> $GITHUB_OUTPUT
@@ -63,6 +66,7 @@ jobs:
 
       - name: Send Discord Notification
         run: |
+          # Créer le payload JSON
           cat > payload.json << EOF
           {
             "username": "GitHub",
@@ -99,4 +103,5 @@ jobs:
             ]
           }
           EOF
-          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
+
+          cat payload.json | jq -c . | curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @-
