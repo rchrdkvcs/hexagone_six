@@ -11,8 +11,8 @@ import AppButton from '~/components/utils/AppButton.vue'
     <header
       class="container mx-auto px-4 py-20 md:py-32 md:pt-48 flex flex-col items-center text-center space-y-6"
     >
-      <h1 class="text-4xl md:text-6xl font-bold mb-6">R6CALLS</h1>
-      <p class="text-xl md:text-2xl text-white/80 max-w-2xl mb-10">
+      <img alt="Logo" class="h-12" src="/public/images/logo.png" />
+      <p class="text-xl md:text-2xl text-white/80 max-w-3xl mb-10">
         Maîtrisez les callouts des maps de Rainbow Six Siege en français.
       </p>
       <div class="flex flex-col sm:flex-row gap-4">
