@@ -38,11 +38,9 @@ jobs:
           COMMIT_MSG: ${{ steps.commit-details.outputs.message }}
           AUTHOR: ${{ steps.commit-details.outputs.author }}
         run: |
-          # Échapper les caractères spéciaux pour le JSON
           COMMIT_MSG_ESCAPED=$(echo "$COMMIT_MSG" | jq -Rs .)
           AUTHOR_ESCAPED=$(echo "$AUTHOR" | jq -Rs .)
 
-          # Construire le payload avec jq pour s'assurer que le JSON est valide
           jq -n \
           --arg repo "$REPO" \
           --arg branch "$BRANCH" \
