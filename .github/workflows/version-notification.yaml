@@ -22,19 +22,44 @@ jobs:
           TAG_AUTHOR=$(git for-each-ref --format='%(taggername)' refs/tags/$TAG_NAME || git for-each-ref --format='%(committername)' refs/tags/$TAG_NAME)
           TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME}"
           COMMIT_SHA=$(git rev-list -n 1 $TAG_NAME)
-          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%B" $COMMIT_SHA | sed ':a;N;$!ba;s/\n/\\n/g')
+
+          # Trouver le dernier tag avant celui-ci
+          PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+
+          # Générer le message cumulatif de tous les commits entre les tags
+          if [ -n "$PREVIOUS_TAG" ]; then
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | sed ':a;N;$!ba;s/\n/\\n/g')
+          else
+            # Si pas de tag précédent, prendre tous les commits jusqu'au tag actuel
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | sed ':a;N;$!ba;s/\n/\\n/g')
+          fi
 
           echo "name=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "message<<EOF" >> $GITHUB_OUTPUT
           if [ -n "$TAG_MESSAGE" ]; then
+            # Afficher le message du tag s'il existe
             echo "$TAG_MESSAGE" >> $GITHUB_OUTPUT
+            echo "" >> $GITHUB_OUTPUT
+            echo "**Commits inclus:**" >> $GITHUB_OUTPUT
+            echo "$COMMITS_MESSAGES" >> $GITHUB_OUTPUT
           else
-            echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+            # Sinon utiliser uniquement le résumé des commits
+            echo "**Commits inclus:**" >> $GITHUB_OUTPUT
+            echo "$COMMITS_MESSAGES" >> $GITHUB_OUTPUT
           fi
           echo "EOF" >> $GITHUB_OUTPUT
           echo "author=$TAG_AUTHOR" >> $GITHUB_OUTPUT
           echo "url=$TAG_URL" >> $GITHUB_OUTPUT
           echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+
+          # Obtenir le nombre de commits depuis le dernier tag
+          if [ -n "$PREVIOUS_TAG" ]; then
+            COMMIT_COUNT=$(git rev-list --count $PREVIOUS_TAG..$TAG_NAME)
+          else
+            COMMIT_COUNT=$(git rev-list --count $TAG_NAME)
+          fi
+          echo "commit_count=$COMMIT_COUNT" >> $GITHUB_OUTPUT
+          echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
 
       - name: Send Discord Notification
         run: |
@@ -54,8 +79,8 @@ jobs:
                     "inline": true
                   },
                   {
-                    "name": "Commit",
-                    "value": "\`${{ steps.tag-details.outputs.sha }}\`",
+                    "name": "Commits",
+                    "value": "${{ steps.tag-details.outputs.commit_count }} depuis ${{ steps.tag-details.outputs.previous_tag || 'le début' }}",
                     "inline": true
                   },
                   {
