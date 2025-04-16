@@ -64,8 +64,8 @@ jobs:
             PREVIOUS_TAG_DISPLAY="le début"
           fi
 
-          # Échapper les caractères spéciaux dans MESSAGE
-          MESSAGE_ESCAPED=$(echo "$MESSAGE" | jq -Rsa .)
+          # Nettoyer et formater correctement le message
+          MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
 
           echo '{}' | jq \
             --arg username "GitHub" \
@@ -88,7 +88,7 @@ jobs:
                "fields": [
                  {"name": "Tag", "value": $tag, "inline": true},
                  {"name": "Commits", "value": $commits, "inline": true},
-                 {"name": "Notes de version", "value": $notes}
+                 {"name": "Notes de version", "value": $notes | gsub("\\\\n"; "\n")}
                ],
                "author": {"name": $author},
                "footer": {"text": $footer},
