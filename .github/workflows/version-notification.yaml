@@ -85,7 +85,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "${MESSAGE}"
+                    "value": "$(echo "$MESSAGE" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')"
                   }
                 ],
                 "author": {
