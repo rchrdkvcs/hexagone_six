@@ -59,8 +59,6 @@ jobs:
           MESSAGE: ${{ steps.tag-details.outputs.message }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed 's/"/\\"/g')
-
           PREVIOUS_TAG_DISPLAY=${{ steps.tag-details.outputs.previous_tag }}
           if [ -z "$PREVIOUS_TAG_DISPLAY" ]; then
             PREVIOUS_TAG_DISPLAY="le début"
@@ -88,7 +86,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "$MESSAGE_ESCAPED"
+                    "value": "${{ MESSAGE }}"
                   }
                 ],
                 "author": {
@@ -103,4 +101,4 @@ jobs:
           }
           EOF
 
-          curl -H "Content-Type: application/json" -X POST $DISCORD_WEBHOOK -d @payload.json
+          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
