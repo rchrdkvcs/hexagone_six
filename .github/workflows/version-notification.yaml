@@ -86,7 +86,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "${{ MESSAGE }}"
+                    "value": "asd"
                   }
                 ],
                 "author": {
