@@ -3,7 +3,7 @@ name: Discord Notification - Development Branch
 on:
   push:
     branches:
-      - 'develop' # Only trigger on pushes to the 'develop' branch
+      - 'develop' # Uniquement sur la branche develop
 
 jobs:
   notify-discord:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch all history to get commit details
+          fetch-depth: 0
 
       - name: Get commit details
         id: commit-details
@@ -20,20 +20,69 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
           COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
           COMMIT_SHA=$(git log -1 --pretty=format:"%h")
+          COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/$(git log -1 --pretty=format:"%H")"
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
+
+          # Obtenir l'avatar de l'auteur si possible
+          AUTHOR_EMAIL=$(git log -1 --pretty=format:"%ae")
+          AUTHOR_HASH=$(echo -n "$AUTHOR_EMAIL" | md5sum | awk '{print $1}')
+          AUTHOR_AVATAR="https://www.gravatar.com/avatar/${AUTHOR_HASH}?d=identicon"
+
+          # Obtenir la liste des fichiers modifiés
+          FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r HEAD | sed -e 's/^/* `/g' -e 's/$/`/g' | head -n 5)
+          if [ $(git diff-tree --no-commit-id --name-only -r HEAD | wc -l) -gt 5 ]; then
+            FILES_CHANGED="${FILES_CHANGED}\n* ... et d'autres fichiers"
+          fi
+
           echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
           echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
           echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "commit_url=$COMMIT_URL" >> $GITHUB_OUTPUT
+          echo "avatar=$AUTHOR_AVATAR" >> $GITHUB_OUTPUT
+          echo "files_changed<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES_CHANGED" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Send Discord Message
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: |
-            **New commit pushed to `${{ steps.commit-details.outputs.branch }}`**
-            **Author:** ${{ steps.commit-details.outputs.author }}
-            **Commit:** ${{ steps.commit-details.outputs.sha }}
-            **Message:** ${{ steps.commit-details.outputs.message }}
-            **Repository:** ${{ github.repository }}
+      - name: Send Discord Notification
+        run: |
+          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d '{
+            "username": "GitHub",
+            "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+            "embeds": [
+              {
+                "title": "Nouveau commit sur ${{ github.repository }}",
+                "url": "${{ steps.commit-details.outputs.commit_url }}",
+                "color": 5814783,
+                "fields": [
+                  {
+                    "name": "Branche",
+                    "value": "`${{ steps.commit-details.outputs.branch }}`",
+                    "inline": true
+                  },
+                  {
+                    "name": "Commit",
+                    "value": "[\`${{ steps.commit-details.outputs.sha }}\`](${{ steps.commit-details.outputs.commit_url }})",
+                    "inline": true
+                  },
+                  {
+                    "name": "Message",
+                    "value": "${{ steps.commit-details.outputs.message }}"
+                  },
+                  {
+                    "name": "Fichiers modifiés",
+                    "value": "${{ steps.commit-details.outputs.files_changed }}"
+                  }
+                ],
+                "author": {
+                  "name": "${{ steps.commit-details.outputs.author }}",
+                  "icon_url": "${{ steps.commit-details.outputs.avatar }}"
+                },
+                "footer": {
+                  "text": "Deployé via Coolify • ${{ github.event.repository.name }}",
+                  "icon_url": "https://coolify.io/favicon/favicon-32x32.png"
+                },
+                "timestamp": "'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'"
+              }
+            ]
+          }'
