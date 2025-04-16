@@ -30,33 +30,52 @@ jobs:
           echo "commit_url=$COMMIT_URL" >> $GITHUB_OUTPUT
 
       - name: Send Discord Notification
+        env:
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ steps.commit-details.outputs.branch }}
+          COMMIT_URL: ${{ steps.commit-details.outputs.commit_url }}
+          COMMIT_SHA: ${{ steps.commit-details.outputs.sha }}
+          COMMIT_MSG: ${{ steps.commit-details.outputs.message }}
+          AUTHOR: ${{ steps.commit-details.outputs.author }}
         run: |
-          cat > payload.json << EOF
-          {
+          # Échapper les caractères spéciaux pour le JSON
+          COMMIT_MSG_ESCAPED=$(echo "$COMMIT_MSG" | jq -Rs .)
+          AUTHOR_ESCAPED=$(echo "$AUTHOR" | jq -Rs .)
+
+          # Construire le payload avec jq pour s'assurer que le JSON est valide
+          jq -n \
+          --arg repo "$REPO" \
+          --arg branch "$BRANCH" \
+          --arg commit_url "$COMMIT_URL" \
+          --arg commit_sha "$COMMIT_SHA" \
+          --argjson commit_msg $COMMIT_MSG_ESCAPED \
+          --argjson author $AUTHOR_ESCAPED \
+          --arg timestamp "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+          '{
             "username": "GitHub",
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [
               {
-                "title": "${{ github.repository }} - ${{ steps.commit-details.outputs.branch }}",
-                "url": "${{ steps.commit-details.outputs.commit_url }}",
+                "title": $repo + " - " + $branch,
+                "url": $commit_url,
                 "color": 5814783,
                 "fields": [
                   {
                     "name": "Commit",
-                    "value": "[${{ steps.commit-details.outputs.sha }}](${{ steps.commit-details.outputs.commit_url }})",
+                    "value": "[" + $commit_sha + "](" + $commit_url + ")",
                     "inline": true
                   },
                   {
                     "name": "Message",
-                    "value": "${{ steps.commit-details.outputs.message }}"
+                    "value": $commit_msg
                   }
                 ],
                 "footer": {
-                  "text": "Par ${{ steps.commit-details.outputs.author }}",
+                  "text": "Par " + $author
                 },
-                "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                "timestamp": $timestamp
               }
             ]
-          }
-          EOF
+          }' > payload.json
+
           curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
