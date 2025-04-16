@@ -3,7 +3,7 @@ name: Discord Notification - Development Branch
 on:
   push:
     branches:
-      - 'develop' # Uniquement sur la branche develop
+      - 'develop'
 
 jobs:
   notify-discord:
@@ -38,16 +38,13 @@ jobs:
           COMMIT_MSG: ${{ steps.commit-details.outputs.message }}
           AUTHOR: ${{ steps.commit-details.outputs.author }}
         run: |
-          COMMIT_MSG_ESCAPED=$(echo "$COMMIT_MSG" | jq -Rs .)
-          AUTHOR_ESCAPED=$(echo "$AUTHOR" | jq -Rs .)
-
           jq -n \
           --arg repo "$REPO" \
           --arg branch "$BRANCH" \
           --arg commit_url "$COMMIT_URL" \
           --arg commit_sha "$COMMIT_SHA" \
-          --argjson commit_msg $COMMIT_MSG_ESCAPED \
-          --argjson author $AUTHOR_ESCAPED \
+          --arg commit_msg "$(echo "$COMMIT_MSG" | jq -Rs .)" \
+          --arg author "$(echo "$AUTHOR" | jq -Rs .)" \
           --arg timestamp "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
           '{
             "username": "GitHub",
