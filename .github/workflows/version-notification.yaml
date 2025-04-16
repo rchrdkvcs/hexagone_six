@@ -51,7 +51,6 @@ jobs:
           echo "url=$TAG_URL" >> $GITHUB_OUTPUT
           echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
 
-          # Obtenir le nombre de commits depuis le dernier tag
           if [ -n "$PREVIOUS_TAG" ]; then
             COMMIT_COUNT=$(git rev-list --count $PREVIOUS_TAG..$TAG_NAME)
           else
@@ -62,9 +61,6 @@ jobs:
 
       - name: Send Discord Notification
         run: |
-          # Préparer un message JSON valide et simplifié
-          MESSAGE=$(echo "${{ steps.tag-details.outputs.message }}" | tr '\n' ' ' | sed 's/"/\\"/g')
-
           cat > payload.json << EOF
           {
             "username": "GitHub",
@@ -87,7 +83,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "${MESSAGE}"
+                    "value": "${{ steps.tag-details.outputs.message }}"
                   }
                 ],
                 "author": {
