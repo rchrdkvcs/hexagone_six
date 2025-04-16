@@ -14,14 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
       - name: Get tag details
         id: tag-details
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | sed ':a;N;$!ba;s/\n/\\\\n/g')
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' $TAG_NAME | tr -d '"' | tr '\n' ' ' | sed 's/$/\\n/g')
           TAG_AUTHOR=$(git for-each-ref --format='%(taggername)' refs/tags/$TAG_NAME || git for-each-ref --format='%(committername)' refs/tags/$TAG_NAME)
           TAG_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${TAG_NAME}"
           COMMIT_SHA=$(git rev-list -n 1 $TAG_NAME)
@@ -31,10 +28,10 @@ jobs:
 
           # Générer le message cumulatif de tous les commits entre les tags
           if [ -n "$PREVIOUS_TAG" ]; then
-            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | sed ':a;N;$!ba;s/\n/\\\\n/g')
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $PREVIOUS_TAG..$TAG_NAME | tr '\n' ' ' | sed 's/$/\\n/g' | tr -d '"')
           else
             # Si pas de tag précédent, prendre tous les commits jusqu'au tag actuel
-            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | sed ':a;N;$!ba;s/\n/\\\\n/g')
+            COMMITS_MESSAGES=$(git log --pretty=format:"• %s" $TAG_NAME | tr '\n' ' ' | sed 's/$/\\n/g' | tr -d '"')
           fi
 
           echo "name=$TAG_NAME" >> $GITHUB_OUTPUT
@@ -42,12 +39,11 @@ jobs:
           if [ -n "$TAG_MESSAGE" ]; then
             # Afficher le message du tag s'il existe
             echo "$TAG_MESSAGE" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "**Commits inclus:**" >> $GITHUB_OUTPUT
+            echo "**Commits inclus:**\\n" >> $GITHUB_OUTPUT
             echo "$COMMITS_MESSAGES" >> $GITHUB_OUTPUT
           else
             # Sinon utiliser uniquement le résumé des commits
-            echo "**Commits inclus:**" >> $GITHUB_OUTPUT
+            echo "**Commits inclus:**\\n" >> $GITHUB_OUTPUT
             echo "$COMMITS_MESSAGES" >> $GITHUB_OUTPUT
           fi
           echo "EOF" >> $GITHUB_OUTPUT
@@ -66,7 +62,9 @@ jobs:
 
       - name: Send Discord Notification
         run: |
-          # Créer le payload JSON
+          # Préparer un message JSON valide et simplifié
+          MESSAGE=$(echo "${{ steps.tag-details.outputs.message }}" | tr '\n' ' ' | sed 's/"/\\"/g')
+
           cat > payload.json << EOF
           {
             "username": "GitHub",
@@ -89,7 +87,7 @@ jobs:
                   },
                   {
                     "name": "Notes de version",
-                    "value": "${{ steps.tag-details.outputs.message }}"
+                    "value": "${MESSAGE}"
                   }
                 ],
                 "author": {
@@ -104,4 +102,4 @@ jobs:
           }
           EOF
 
-          cat payload.json | jq -c . | curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @-
+          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
