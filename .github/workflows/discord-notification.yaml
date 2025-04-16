@@ -17,13 +17,15 @@ jobs:
       - name: Get commit details
         id: commit-details
         run: |
-          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%B" | sed ':a;N;$!ba;s/\n/\\n/g')
           COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
           COMMIT_SHA=$(git log -1 --pretty=format:"%h")
           COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/$(git log -1 --pretty=format:"%H")"
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-          echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "message<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
           echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
@@ -41,6 +43,11 @@ jobs:
                 "url": "${{ steps.commit-details.outputs.commit_url }}",
                 "color": 5814783,
                 "fields": [
+                  {
+                    "name": "Branche",
+                    "value": "`${{ github.ref_name }}`",
+                    "inline": true
+                  },
                   {
                     "name": "Details du commit",
                     "value": "${{ steps.commit-details.outputs.message }}"
