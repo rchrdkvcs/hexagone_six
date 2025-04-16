@@ -46,7 +46,8 @@ jobs:
 
       - name: Send Discord Notification
         run: |
-          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d '{
+          cat > payload.json << EOF
+          {
             "username": "GitHub",
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [
@@ -82,7 +83,9 @@ jobs:
                   "text": "Deployé via Coolify • ${{ github.event.repository.name }}",
                   "icon_url": "https://coolify.io/favicon/favicon-32x32.png"
                 },
-                "timestamp": "'"$(date -u +"%Y-%m-%dT%H:%M:%SZ")"'"
+                "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
               }
             ]
-          }'
+          }
+          EOF
+          curl -H "Content-Type: application/json" -X POST ${{ secrets.DISCORD_WEBHOOK }} -d @payload.json
