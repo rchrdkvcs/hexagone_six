@@ -23,26 +23,11 @@ jobs:
           COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/$(git log -1 --pretty=format:"%H")"
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
 
-          # Obtenir l'avatar de l'auteur si possible
-          AUTHOR_EMAIL=$(git log -1 --pretty=format:"%ae")
-          AUTHOR_HASH=$(echo -n "$AUTHOR_EMAIL" | md5sum | awk '{print $1}')
-          AUTHOR_AVATAR="https://www.gravatar.com/avatar/${AUTHOR_HASH}?d=identicon"
-
-          # Obtenir la liste des fichiers modifiés
-          FILES_CHANGED=$(git diff-tree --no-commit-id --name-only -r HEAD | sed -e 's/^/* `/g' -e 's/$/`/g' | head -n 5)
-          if [ $(git diff-tree --no-commit-id --name-only -r HEAD | wc -l) -gt 5 ]; then
-            FILES_CHANGED="${FILES_CHANGED}\n* ... et d'autres fichiers"
-          fi
-
           echo "message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
           echo "author=$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
           echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
           echo "commit_url=$COMMIT_URL" >> $GITHUB_OUTPUT
-          echo "avatar=$AUTHOR_AVATAR" >> $GITHUB_OUTPUT
-          echo "files_changed<<EOF" >> $GITHUB_OUTPUT
-          echo "$FILES_CHANGED" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Discord Notification
         run: |
@@ -52,36 +37,22 @@ jobs:
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [
               {
-                "title": "Nouveau commit sur ${{ github.repository }}",
+                "title": "${{ github.repository }} - ${{ steps.commit-details.outputs.branch }}",
                 "url": "${{ steps.commit-details.outputs.commit_url }}",
                 "color": 5814783,
                 "fields": [
                   {
-                    "name": "Branche",
-                    "value": "`${{ steps.commit-details.outputs.branch }}`",
-                    "inline": true
-                  },
-                  {
                     "name": "Commit",
-                    "value": "[\`${{ steps.commit-details.outputs.sha }}\`](${{ steps.commit-details.outputs.commit_url }})",
+                    "value": "[${{ steps.commit-details.outputs.sha }}](${{ steps.commit-details.outputs.commit_url }})",
                     "inline": true
                   },
                   {
                     "name": "Message",
                     "value": "${{ steps.commit-details.outputs.message }}"
-                  },
-                  {
-                    "name": "Fichiers modifiés",
-                    "value": "${{ steps.commit-details.outputs.files_changed }}"
                   }
                 ],
-                "author": {
-                  "name": "${{ steps.commit-details.outputs.author }}",
-                  "icon_url": "${{ steps.commit-details.outputs.avatar }}"
-                },
                 "footer": {
-                  "text": "Deployé via Coolify • ${{ github.event.repository.name }}",
-                  "icon_url": "https://coolify.io/favicon/favicon-32x32.png"
+                  "text": "Par ${{ steps.commit-details.outputs.author }}",
                 },
                 "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
               }
