@@ -67,6 +67,11 @@ jobs:
           # Nettoyer et formater correctement le message
           MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
 
+          # Tronquer le champ Notes de version si nécessaire
+          if [ ${#MESSAGE_ESCAPED} -gt 1024 ]; then
+            MESSAGE_ESCAPED="${MESSAGE_ESCAPED:0:1020}..."
+          fi
+
           echo '{}' | jq \
             --arg username "GitHub" \
             --arg avatar_url "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" \
