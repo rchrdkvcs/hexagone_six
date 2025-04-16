@@ -3,7 +3,7 @@ const actualYear = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="container mx-auto px-4 py-10 border-t border-white/10">
+  <footer class="container mx-auto px-4 py-10 border-t border-white/10 mt-32">
     <div class="flex justify-between items-center gap-6">
       <div>
         <p class="text-xl font-bold mb-1">R6CALLS</p>
@@ -14,19 +14,19 @@ const actualYear = new Date().getFullYear()
         <li>
           <a
             class="flex items-center justify-center gap-2 color-white transition-all duration-300 color-white/60 hover:color-white/100"
-            href="https://discord.com"
+            href="https://discord.gg/bS66EX7cHk"
           >
             <i class="i-mdi:discord size-6"></i>
           </a>
         </li>
-        <li>
-          <a
-            class="flex items-center justify-center gap-2 color-white transition-all duration-300 color-white/60 hover:color-white/100"
-            href="https://twitter.com"
-          >
-            <i class="i-mdi:twitter size-6"></i>
-          </a>
-        </li>
+        <!--        <li>-->
+        <!--          <a-->
+        <!--            class="flex items-center justify-center gap-2 color-white transition-all duration-300 color-white/60 hover:color-white/100"-->
+        <!--            href="https://twitter.com"-->
+        <!--          >-->
+        <!--            <i class="i-mdi:twitter size-6"></i>-->
+        <!--          </a>-->
+        <!--        </li>-->
       </ul>
 
       <div class="flex gap-6 text-sm color-white/60">

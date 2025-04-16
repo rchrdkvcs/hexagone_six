@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Head, usePage } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
 import MapLeaflet from '~/components/maps/MapLeaflet.vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import MapsController from '#controllers/maps_controller'
@@ -27,9 +27,22 @@ const selectedMarker = ref<Marker | null>(null)
 const viewModalMarker = ref<Marker | null>(null)
 const showViewModal = ref(false)
 const user = usePage().props.user as User
+const showFooter = inject('showFooter') as Ref<boolean> | null
 
-const { isLoading, saveSuccess, saveError, stageMarkers, addMarker, updateMarker, deleteMarker } =
-  use_markers(props.map.markers, props.map.id, () => currentImageIndex.value, true)
+onMounted(() => {
+  showFooter.value = false
+})
+
+onUnmounted(() => {
+  showFooter.value = true
+})
+
+const { stageMarkers, addMarker, updateMarker, deleteMarker } = use_markers(
+  props.map.markers,
+  props.map.id,
+  () => currentImageIndex.value,
+  true
+)
 
 const handleMapClick = (position: { x: number; y: number }) => {
   if (!isEditMode.value) return

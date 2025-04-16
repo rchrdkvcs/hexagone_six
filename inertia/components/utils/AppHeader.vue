@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import AppButton from '~/components/utils/AppButton.vue'
-import { usePage } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import type User from '#models/user'
 import { onClickOutside } from '@vueuse/core'
@@ -31,9 +31,9 @@ const toggleUserMenu = () => {
   >
     <div class="max-w-7xl mx-auto px-4 h-full grid grid-cols-3 items-center">
       <!-- Logo -->
-      <div class="flex items-center justify-start">
+      <Link class="w-fit hover:scale-105 transition ease-in-out duration-150" href="/">
         <img alt="Logo" class="h-6" src="/public/images/logo.png" />
-      </div>
+      </Link>
 
       <!-- Navigation -->
       <nav class="hidden md:flex space-x-1 justify-center">
