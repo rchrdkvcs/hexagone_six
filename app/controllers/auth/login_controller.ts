@@ -7,13 +7,9 @@ export default class LoginController {
   }
 
   public async execute({ request, response, auth }: HttpContext) {
-    const { userName, password } = request.only(['userName', 'password'])
+    const { email, password } = request.only(['email', 'password'])
 
-    const user = await User.verifyCredentials(userName, password)
-
-    if (!user) {
-      return response.status(401).json({ message: 'Invalid credentials' })
-    }
+    const user = await User.verifyCredentials(email, password)
 
     await auth.use('web').login(user)
 
@@ -21,6 +17,7 @@ export default class LoginController {
   }
 
   public async logout({ auth, response }: HttpContext) {
+    const user = auth.user
     await auth.use('web').logout()
 
     return response.redirect('/')
