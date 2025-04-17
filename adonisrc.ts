@@ -94,10 +94,6 @@ export default defineConfig({
       pattern: 'public/**',
       reloadServer: false,
     },
-    {
-      pattern: 'favicon.ico',
-      reloadServer: false,
-    },
   ],
 
   assetsBundler: false,
