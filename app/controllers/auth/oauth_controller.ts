@@ -4,14 +4,14 @@ import User from '#models/user'
 export default class OauthController {
   public async render({ params, ally, session, request }: HttpContext) {
     const { provider } = params
-    // Stocker l'URL de retour dans la session
     const returnUrl = request.input('returnUrl', '/')
+
     session.put('returnUrl', returnUrl)
 
     return ally.use(provider).redirect()
   }
 
-  public async execute({ params, ally, auth, response, session }: HttpContext) {
+  public async execute({ params, ally, auth, response, session, request }: HttpContext) {
     const { provider } = params
     const social = ally.use(provider)
 
@@ -42,7 +42,6 @@ export default class OauthController {
 
     await auth.use('web').login(user)
 
-    // Récupérer l'URL de retour depuis la session
     const returnUrl = session.pull('returnUrl', '/')
     return response.redirect(returnUrl)
   }

@@ -33,11 +33,13 @@ export default class SuggestionsController {
     }
   }
 
-  async store({ response, request }: HttpContext) {
+  async store({ response, request, auth }: HttpContext) {
     try {
+      const user = auth.user
       const data = request.only(['markerId', 'label'])
       const suggestion = await MarkerSuggest.create({
         ...data,
+        userId: user?.id || null,
         isApproved: false,
         upVote: 0,
         downVote: 0,
