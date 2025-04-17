@@ -9,6 +9,9 @@ export default class MarkerSuggest extends BaseModel {
   declare id: string
 
   @column()
+  declare userId: string | null
+
+  @column()
   declare label: string
 
   @column()

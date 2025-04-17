@@ -6,6 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id')
+      table.uuid('user_id').nullable()
       table.string('label').notNullable()
       table.boolean('is_approved').notNullable().defaultTo(false)
       table.integer('up_vote').notNullable().defaultTo(0)
