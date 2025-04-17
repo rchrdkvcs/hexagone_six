@@ -2,8 +2,9 @@
 import AppButton from '~/components/utils/AppButton.vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
-import type User from '#models/user'
 import { onClickOutside } from '@vueuse/core'
+import { useUser } from '~/composables/use_user'
+import { useAccess } from '~/composables/use_access'
 
 const navItems = [
   { name: 'Accueil', href: '/' },
@@ -11,7 +12,7 @@ const navItems = [
 ]
 
 const route = computed(() => usePage().url)
-const user = usePage().props.user as User
+const user = useUser()
 
 const userMenuOpen = ref(false)
 const userMenuRef = ref(null)
@@ -74,20 +75,28 @@ const toggleUserMenu = () => {
               <p class="color-white font-medium">{{ user.userName }}</p>
               <p class="color-white/60 color-xs truncate">{{ user.email }}</p>
             </div>
-            <a
+            <Link
+              v-if="useAccess() >= 2"
+              class="flex items-center gap-2 px-4 py-2 color-white/80 hover:color-white hover:bg-white/5 transition-colors"
+              href="/admin"
+            >
+              <i class="i-mdi:cog"></i>
+              <span>Administration</span>
+            </Link>
+            <Link
               class="flex items-center gap-2 px-4 py-2 color-white/80 hover:color-white hover:bg-white/5 transition-colors"
               href="/profil"
             >
               <i class="i-mdi:account-cog"></i>
               <span>Paramètres</span>
-            </a>
-            <a
+            </Link>
+            <Link
               class="flex items-center gap-2 px-4 py-2 color-white/80 hover:color-white hover:bg-white/5 transition-colors"
               href="/logout"
             >
               <i class="i-mdi:logout"></i>
               <span>Se déconnecter</span>
-            </a>
+            </Link>
           </div>
         </div>
 
