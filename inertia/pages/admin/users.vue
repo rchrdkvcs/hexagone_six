@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { InferPageProps } from '@adonisjs/inertia/types'
-import AdminUsersController from '#controllers/admin/admin_users_controller'
+import type AdminUsersController from '#controllers/admin/admin_users_controller'
 
 const props = defineProps<{
   users: InferPageProps<AdminUsersController, 'render'>

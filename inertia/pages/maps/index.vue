@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3'
 import MapCard from '~/components/maps/MapCard.vue'
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
-import MapsController from '#controllers/maps_controller'
+import type MapsController from '#controllers/maps_controller'
 import AppButton from '~/components/utils/AppButton.vue'
 
 interface Playlist {
