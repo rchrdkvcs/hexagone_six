@@ -6,11 +6,13 @@ export default class RegistersController {
     return inertia.render('auth/register')
   }
 
-  public async execute({ request, response }: HttpContext) {
-    const formData = request.only(['userName', 'password'])
+  public async execute({ request, response, auth }: HttpContext) {
+    const formData = request.only(['email', 'password', 'userName'])
 
     const user = await User.create(formData)
 
-    response.status(201).json(user)
+    await auth.use('web').login(user)
+
+    return response.redirect('/')
   }
 }
