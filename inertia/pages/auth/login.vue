@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { Head, useForm } from '@inertiajs/vue3'
 import AppButton from '~/components/utils/AppButton.vue'
-import empty from '~/layouts/empty.vue'
+import Empty from '~/layouts/empty.vue'
 
 defineOptions({
-  layout: empty,
+  layout: Empty,
 })
 
 const form = useForm({

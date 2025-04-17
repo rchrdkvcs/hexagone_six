@@ -7,11 +7,11 @@ import type { Authenticators } from '@adonisjs/auth/types'
  * be accessed by unauthenticated users.
  *
  * For example, the login page should not be accessible if the user
- * is already logged-in
+ * is already logged in
  */
 export default class GuestMiddleware {
   /**
-   * The URL to redirect to when user is logged-in
+   * The URL to redirect to when the user is logged in
    */
   redirectTo = '/'
 
