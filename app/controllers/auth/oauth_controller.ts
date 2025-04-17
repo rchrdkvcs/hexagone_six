@@ -11,7 +11,7 @@ export default class OauthController {
     return ally.use(provider).redirect()
   }
 
-  public async execute({ params, ally, auth, response, session, request }: HttpContext) {
+  public async execute({ params, ally, auth, response, session }: HttpContext) {
     const { provider } = params
     const social = ally.use(provider)
 
