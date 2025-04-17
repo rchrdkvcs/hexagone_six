@@ -35,7 +35,7 @@ const toggleFilter = (filter: string) => {
 </script>
 
 <template>
-  <Head title="Cartes" />
+  <Head title="Liste des cartes" />
 
   <div class="flex flex-wrap gap-2 py-3 justify-center items-center my-8 mt-24 max-w-3xl mx-auto">
     <AppButton

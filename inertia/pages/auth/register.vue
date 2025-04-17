@@ -30,7 +30,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Cree mon compte" />
+  <Head title="Crée mon compte" />
 
   <div class="min-h-screen w-full flex justify-center items-center p-4">
     <div

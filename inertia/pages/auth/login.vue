@@ -24,7 +24,7 @@ const submit = (e: Event) => {
 </script>
 
 <template>
-  <Head title="Connexion" />
+  <Head title="Se connecter" />
 
   <div class="min-h-screen w-full flex justify-center items-center p-4">
     <div

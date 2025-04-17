@@ -4,7 +4,7 @@ import AppButton from '~/components/utils/AppButton.vue'
 </script>
 
 <template>
-  <Head title="R6Calls - Apprendre les callouts de Rainbow Six Siege en français" />
+  <Head title="Apprendre les callouts de Rainbow Six Siege en français" />
 
   <div class="min-h-screen">
     <!-- Hero Section -->
