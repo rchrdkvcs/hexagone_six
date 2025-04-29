@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/vue3'
-import type User from '#models/user'
+import type User from '../../app/users/models/user'
 
 export function useUser() {
   const page = usePage()

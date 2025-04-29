@@ -13,12 +13,12 @@ import { middleware } from '#start/kernel'
 import authRoutes from '#start/routes/auth'
 import adminRoutes from '#start/routes/admin'
 
+const MapsController = () => import('#maps/controllers/maps_controller')
+const MarkersController = () => import('#markers/controllers/markers_controller')
+const SuggestionsController = () => import('#suggestions/controllers/suggestions_controller')
+
 authRoutes()
 adminRoutes()
-
-const SuggestionsController = () => import('#controllers/suggestions_controller')
-const MapsController = () => import('#controllers/maps_controller')
-const MarkersController = () => import('#controllers/markers_controller')
 
 router
   .group(() => {

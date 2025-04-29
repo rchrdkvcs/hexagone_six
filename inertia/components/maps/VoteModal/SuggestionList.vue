@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { InferPageProps } from '@adonisjs/inertia/types'
-import type MapsController from '#controllers/maps_controller'
+import type MapsController from '../../../../app/maps/controllers/maps_controller'
 import SuggestionItem from '~/components/maps/VoteModal/SuggestionItem.vue'
 
 type Marker = InferPageProps<MapsController, 'show'>['map']['markers']

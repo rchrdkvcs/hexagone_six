@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import MarkerSuggest from '#models/marker_suggest'
-import VoteLog from '#models/vote_log'
+import MarkerSuggest from '#suggestions/models/suggestion'
+import Vote from '#votes/models/vote'
 
 export default class SuggestionsController {
   async index({ response, request }: HttpContext) {
@@ -55,12 +55,12 @@ export default class SuggestionsController {
     }
   }
 
-  async update({ response, request, params }: HttpContext) {
+  async update({ response, request, params, auth }: HttpContext) {
     try {
       const data = request.only(['upVote', 'downVote', 'isApproved'])
 
       const userIp = request.ip()
-      const existingVote = await VoteLog.query()
+      const existingVote = await Vote.query()
         .where('userIp', userIp)
         .where('markerSuggestId', params.id)
         .first()
@@ -71,8 +71,11 @@ export default class SuggestionsController {
           message: 'Vous avez déjà voté pour cette suggestion',
         })
       } else {
-        await VoteLog.create({
+        const userId = auth.user ? auth.user.id : null
+
+        await Vote.create({
           userIp,
+          userId,
           voteType: data.upVote ? 'upVote' : 'downVote',
           markerSuggestId: params.id,
         })

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import type MarkerSuggest from '#models/marker_suggest'
+import type MarkerSuggest from '../../../../app/suggestions/models/suggestion'
 import axios from 'axios'
 import { computed, ref } from 'vue'
 
@@ -49,7 +49,7 @@ const handleVote = async (voteType: 'up' | 'down') => {
     localSuggestion.value[voteProperty] = previousValue
     localSuggestion.value.voteRatio = localSuggestion.value.upVote - localSuggestion.value.downVote
     voteError.value =
-      error.response.data.message || 'Une erreur est survenue lors de la mise à jour du vote.'
+      error.response.data.message || 'Une erreur est survenue lors de la mise à jour du votes.'
     console.error(`Error updating ${voteProperty}:`, error)
   } finally {
     isVoting.value = false

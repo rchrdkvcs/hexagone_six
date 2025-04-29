@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Map from '#models/map'
-import Playlist from '#models/playlist'
+import Map from '#maps/models/map'
+import Playlist from '#playlists/models/playlist'
 
 export default class MapsController {
   async index({ inertia }: HttpContext) {

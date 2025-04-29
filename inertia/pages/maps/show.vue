@@ -3,11 +3,11 @@ import { Head, usePage } from '@inertiajs/vue3'
 import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
 import MapLeaflet from '~/components/maps/MapLeaflet.vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
-import type MapsController from '#controllers/maps_controller'
+import type MapsController from '../../../app/maps/controllers/maps_controller'
 import { type Marker, use_markers } from '~/composables/use_markers'
 import AppButton from '~/components/utils/AppButton.vue'
 import VoteModal from '~/components/maps/VoteModal.vue'
-import type User from '#models/user'
+import type User from '../../../app/users/models/user'
 import MarkerModal from '~/components/maps/MarkerModal.vue'
 
 const props = defineProps<{

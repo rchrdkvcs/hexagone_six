@@ -1,6 +1,6 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-import Map from '#models/map'
-import Playlist from '#models/playlist'
+import Map from '#maps/models/map'
+import Playlist from '#playlists/models/playlist'
 
 export default class extends BaseSeeder {
   async run() {

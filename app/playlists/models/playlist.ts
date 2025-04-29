@@ -1,7 +1,7 @@
 import { BaseModel, beforeCreate, column, manyToMany } from '@adonisjs/lucid/orm'
 import type { ManyToMany } from '@adonisjs/lucid/types/relations'
-import Map from '#models/map'
 import crypto from 'node:crypto'
+import Map from '#maps/models/map'
 
 export default class Playlist extends BaseModel {
   @column({ isPrimary: true })

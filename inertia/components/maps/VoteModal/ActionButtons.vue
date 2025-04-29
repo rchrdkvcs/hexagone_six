@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import AppButton from '~/components/utils/AppButton.vue'
 import { usePage } from '@inertiajs/vue3'
-import type User from '#models/user'
+import type User from '../../../../app/users/models/user'
 import { ref } from 'vue'
 import AuthModal from '~/components/AuthModal.vue'
 

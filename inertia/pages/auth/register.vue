@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Head, Link, useForm } from '@inertiajs/vue3'
-import Empty from '~/layouts/empty.vue'
 import AppButton from '~/components/utils/AppButton.vue'
+import Empty from '~/layouts/empty.vue'
 
 defineOptions({
   layout: Empty,
@@ -13,20 +13,6 @@ const form = useForm({
   password: '',
   passwordConfirmation: '',
 })
-
-const submit = () => {
-  if (form.password !== form.passwordConfirmation) {
-    form.setError('passwordConfirmation', 'Les mots de passe ne correspondent pas.')
-    return
-  }
-
-  form.post('/register', {
-    onFinish: () => form.reset(),
-    onError: (errors) => {
-      console.error(errors)
-    },
-  })
-}
 </script>
 
 <template>
@@ -44,46 +30,71 @@ const submit = () => {
           </p>
         </div>
 
-        <form class="space-y-6" @submit.prevent="submit">
+        <form class="space-y-6" @submit.prevent="form.post('/register')">
           <div class="space-y-4">
-            <input
-              v-model="form.userName"
-              class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
-              placeholder="Nom d'utilisateur"
-              type="text"
-            />
-            <input
-              v-model="form.email"
-              class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
-              placeholder="Adresse email"
-              type="email"
-            />
-            <input
-              v-model="form.password"
-              class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
-              placeholder="Mot de passe"
-              type="password"
-            />
-            <input
-              v-model="form.passwordConfirmation"
-              class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
-              placeholder="Confirmer le mot de passe"
-              type="password"
-            />
-          </div>
+            <div class="space-y-1">
+              <input
+                v-model="form.userName"
+                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+                placeholder="Nom d'utilisateur"
+                type="text"
+              />
+              <span v-if="form.errors.userName" class="color-red">
+                Le nom d'utilisateur est invalide.
+              </span>
+            </div>
 
-          <div v-if="form.errors">
-            <p
-              v-for="(error, index) in form.errors"
-              :key="index"
-              class="text-red-500 text-sm mt-2 w-full text-center"
-            >
-              {{ error }}
-            </p>
+            <div class="space-y-1">
+              <input
+                v-model="form.email"
+                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+                placeholder="Adresse email"
+                type="email"
+              />
+              <span v-if="form.errors.email" class="color-red">
+                L'adresse e-mail est invalide.
+              </span>
+            </div>
+
+            <div class="space-y-1">
+              <input
+                v-model="form.password"
+                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+                placeholder="Mot de passe"
+                type="password"
+              />
+              <span v-if="form.errors.password" class="color-red">
+                Le mot de passe est requis.
+              </span>
+            </div>
+
+            <div class="space-y-1">
+              <input
+                v-model="form.passwordConfirmation"
+                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
+                placeholder="Confirmer le mot de passe"
+                type="password"
+              />
+              <span v-if="form.errors.passwordConfirmation" class="color-red">
+                La confirmation du mot de passe est requise.
+              </span>
+            </div>
           </div>
 
           <div>
-            <AppButton class="w-full py-3" icon="i-mdi:send" label="Crée mon compte" />
+            <AppButton
+              v-if="form.processing"
+              class="w-full py-3"
+              disabled
+              icon="i-mdi:loading animate-spin"
+              label="Création en cours..."
+            />
+            <AppButton
+              v-else
+              class="w-full py-3"
+              icon="i-mdi:account-plus"
+              label="Crée mon compte"
+            />
           </div>
 
           <div class="relative flex items-center my-6">

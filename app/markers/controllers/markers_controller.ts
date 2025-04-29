@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Marker from '#models/marker'
+import Marker from '#markers/models/marker'
 
 export default class MarkersController {
   async store({ response, request }: HttpContext) {

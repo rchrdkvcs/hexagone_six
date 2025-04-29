@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Marker from '#models/marker'
 import crypto from 'node:crypto'
+import Marker from '#markers/models/marker'
 
 export default class MarkerSuggest extends BaseModel {
   @column({ isPrimary: true })

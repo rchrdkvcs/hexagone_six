@@ -1,13 +1,16 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 import crypto from 'node:crypto'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
 
-export default class VoteLog extends BaseModel {
+export default class Vote extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
   @column()
   declare userIp: string
+
+  @column()
+  declare userId: string | null
 
   @column()
   declare voteType: string
@@ -22,7 +25,7 @@ export default class VoteLog extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeCreate()
-  static generateUuid(vote_log: VoteLog) {
-    vote_log.id = crypto.randomUUID()
+  static generateUuid(vote: Vote) {
+    vote.id = crypto.randomUUID()
   }
 }

@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import User from '#models/user'
+import User from '#users/models/user'
 
 export default class OauthController {
   public async render({ params, ally, session, request }: HttpContext) {

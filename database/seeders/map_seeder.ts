@@ -1,5 +1,5 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-import Map from '#models/map'
+import Map from '#maps/models/map'
 
 export default class extends BaseSeeder {
   async run() {

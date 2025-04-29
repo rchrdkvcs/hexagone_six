@@ -10,17 +10,11 @@ defineOptions({
 const form = useForm({
   email: '',
   password: '',
+} as {
+  email: string
+  password: string
+  code?: string
 })
-
-const submit = (e: Event) => {
-  e.preventDefault()
-  form.post('/login', {
-    onFinish: () => form.reset(),
-    onError: (errors) => {
-      console.error(errors)
-    },
-  })
-}
 </script>
 
 <template>
@@ -38,29 +32,53 @@ const submit = (e: Event) => {
           </p>
         </div>
 
-        <form class="space-y-6" @submit.prevent="submit">
+        <form class="space-y-6" @submit.prevent="form.post('/login')">
           <div class="space-y-4">
-            <div>
+            <div class="space-y-1">
               <input
                 v-model="form.email"
                 class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
                 placeholder="Adresse email"
                 type="email"
               />
+              <span v-if="form.errors.email" class="color-red">
+                L'adresse e-mail est invalide.
+              </span>
             </div>
 
-            <div>
+            <div class="space-y-1">
               <input
                 v-model="form.password"
                 class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
                 placeholder="Mot de passe"
                 type="password"
               />
+              <span v-if="form.errors.password" class="color-red">
+                Le mot de passe est requis.
+              </span>
             </div>
           </div>
 
           <div>
-            <AppButton class="w-full py-3" icon="i-mdi:email" label="Poursuivre avec mon e-mail" />
+            <AppButton
+              v-if="form.processing"
+              class="w-full py-3"
+              disabled
+              icon="i-mdi:loading animate-spin"
+              label="Connection..."
+            />
+            <AppButton
+              v-else
+              class="w-full py-3"
+              icon="i-mdi:email"
+              label="Poursuivre avec mon e-mail"
+            />
+          </div>
+
+          <div v-if="form.errors.code" class="w-full flex flex-col justify-center items-center">
+            <span v-if="form.errors.code === 'E_INVALID_CREDENTIALS'" class="color-red">
+              Aucun n'a été trouvé avec ces identifiants.
+            </span>
           </div>
 
           <div class="relative flex items-center my-6">

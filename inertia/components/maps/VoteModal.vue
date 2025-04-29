@@ -7,7 +7,7 @@ import SuggestionList from '~/components/maps/VoteModal/SuggestionList.vue'
 import ActionButtons from '~/components/maps/VoteModal/ActionButtons.vue'
 import SuggestionPopup from '~/components/maps/VoteModal/SuggestionPopup.vue'
 import ModalHeader from '~/components/maps/VoteModal/ModalHeader.vue'
-import type MapsController from '#controllers/maps_controller'
+import type MapsController from '../../../app/maps/controllers/maps_controller'
 
 // Types and props
 type Marker = InferPageProps<MapsController, 'show'>['map']['markers']
