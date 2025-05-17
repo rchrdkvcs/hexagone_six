@@ -101,8 +101,8 @@ watch([showAllSuggestions, suggestions], updateContainerHeight, { deep: true })
   <teleport to="body">
     <aside
       :class="[
-        'fixed top-50% translate-y-[-50%] w-350px bg-#24262A/75 backdrop-blur-lg p-4 rounded-2xl z-999 border border-white/10 shadow-lg flex flex-col gap-6 transition-all duration-300 ease-in-out',
-        isVisible ? 'right-8 opacity-100' : 'right-[-400px] opacity-0',
+        'fixed top-16 w-sm h-[calc(100vh-64px)] bg-#24262A/75 backdrop-blur-lg p-4 z-999 flex flex-col justify-between gap-6 transition-all duration-300 ease-in-out',
+        isVisible ? 'right-0 opacity-100' : 'right-[-400px] opacity-0',
       ]"
     >
       <ModalHeader
