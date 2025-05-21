@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { Head } from '@inertiajs/vue3'
 import AppButton from '~/components/utils/AppButton.vue'
+import AppLogo from '~/components/utils/AppLogo.vue'
 </script>
 
 <template>
@@ -11,12 +12,12 @@ import AppButton from '~/components/utils/AppButton.vue'
     <header
       class="container mx-auto px-4 py-20 md:py-32 md:pt-48 flex flex-col items-center text-center space-y-6"
     >
-      <img alt="Logo" class="h-12" src="/public/images/logo.png" />
-      <p class="text-xl md:text-2xl text-white/80 max-w-3xl mb-10">
+      <AppLogo class="h-16" />
+      <p class="text-lg md:text-xl max-w-3xl text-toned">
         Maîtrisez les callouts des maps de Rainbow Six Siege en français.
       </p>
       <div class="flex flex-col sm:flex-row gap-4">
-        <AppButton href="/cartes" icon="i-mdi:map" label="Voir les cartes" />
+        <UButton icon="lucide:map" label="Voir les cartes" size="xl" to="/cartes" />
       </div>
     </header>
 

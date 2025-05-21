@@ -59,8 +59,10 @@ const getMarkerIcon = (marker: Marker) => {
 }
 
 const onMapReady = (mapInstance: any) => mapInstance.fitBounds(bounds.value)
+
 const handleMapClick = (event: L.LeafletMouseEvent) =>
   emit('map-click', { x: event.latlng.lng, y: event.latlng.lat })
+
 const handleMarkerClick = (marker: Marker) => {
   selectedMarkerId.value = marker.id
   emit(props.isEditMode ? 'edit-marker' : 'marker-click', marker)
@@ -103,17 +105,18 @@ onMounted(() => {
         :key="`${marker.id}-${voteModal}-${selectedMarkerId}`"
         :icon="getMarkerIcon(marker) as unknown as L.Icon"
         :lat-lng="[marker.y, marker.x]"
-        @click="() => handleMarkerClick(marker)"
+        @click="handleMarkerClick(marker)"
       />
     </l-map>
   </div>
 </template>
 
 <style scoped>
+@reference "tailwindcss";
+@reference "@nuxt/ui";
+
 .image-map-container {
-  width: 100%;
-  height: 100vh;
-  background: transparent;
+  @apply size-full bg-transparent;
 }
 
 :deep(.leaflet-container),
@@ -121,55 +124,28 @@ onMounted(() => {
 :deep(.leaflet-map-pane canvas),
 :deep(.leaflet-tile-pane),
 :deep(.leaflet-overlay-pane) {
-  background: transparent;
+  @apply bg-transparent;
 }
 
 :deep(.text-marker-icon) {
-  background: transparent;
-  border: none;
-  position: relative;
-  left: 0;
-  top: 0;
+  @apply bg-transparent border-none relative left-0 top-0;
 }
 
 :deep(.leaflet-image-layer) {
-  border-radius: 16px;
-  border: 1px solid #ffffff15;
+  @apply border border-default rounded-lg;
 }
 
 :deep(.marker-text) {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  color: white;
-  font-size: 1rem;
-  white-space: nowrap;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  background: rgba(36, 38, 42, 0.5);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  z-index: 1;
+  @apply font-medium text-base text-white whitespace-nowrap absolute text-center cursor-pointer transition-all duration-300 z-10 -translate-1/2;
+  @apply bg-default/75 backdrop-blur rounded-full px-3 py-1;
 }
 
 :deep(.marker-text:hover),
 :deep(.marker-text.modal-open) {
-  background: rgba(255, 255, 255, 0.9);
-  color: #000;
-  transform: translate(-50%, -50%) scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  z-index: 1000 !important;
+  @apply bg-primary text-slate-900 font-semibold z-[1000] shadow-xl;
 }
 
 :deep(.leaflet-marker-pane .leaflet-marker-icon:hover) {
-  z-index: 1000 !important;
+  @apply z-50;
 }
 </style>

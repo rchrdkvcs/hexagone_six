@@ -1,15 +1,13 @@
-/// <reference path="../../adonisrc.ts" />
-/// <reference path="../../config/inertia.ts" />
-
 import { createApp, DefineComponent, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
-import 'virtual:uno.css'
 import '../assets/styles/main.css'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 import Default from '~/layouts/default.vue'
+import Admin from '~/layouts/admin.vue'
+import ui from '@nuxt/ui/vue-plugin'
 
 createInertiaApp({
-  progress: { color: '#00ffe5' },
+  progress: { color: '#ff6467' },
 
   title: (title) => `R6Calls | ${title}`,
 
@@ -18,7 +16,9 @@ createInertiaApp({
       `../pages/${name}.vue`,
       import.meta.glob<DefineComponent>('../pages/**/*.vue')
     ).then((page) => {
-      if (!page.default.layout) {
+      if (name.startsWith('admin/')) {
+        page.default.layout = Admin
+      } else if (!page.default.layout) {
         page.default.layout = Default
       }
       return page
@@ -28,6 +28,7 @@ createInertiaApp({
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
+      .use(ui)
       .mount(el)
   },
 })

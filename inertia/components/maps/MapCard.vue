@@ -11,7 +11,7 @@ defineProps<{
 <template>
   <Link
     :href="href"
-    class="group relative rounded-xl overflow-hidden border border-white/10 hover:(transform scale-102) transition-all duration-300 shadow-md flex flex-col"
+    class="group relative rounded-lg overflow-hidden border border-default transition-all duration-300 shadow-md"
   >
     <div class="overflow-hidden relative">
       <img
@@ -19,25 +19,33 @@ defineProps<{
         :src="imageSrc"
         class="w-full object-cover aspect-video transform group-hover:scale-105 transition-transform duration-500"
       />
+
       <div
-        class="absolute inset-0 bg-gradient-to-t from-primary-700/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        class="absolute inset-0 backdrop-filter backdrop-blur-sm opacity-100 group-hover:opacity-0 transition-opacity duration-300"
+        style="
+          -webkit-mask-image: linear-gradient(to top, black 20%, transparent 75%);
+          mask-image: linear-gradient(to top, black 20%, transparent 75%);
+        "
       ></div>
+
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-primary-800/75 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      ></div>
+
+      <div class="absolute bottom-0 left-0 w-full p-4 z-10">
+        <p
+          class="text-lg text-white/80 font-medium group-hover:text-2xl group-hover:text-white transition-all duration-300 origin-left"
+        >
+          {{ name }}
+        </p>
+      </div>
     </div>
 
+    <!-- Icône flèche -->
     <div
-      class="w-full backdrop-blur-md bg-primary-800/25 py-3 px-4 transition-all duration-300 relative z-10 border-t border-white/10"
+      class="absolute top-2 right-2 size-8 rounded-full bg-neutral/75 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
     >
-      <p
-        class="text-lg font-medium text-white group-hover:translate-x-1 transition-transform duration-300"
-      >
-        {{ name }}
-      </p>
-    </div>
-
-    <div
-      class="absolute top-2 right-2 size-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-    >
-      <i class="i-mdi:arrow-right text-white"></i>
+      <UIcon name="lucide:arrow-right" />
     </div>
   </Link>
 </template>

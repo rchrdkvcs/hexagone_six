@@ -10,26 +10,15 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
-const OauthController = () => import('#controllers/auth/oauth_controller')
+import authRoutes from '#start/routes/auth'
+import adminRoutes from '#start/routes/admin'
 
-const AdminController = () => import('#controllers/admin/admin_controller')
+const MapsController = () => import('#maps/controllers/maps_controller')
+const MarkersController = () => import('#markers/controllers/markers_controller')
+const SuggestionsController = () => import('#suggestions/controllers/suggestions_controller')
 
-const SuggestionsController = () => import('#controllers/suggestions_controller')
-const MapsController = () => import('#controllers/maps_controller')
-const MarkersController = () => import('#controllers/markers_controller')
-const LoginController = () => import('#controllers/auth/login_controller')
-const RegistersController = () => import('#controllers/auth/registers_controller')
-
-router.get('/login', [LoginController, 'render'])
-router.post('/login', [LoginController, 'execute'])
-
-router.get('/register', [RegistersController, 'render'])
-router.post('/register', [RegistersController, 'execute'])
-
-router.get('/:provider/redirect', [OauthController, 'render'])
-router.get('/:provider/callback', [OauthController, 'execute'])
-
-router.get('/logout', [LoginController, 'logout'])
+authRoutes()
+adminRoutes()
 
 router
   .group(() => {
@@ -50,12 +39,5 @@ router
     router.post('/markers/suggestions', [SuggestionsController, 'store'])
     router.patch('/markers/suggestions/:id', [SuggestionsController, 'update'])
     router.delete('/markers/suggestions/:id', [SuggestionsController, 'destroy'])
-
-    router
-      .group(() => {
-        router.get('/', [AdminController, 'index'])
-      })
-      .prefix('admin')
-      .use([middleware.auth(), middleware.userRole()])
   })
   .use(middleware.silentAuth())
