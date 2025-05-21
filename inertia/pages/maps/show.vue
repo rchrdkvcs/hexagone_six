@@ -1,14 +1,18 @@
 <script lang="ts" setup>
-import { Head, usePage } from '@inertiajs/vue3'
-import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
+import { Head } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
 import MapLeaflet from '~/components/maps/MapLeaflet.vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import type MapsController from '../../../app/maps/controllers/maps_controller'
-import { type Marker, use_markers } from '~/composables/use_markers'
-import AppButton from '~/components/utils/AppButton.vue'
-import VoteModal from '~/components/maps/VoteModal.vue'
-import type User from '../../../app/users/models/user'
+import { type Marker, useMarkers } from '~/composables/use_markers'
 import MarkerModal from '~/components/maps/MarkerModal.vue'
+import MapSlideover from '~/components/maps/MapSlideover.vue'
+import { useAccess } from '~/composables/use_access'
+import Maps from '~/layouts/maps.vue'
+
+defineOptions({
+  layout: Maps,
+})
 
 const props = defineProps<{
   map: InferPageProps<MapsController, 'show'>['map']
@@ -26,18 +30,11 @@ const tempMarkerPosition = ref<{ x: number; y: number } | null>(null)
 const selectedMarker = ref<Marker | null>(null)
 const viewModalMarker = ref<Marker | null>(null)
 const showViewModal = ref(false)
-const user = usePage().props.user as User
-const showFooter = inject('showFooter') as Ref<boolean> | null
+const toast = useToast()
+const overlay = useOverlay()
+const slideover = overlay.create(MapSlideover)
 
-onMounted(() => {
-  showFooter.value = false
-})
-
-onUnmounted(() => {
-  showFooter.value = true
-})
-
-const { stageMarkers, addMarker, updateMarker, deleteMarker } = use_markers(
+const { stageMarkers, addMarker, updateMarker, deleteMarker } = useMarkers(
   props.map.markers,
   props.map.id,
   () => currentImageIndex.value,
@@ -59,7 +56,7 @@ const handleMarkerClick = (marker: Marker) => {
     showPopup.value = true
   } else {
     viewModalMarker.value = marker
-    showViewModal.value = true
+    slideover.open({ marker })
   }
 }
 
@@ -77,12 +74,21 @@ const closePopup = () => {
   selectedMarker.value = null
 }
 
-const closeViewModal = () => {
-  showViewModal.value = false
-  viewModalMarker.value = null
-}
-
 const toggleEditMode = () => {
+  if (isEditMode.value === false) {
+    toast.add({
+      title: 'Mode édition activé',
+      description: 'Vous pouvez maintenant ajouter, modifier ou supprimer des marqueurs.',
+      icon: 'lucide:shield',
+    })
+  } else if (isEditMode.value === true) {
+    toast.add({
+      title: 'Mode édition désactivé',
+      description: 'Vous ne pouvez plus ajouter, modifier ou supprimer des marqueurs.',
+      icon: 'lucide:shield',
+    })
+  }
+
   isEditMode.value = !isEditMode.value
   if (!isEditMode.value) closePopup()
 }
@@ -98,34 +104,32 @@ const loadImage = (index: number) => {
   <Head :title="props.map.name" />
 
   <div
-    class="fixed bottom-4 left-50% translate-x-[-50%] z-999 flex gap-2 backdrop-blur-md bg-primary-800/50 border border-white/5 rounded-full p-2 shadow-lg"
+    class="fixed bottom-4 left-1/2 -translate-x-1/2 z-999 flex gap-2 bg-default/75 backdrop-blur border border-default rounded-full p-2 shadow-lg"
   >
-    <AppButton
+    <UButton
       v-for="index in totalImages"
       :key="index"
-      :class="[
-        index === currentImageIndex
-          ? 'bg-white/15 color-white !rounded-full'
-          : 'color-white/80 bg-transparent',
-      ]"
       :label="`Etage ${index}`"
-      class="!rounded-full"
+      :active="index === currentImageIndex"
+      activeColor="primary"
+      activeVariant="solid"
       variant="ghost"
+      class="rounded-full cursor-pointer font-semibold transition-all duration-200 ease-in-out"
+      color="neutral"
       @click="loadImage(index)"
+      size="lg"
     />
 
-    <AppButton
-      v-if="
-        user &&
-        (user.roles.includes('developer') ||
-          user.roles.includes('admin') ||
-          user.roles.includes('editor'))
-      "
-      :class="isEditMode ? 'bg-white/15 color-white' : 'color-white/80 bg-transparent'"
-      class="!rounded-full"
-      icon="i-mdi:pencil"
+    <UButton
+      v-if="useAccess() >= 2"
+      :active="isEditMode"
+      activeColor="primary"
       variant="ghost"
       @click="toggleEditMode"
+      activeVariant="solid"
+      class="rounded-full cursor-pointer"
+      icon="lucide:pencil"
+      size="lg"
     />
   </div>
 
@@ -141,7 +145,7 @@ const loadImage = (index: number) => {
     @delete-marker="deleteMarker"
   />
 
-  <div class="relative bg-black/25 backdrop-blur-md overflow-hidden">
+  <div class="fixed top-0 left-0 size-full overflow-hidden">
     <MapLeaflet
       ref="map"
       :imageHeight="imageHeight"
@@ -155,12 +159,4 @@ const loadImage = (index: number) => {
       @marker-click="handleMarkerClick"
     />
   </div>
-
-  <VoteModal
-    v-if="showViewModal"
-    :key="viewModalMarker?.id"
-    :map="map"
-    :marker="viewModalMarker"
-    @close="closeViewModal"
-  />
 </template>

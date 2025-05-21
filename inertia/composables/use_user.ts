@@ -1,11 +1,8 @@
 import { usePage } from '@inertiajs/vue3'
 import type User from '../../app/users/models/user'
+import { computed } from 'vue'
 
 export function useUser() {
   const page = usePage()
-  const user = page.props.user as User | null
-
-  if (!user) return null
-
-  return user
+  return computed(() => page.props.user as User | null)
 }

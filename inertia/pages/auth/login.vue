@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Head, useForm } from '@inertiajs/vue3'
-import AppButton from '~/components/utils/AppButton.vue'
+import { ref } from 'vue'
 import Empty from '~/layouts/empty.vue'
 
 defineOptions({
@@ -15,106 +15,113 @@ const form = useForm({
   password: string
   code?: string
 })
+
+const showPassword = ref(false)
 </script>
 
 <template>
   <Head title="Se connecter" />
 
   <div class="min-h-screen w-full flex justify-center items-center p-4">
-    <div
-      class="w-full max-w-md backdrop-blur-md bg-primary-800/50 rounded-2xl border border-white/10 shadow-xl overflow-hidden"
+    <UCard
+      :ui="{
+        header: 'space-y-2',
+        footer: 'flex items-center justify-center gap-2',
+      }"
+      class="w-md backdrop-blur-md"
+      variant="subtle"
     >
-      <div class="p-8">
-        <div class="text-center mb-6">
-          <h1 class="text-2xl font-bold text-white">Connectez-vous à R6Calls</h1>
-          <p class="text-white/60 text-sm mt-2">
-            Accédez à votre compte pour commencer l'aventure !
-          </p>
+      <template #header>
+        <h1 class="text-2xl font-bold">Connectez-vous à R6Calls</h1>
+        <p class="text-muted text-sm">Accédez à votre compte pour commencer l'aventure !</p>
+      </template>
+
+      <form class="space-y-6" @submit.prevent="form.post('/login')">
+        <div class="space-y-4">
+          <UFormField :error="form.errors.email" label="Email" required>
+            <UInput
+              v-model="form.email"
+              class="w-full"
+              color="neutral"
+              placeholder="Adresse e-mail"
+              size="xl"
+              type="text"
+            />
+          </UFormField>
+
+          <UFormField :error="form.errors.password" label="Mot de passe" required>
+            <UInput
+              v-model="form.password"
+              :type="showPassword ? 'text' : 'password'"
+              :ui="{ trailing: 'pe-1' }"
+              class="w-full"
+              color="neutral"
+              placeholder="Password"
+              size="xl"
+            >
+              <template #trailing>
+                <UButton
+                  :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                  :aria-pressed="showPassword"
+                  :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                  aria-controls="password"
+                  color="neutral"
+                  variant="link"
+                  @click="showPassword = !showPassword"
+                />
+              </template>
+            </UInput>
+          </UFormField>
         </div>
 
-        <form class="space-y-6" @submit.prevent="form.post('/login')">
-          <div class="space-y-4">
-            <div class="space-y-1">
-              <input
-                v-model="form.email"
-                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
-                placeholder="Adresse email"
-                type="email"
-              />
-              <span v-if="form.errors.email" class="color-red">
-                L'adresse e-mail est invalide.
-              </span>
-            </div>
+        <UButton
+          :label="form.processing ? 'Connection...' : 'Poursuivre avec mon e-mail'"
+          :loading="form.processing"
+          class="w-full justify-center cursor-pointer"
+          icon="lucide:at-sign"
+          size="xl"
+          type="submit"
+        />
 
-            <div class="space-y-1">
-              <input
-                v-model="form.password"
-                class="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all duration-300"
-                placeholder="Mot de passe"
-                type="password"
-              />
-              <span v-if="form.errors.password" class="color-red">
-                Le mot de passe est requis.
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <AppButton
-              v-if="form.processing"
-              class="w-full py-3"
-              disabled
-              icon="i-mdi:loading animate-spin"
-              label="Connection..."
-            />
-            <AppButton
-              v-else
-              class="w-full py-3"
-              icon="i-mdi:email"
-              label="Poursuivre avec mon e-mail"
-            />
-          </div>
-
-          <div v-if="form.errors.code" class="w-full flex flex-col justify-center items-center">
-            <span v-if="form.errors.code === 'E_INVALID_CREDENTIALS'" class="color-red">
-              Aucun n'a été trouvé avec ces identifiants.
-            </span>
-          </div>
-
-          <div class="relative flex items-center my-6">
-            <div class="flex-grow border-t border-white/10"></div>
-            <span class="flex-shrink mx-4 text-white/60 text-sm">OU CONTINUER AVEC</span>
-            <div class="flex-grow border-t border-white/10"></div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <a
-              class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-white transition-all duration-300"
-              href="/discord/redirect"
-            >
-              <i class="i-mdi:discord text-lg"></i>
-              <span>Discord</span>
-            </a>
-
-            <a
-              class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-white transition-all duration-300"
-              href="/google/redirect"
-            >
-              <i class="i-mdi:google text-lg"></i>
-              <span>Google</span>
-            </a>
-          </div>
-        </form>
-
-        <div class="mt-6 text-center">
-          <p class="text-white/60 text-sm">
-            Vous n'avez pas de compte ?
-            <a class="color-white hover:color-secondary transition-colors" href="/register"
-              >S'inscrire</a
-            >
-          </p>
+        <div v-if="form.errors.code" class="w-full flex flex-col justify-center items-center">
+          <span v-if="form.errors.code === 'E_INVALID_CREDENTIALS'" class="color-red">
+            Aucun n'a été trouvé avec ces identifiants.
+          </span>
         </div>
-      </div>
-    </div>
+
+        <USeparator label="Ou continuer avec" />
+
+        <div class="grid grid-cols-2 gap-4">
+          <UButton
+            class="w-full justify-center cursor-pointer"
+            color="neutral"
+            external
+            icon="ic:baseline-discord"
+            label="Discord"
+            size="xl"
+            target="_self"
+            to="/discord/redirect"
+            variant="subtle"
+          />
+
+          <UButton
+            class="w-full justify-center cursor-pointer"
+            color="neutral"
+            external
+            icon="mdi:google"
+            label="Google"
+            size="xl"
+            target="_self"
+            to="/google/redirect"
+            variant="subtle"
+          />
+        </div>
+      </form>
+
+      <template #footer>
+        <p class="text-toned">Vous n'avez pas de compte ?</p>
+        <ULink class="text-secondary" to="/register">Crée un compte</ULink>
+      </template>
+    </UCard>
   </div>
 </template>

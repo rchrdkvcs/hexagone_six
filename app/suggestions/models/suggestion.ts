@@ -3,13 +3,11 @@ import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import crypto from 'node:crypto'
 import Marker from '#markers/models/marker'
+import User from '#users/models/user'
 
-export default class MarkerSuggest extends BaseModel {
+export default class Suggestion extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
-
-  @column()
-  declare userId: string | null
 
   @column()
   declare label: string
@@ -27,6 +25,12 @@ export default class MarkerSuggest extends BaseModel {
   declare voteRatio: number
 
   @column()
+  declare userId: string | null
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
+
+  @column()
   declare markerId: string
 
   @belongsTo(() => Marker)
@@ -39,7 +43,7 @@ export default class MarkerSuggest extends BaseModel {
   declare updatedAt: DateTime
 
   @beforeCreate()
-  static generateUuid(markerSuggest: MarkerSuggest) {
-    markerSuggest.id = crypto.randomUUID()
+  static generateUuid(suggestion: Suggestion) {
+    suggestion.id = crypto.randomUUID()
   }
 }

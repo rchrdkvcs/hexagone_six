@@ -19,7 +19,7 @@ interface MarkerResponse {
 
 type PendingChange = { type: 'add' | 'update' | 'delete'; marker: Marker } | null
 
-export function use_markers(
+export function useMarkers(
   initialMarkers: Marker[],
   mapId: string,
   getCurrentStage: () => number,

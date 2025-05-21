@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import MarkerSuggest from '#suggestions/models/suggestion'
+import Suggestion from '#suggestions/models/suggestion'
 import Vote from '#votes/models/vote'
 
 export default class SuggestionsController {
@@ -7,7 +7,7 @@ export default class SuggestionsController {
     try {
       const { markerId, top, latest } = request.only(['markerId', 'top', 'latest'])
 
-      const suggestions = await MarkerSuggest.query().where('marker_id', markerId)
+      const suggestions = await Suggestion.query().where('markerId', markerId).preload('user')
 
       if (top) {
         const topCount = Number.parseInt(top) || 3
@@ -37,7 +37,7 @@ export default class SuggestionsController {
     try {
       const user = auth.user
       const data = request.only(['markerId', 'label'])
-      const suggestion = await MarkerSuggest.create({
+      const suggestion = await Suggestion.create({
         ...data,
         userId: user?.id || null,
         isApproved: false,
@@ -58,31 +58,37 @@ export default class SuggestionsController {
   async update({ response, request, params, auth }: HttpContext) {
     try {
       const data = request.only(['upVote', 'downVote', 'isApproved'])
-
       const userIp = request.ip()
-      const existingVote = await Vote.query()
-        .where('userIp', userIp)
-        .where('markerSuggestId', params.id)
-        .first()
+      const suggestionId = params.id
+
+      let existingVote = null
+
+      try {
+        existingVote = await Vote.query()
+          .where('userIp', userIp)
+          .where('suggestionId', suggestionId)
+          .first()
+      } catch (voteError) {
+        console.error('Error checking for existing vote:', voteError.message)
+      }
 
       if (existingVote) {
         return response.status(400).json({
           success: false,
-          message: 'Vous avez déjà voté pour cette suggestion',
-        })
-      } else {
-        const userId = auth.user ? auth.user.id : null
-
-        await Vote.create({
-          userIp,
-          userId,
-          voteType: data.upVote ? 'upVote' : 'downVote',
-          markerSuggestId: params.id,
+          message: 'Vous avez déjà voté pour cette suggestion.',
         })
       }
 
-      const { id } = params
-      const suggestion = await MarkerSuggest.findOrFail(id)
+      const userId = auth.user ? auth.user.id : null
+
+      await Vote.create({
+        userIp,
+        userId,
+        voteType: data.upVote ? 'upVote' : 'downVote',
+        suggestionId,
+      })
+
+      const suggestion = await Suggestion.findOrFail(suggestionId)
       suggestion.merge(data)
 
       if (data.upVote !== undefined || data.downVote !== undefined) {
@@ -103,7 +109,7 @@ export default class SuggestionsController {
   async destroy({ response, params }: HttpContext) {
     try {
       const { id } = params
-      const suggestion = await MarkerSuggest.findOrFail(id)
+      const suggestion = await Suggestion.findOrFail(id)
 
       await suggestion.delete()
 

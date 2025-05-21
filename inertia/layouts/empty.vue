@@ -1,7 +1,9 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div class="min-h-screen h-screen w-full">
-    <slot />
-  </div>
+  <UApp>
+    <div class="min-h-screen h-screen w-full">
+      <slot />
+    </div>
+  </UApp>
 </template>

@@ -4,7 +4,6 @@ import MapCard from '~/components/maps/MapCard.vue'
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import type MapsController from '../../../app/maps/controllers/maps_controller'
-import AppButton from '~/components/utils/AppButton.vue'
 
 interface Playlist {
   id: string
@@ -37,31 +36,31 @@ const toggleFilter = (filter: string) => {
 <template>
   <Head title="Liste des cartes" />
 
-  <div class="flex flex-wrap gap-2 py-3 justify-center items-center my-8 mt-24 max-w-3xl mx-auto">
-    <AppButton
-      :active="selectedFilter === 'all'"
+  <div class="flex flex-wrap gap-2 py-3 justify-start items-center my-8 max-w-7xl mx-auto">
+    <UBadge
       label="Voir tout"
       value="all"
-      variant="tag"
+      :color="selectedFilter === 'all' ? 'primary' : 'neutral'"
+      :variant="selectedFilter === 'all' ? 'solid' : 'outline'"
       @click="toggleFilter('all')"
+      class="cursor-pointer rounded-full font-medium"
+      size="xl"
     />
 
-    <AppButton
+    <UBadge
       v-for="playlist in props.playlists"
       :key="playlist.id"
-      :active="selectedFilter === playlist.label"
       :label="playlist.label"
       :value="playlist.label"
-      variant="tag"
+      :color="selectedFilter === playlist.label ? 'primary' : 'neutral'"
+      :variant="selectedFilter === playlist.label ? 'solid' : 'outline'"
       @click="toggleFilter(playlist.label)"
+      class="cursor-pointer rounded-full font-medium"
+      size="xl"
     />
   </div>
 
-  <TransitionGroup
-    class="w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-    name="map-list"
-    tag="div"
-  >
+  <div class="w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     <MapCard
       v-for="map in filteredMaps"
       :key="map.id"
@@ -69,39 +68,5 @@ const toggleFilter = (filter: string) => {
       :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
       :name="map.name"
     />
-  </TransitionGroup>
+  </div>
 </template>
-
-<style scoped>
-.map-list-move {
-  transition: transform 0.5s ease;
-}
-
-.map-list-enter-active,
-.map-list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.map-list-enter-from {
-  opacity: 0;
-  transform: scale(0.6);
-}
-
-.map-list-leave-to {
-  opacity: 0;
-  transform: scale(0.6);
-}
-
-.map-list-leave-active {
-  position: absolute;
-  z-index: 0;
-}
-
-.map-list-enter-active {
-  z-index: 1;
-}
-
-.flex {
-  position: relative;
-}
-</style>

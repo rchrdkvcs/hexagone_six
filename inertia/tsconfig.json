@@ -13,6 +13,8 @@
   },
   "include": [
     "./**/*.ts",
-    "./**/*.vue"
+    "./**/*.vue",
+    "../auto-imports.d.ts",
+    "../components.d.ts"
   ]
 }

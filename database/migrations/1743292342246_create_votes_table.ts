@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.string('user_ip').notNullable()
       table.string('user_id').nullable()
       table.string('vote_type').notNullable()
-      table.string('marker_suggest_id').notNullable()
+      table.string('suggestion_id').notNullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

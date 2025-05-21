@@ -1,9 +1,11 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import crypto from 'node:crypto'
+import MarkerSuggest from '#suggestions/models/suggestion'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -31,6 +33,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare roles: string[]
+
+  @hasMany(() => MarkerSuggest)
+  declare suggestions: HasMany<typeof MarkerSuggest>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

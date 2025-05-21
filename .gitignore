@@ -24,3 +24,7 @@ yarn-error.log
 # Platform specific
 .DS_Store
 /pnpm-workspace.yaml
+
+# Nuxt UI
+auto-imports.d.ts
+components.d.ts

@@ -16,7 +16,7 @@ export default class Vote extends BaseModel {
   declare voteType: string
 
   @column()
-  declare markerSuggestId: string
+  declare suggestionId: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
