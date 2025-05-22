@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Suggestion from '#suggestions/models/suggestion'
+import type Suggestion from '#suggestions/models/suggestion'
 
 defineProps<{
   suggestions: Suggestion[]
