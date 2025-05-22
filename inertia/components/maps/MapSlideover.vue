@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
-import type MapsController from '../../../app/maps/controllers/maps_controller'
-import type { TabsItem } from '@nuxt/ui'
 import axios from 'axios'
-import Suggestion from '#suggestions/models/suggestion'
 import SuggestionsList from '~/components/maps/SuggestionsList.vue'
+
+import type { TabsItem } from '@nuxt/ui'
+import type MapsController from '#maps/controllers/maps_controller'
+import type Suggestion from '#suggestions/models/suggestion'
 
 type Marker = InferPageProps<MapsController, 'show'>['map']['markers']
 
