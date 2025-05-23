@@ -28,3 +28,4 @@ yarn-error.log
 # Nuxt UI
 auto-imports.d.ts
 components.d.ts
+/yarn.lock

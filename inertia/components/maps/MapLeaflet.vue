@@ -48,10 +48,10 @@ const mapOptions = ref({
 const toCapitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
 const getMarkerIcon = (marker: Marker) => {
-  const isSelected = props.voteModal && marker.id === selectedMarkerId.value
-  const modalClass = isSelected ? 'modal-open' : ''
+  const isSelected = selectedMarkerId.value === marker.id
+
   return L.divIcon({
-    html: `<div class="marker-text ${modalClass}">${toCapitalize(marker.label || marker.id.toString())}</div>`,
+    html: `<div class="marker-text ${isSelected ? 'active-marker' : ''}">${toCapitalize(marker.label || marker.id.toString())}</div>`,
     className: 'text-marker-icon',
     iconSize: undefined,
     iconAnchor: [0, 0],
@@ -141,7 +141,7 @@ onMounted(() => {
 }
 
 :deep(.marker-text:hover),
-:deep(.marker-text.modal-open) {
+:deep(.active-marker) {
   @apply bg-primary text-slate-900 font-semibold z-[1000] shadow-xl;
 }
 

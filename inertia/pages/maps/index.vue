@@ -36,37 +36,39 @@ const toggleFilter = (filter: string) => {
 <template>
   <Head title="Liste des cartes" />
 
-  <div class="flex flex-wrap gap-2 py-3 justify-start items-center my-8 max-w-7xl mx-auto">
-    <UBadge
-      label="Voir tout"
-      value="all"
-      :color="selectedFilter === 'all' ? 'primary' : 'neutral'"
-      :variant="selectedFilter === 'all' ? 'solid' : 'outline'"
-      @click="toggleFilter('all')"
-      class="cursor-pointer rounded-full font-medium"
-      size="xl"
-    />
+  <UContainer class="px-4 sm:px-6 md:px-8 py-6 md:py-8">
+    <div class="flex flex-wrap gap-2 py-3 justify-start items-center mb-6">
+      <UBadge
+        :color="selectedFilter === 'all' ? 'primary' : 'neutral'"
+        :variant="selectedFilter === 'all' ? 'solid' : 'outline'"
+        class="cursor-pointer rounded-full font-medium"
+        label="Voir tout"
+        size="lg"
+        value="all"
+        @click="toggleFilter('all')"
+      />
 
-    <UBadge
-      v-for="playlist in props.playlists"
-      :key="playlist.id"
-      :label="playlist.label"
-      :value="playlist.label"
-      :color="selectedFilter === playlist.label ? 'primary' : 'neutral'"
-      :variant="selectedFilter === playlist.label ? 'solid' : 'outline'"
-      @click="toggleFilter(playlist.label)"
-      class="cursor-pointer rounded-full font-medium"
-      size="xl"
-    />
-  </div>
+      <UBadge
+        v-for="playlist in props.playlists"
+        :key="playlist.id"
+        :color="selectedFilter === playlist.label ? 'primary' : 'neutral'"
+        :label="playlist.label"
+        :value="playlist.label"
+        :variant="selectedFilter === playlist.label ? 'solid' : 'outline'"
+        class="cursor-pointer rounded-full font-medium text-sm sm:text-base"
+        size="lg"
+        @click="toggleFilter(playlist.label)"
+      />
+    </div>
 
-  <div class="w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    <MapCard
-      v-for="map in filteredMaps"
-      :key="map.id"
-      :href="`/cartes/${map.slug}`"
-      :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
-      :name="map.name"
-    />
-  </div>
+    <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+      <MapCard
+        v-for="map in filteredMaps"
+        :key="map.id"
+        :href="`/cartes/${map.slug}`"
+        :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
+        :name="map.name"
+      />
+    </div>
+  </UContainer>
 </template>

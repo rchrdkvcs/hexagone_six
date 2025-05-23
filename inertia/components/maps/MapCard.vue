@@ -43,7 +43,7 @@ defineProps<{
 
     <!-- Icône flèche -->
     <div
-      class="absolute top-2 right-2 size-8 rounded-full bg-neutral/75 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      class="absolute top-2 right-2 size-8 rounded-full bg-default/50 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
     >
       <UIcon name="lucide:arrow-right" />
     </div>
