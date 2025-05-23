@@ -1,20 +1,20 @@
 FROM node:latest AS base
 
-# Install pnpm
+# Install yarn
 WORKDIR /app
-RUN npm install -g pnpm@latest
+RUN npm install -g yarn@latest
 
 # All deps stage
 FROM base AS deps
 WORKDIR /app
 ADD package.json ./
-RUN pnpm install
+RUN yarn install
 
 # Production only deps stage
 FROM base AS production-deps
 WORKDIR /app
 ADD package.json ./
-RUN pnpm install --production
+RUN yarn install --production
 
 # Build stage
 FROM base AS build
@@ -25,9 +25,10 @@ RUN node ace build --ignore-ts-errors
 
 # Production stage
 FROM base
-ENV NODE_ENV=production
 WORKDIR /app
+
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
+
 EXPOSE 3000
 CMD ["node", "./bin/server.js"]
