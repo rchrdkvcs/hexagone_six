@@ -1,20 +1,20 @@
-FROM node:24-alpine AS base
+FROM node:24.1.0-alpine AS base
 
-# Install pnpm
+# Install bun
 WORKDIR /app
-RUN npm install -g pnpm@latest
+RUN npm install -g bun@latest
 
 # All deps stage
 FROM base AS deps
 WORKDIR /app
 ADD package.json ./
-RUN pnpm install
+RUN bun install
 
 # Production only deps stage
 FROM base AS production-deps
 WORKDIR /app
 ADD package.json ./
-RUN pnpm install --production
+RUN bun install --production
 
 # Build stage
 FROM base AS build
