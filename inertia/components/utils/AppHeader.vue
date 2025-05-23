@@ -62,14 +62,14 @@ const profileItems = computed<NavigationMenuItem[]>(() => [
 
       <UNavigationMenu
         :items="navItems"
-        class="w-full justify-center"
+        class="w-full justify-center hidden md:flex"
         content-orientation="vertical"
         variant="link"
       />
 
       <UNavigationMenu
         :items="profileItems"
-        class="w-full justify-end"
+        class="w-full justify-end hidden md:flex"
         content-orientation="vertical"
         variant="link"
       />

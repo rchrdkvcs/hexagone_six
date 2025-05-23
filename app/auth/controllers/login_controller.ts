@@ -21,6 +21,6 @@ export default class LoginController {
 
     await auth.use('web').login(user)
 
-    return response.redirect().toPath('/')
+    return response.redirect().back()
   }
 }

@@ -1,38 +1,43 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+import type { NavigationMenuItem } from '@nuxt/ui'
+
 const actualYear = new Date().getFullYear()
+
+const socialLinks = ref<NavigationMenuItem[]>([
+  [
+    {
+      icon: 'mdi:discord',
+      to: 'https://discord.gg/hexacalls',
+    },
+    {
+      icon: 'mdi:twitter',
+      to: 'https://twitter.com/hexacalls',
+    },
+  ],
+])
+
+const links = ref<NavigationMenuItem[]>([
+  [
+    {
+      label: 'Mentions légales',
+      to: '/mentions-legales',
+    },
+  ],
+])
 </script>
 
 <template>
-  <footer class="container mx-auto px-4 py-10 border-t border-white/10 mt-32">
-    <div class="flex justify-between items-center gap-6">
+  <footer class="bg-default/75 backdrop-blur border-t border-default py-8">
+    <UContainer class="flex justify-between items-center">
       <div>
-        <p class="text-xl font-bold mb-1">R6CALLS</p>
-        <p class="color-white/60 text-sm">&copy; {{ actualYear }} R6Calls. Tous droits réservés.</p>
+        <p class="text-xl font-bold mb-1">HexaCalls</p>
+        <p class="text-muted text-sm">&copy; {{ actualYear }} Tous droits réservés</p>
       </div>
 
-      <ul class="flex items-center gap-6">
-        <li>
-          <a
-            class="flex items-center justify-center gap-2 color-white transition-all duration-300 color-white/60 hover:color-white/100"
-            href="https://discord.gg/bS66EX7cHk"
-          >
-            <i class="i-mdi:discord size-6"></i>
-          </a>
-        </li>
-        <!--        <li>-->
-        <!--          <a-->
-        <!--            class="flex items-center justify-center gap-2 color-white transition-all duration-300 color-white/60 hover:color-white/100"-->
-        <!--            href="https://twitter.com"-->
-        <!--          >-->
-        <!--            <i class="i-mdi:twitter size-6"></i>-->
-        <!--          </a>-->
-        <!--        </li>-->
-      </ul>
+      <UNavigationMenu :items="socialLinks" variant="link" />
 
-      <div class="flex gap-6 text-sm color-white/60">
-        <a class="hover:color-white transition-colors" href="#">Contact</a>
-        <a class="hover:color-white transition-colors" href="#">Mentions légales</a>
-      </div>
-    </div>
+      <UNavigationMenu :items="links" variant="link" />
+    </UContainer>
   </footer>
 </template>
