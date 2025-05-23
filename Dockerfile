@@ -1,8 +1,8 @@
-FROM node:latest AS base
+FROM node:24-alpine AS base
 
 # Install yarn
 WORKDIR /app
-RUN npm install -g yarn@latest
+RUN npm install -g yarn
 
 # All deps stage
 FROM base AS deps
