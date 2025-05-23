@@ -1,20 +1,20 @@
 FROM node:latest AS base
 
-# Install bun
+# Install pnpm
 WORKDIR /app
-RUN npm install -g bun
+RUN npm install -g pnpm@latest
 
 # All deps stage
 FROM base AS deps
 WORKDIR /app
 ADD package.json ./
-RUN bun install
+RUN pnpm install
 
 # Production only deps stage
 FROM base AS production-deps
 WORKDIR /app
 ADD package.json ./
-RUN bun install --production
+RUN pnpm install --production
 
 # Build stage
 FROM base AS build
