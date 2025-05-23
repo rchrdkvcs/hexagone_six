@@ -1,4 +1,4 @@
-FROM node:24.1.0-alpine AS base
+FROM node:latest AS base
 
 # Install bun
 WORKDIR /app
