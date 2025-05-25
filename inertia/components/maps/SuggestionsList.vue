@@ -11,7 +11,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 size-full py-4 overflow-x-scroll">
+  <div class="flex flex-col gap-2 size-full py-4">
     <UCard
       v-for="(suggestion, index) in suggestions"
       :key="suggestion.id"
@@ -20,12 +20,19 @@ defineEmits<{
       :ui="{
         body: '!py-2 !px-3',
       }"
+      :class="{ 'bg-warning/50 ring-warning/75': index === 0 }"
     >
       <div class="flex justify-between items-center">
-        <h3 class="font-medium text-white text-base flex flex-col gap-1">
+        <h3 class="font-medium text-base flex flex-col gap-1">
           <span>{{ suggestion.label }}</span>
-          <span class="text-sm text-muted font-normal">
-            Proposée par : {{ suggestion.user.userName }}
+          <span :class="index === 0 ? 'text-elevated' : 'text-muted'" class="text-sm font-normal">
+            Proposée par :
+            <ULink
+              :class="index === 0 ? 'text-elevated' : 'text-muted'"
+              :to="`/${suggestion.user.userName}`"
+              class="underline"
+              >{{ suggestion.user.userName }}</ULink
+            >
           </span>
         </h3>
 
