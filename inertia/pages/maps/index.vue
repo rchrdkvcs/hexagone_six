@@ -41,7 +41,7 @@ const toggleFilter = (filter: string) => {
       <UBadge
         :color="selectedFilter === 'all' ? 'primary' : 'neutral'"
         :variant="selectedFilter === 'all' ? 'solid' : 'outline'"
-        class="cursor-pointer rounded-full font-medium"
+        class="cursor-pointer rounded-full font-medium text-sm sm:text-base"
         label="Voir tout"
         size="lg"
         value="all"
