@@ -16,6 +16,9 @@ export default class extends BaseSeeder {
       {
         label: 'Classé',
       },
+      {
+        label: 'E-Sport',
+      },
     ])
   }
 }

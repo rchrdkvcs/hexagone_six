@@ -14,17 +14,17 @@ export default class extends BaseSeeder {
 
     const mapRelations = [
       // Maps compétitives et populaires
-      { slug: 'bank', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'border', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'chalet', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'clubhouse', playlists: ['Standard', 'Classé', 'Match Rapide'] },
+      { slug: 'bank', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
+      { slug: 'border', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
+      { slug: 'chalet', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
+      { slug: 'clubhouse', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
       { slug: 'coastline', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'kafe', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'oregon', playlists: ['Standard', 'Classé', 'Match Rapide'] },
+      { slug: 'kafe', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
+      { slug: 'oregon', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
       { slug: 'outback', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'villa', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'skyscraper', playlists: ['Standard', 'Classé', 'Match Rapide'] },
-      { slug: 'themepark', playlists: ['Standard', 'Classé', 'Match Rapide'] },
+      { slug: 'villa', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
+      { slug: 'skyscraper', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
+      { slug: 'themepark', playlists: ['Standard', 'Classé', 'Match Rapide', 'E-Sport'] },
       { slug: 'emeraldplains', playlists: ['Standard', 'Classé', 'Match Rapide'] },
       { slug: 'nighthavenlabs', playlists: ['Standard', 'Classé', 'Match Rapide'] },
 
