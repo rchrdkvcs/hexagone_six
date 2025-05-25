@@ -33,6 +33,7 @@ const showViewModal = ref(false)
 const toast = useToast()
 const overlay = useOverlay()
 const slideover = overlay.create(MapSlideover)
+const showLabel = ref(true)
 
 const { stageMarkers, addMarker, updateMarker, deleteMarker } = useMarkers(
   props.map.markers,
@@ -98,6 +99,16 @@ const loadImage = (index: number) => {
     currentImageIndex.value = index
   }
 }
+
+const handleLabelView = () => {
+  showLabel.value = !showLabel.value
+  toast.add({
+    title: showLabel.value
+      ? 'Affichage des étiquettes activé'
+      : 'Affichage des étiquettes désactivé',
+    icon: 'lucide:eye',
+  })
+}
 </script>
 
 <template>
@@ -118,6 +129,15 @@ const loadImage = (index: number) => {
       color="neutral"
       @click="loadImage(index)"
       size="lg"
+    />
+
+    <UButton
+      :active="showLabel"
+      :icon="showLabel ? 'lucide:eye-off' : 'lucide:eye'"
+      class="rounded-full cursor-pointer"
+      size="lg"
+      variant="ghost"
+      @click="handleLabelView"
     />
 
     <UButton
@@ -154,6 +174,7 @@ const loadImage = (index: number) => {
       :is-edit-mode="isEditMode"
       :markers="stageMarkers"
       :voteModal="showViewModal"
+      :showLabel="showLabel"
       @map-click="handleMapClick"
       @edit-marker="handleEditMarker"
       @marker-click="handleMarkerClick"
