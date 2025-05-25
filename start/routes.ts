@@ -13,6 +13,8 @@ import { middleware } from '#start/kernel'
 import authRoutes from '#start/routes/auth'
 import adminRoutes from '#start/routes/admin'
 
+const ShowUserController = () => import('#users/controllers/show_user_controller')
+
 const StoreSuggestionController = () =>
   import('#suggestions/controllers/store_suggestion_controller')
 const UpdateSuggestionController = () =>
@@ -41,5 +43,7 @@ router
 
     router.post('/markers/suggestions', [StoreSuggestionController, 'execute'])
     router.patch('/markers/suggestions/:id', [UpdateSuggestionController, 'execute'])
+
+    router.get('/:userName', [ShowUserController, 'render'])
   })
   .use(middleware.silentAuth())
