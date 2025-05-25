@@ -19,6 +19,7 @@ const props = defineProps<{
   markers: Marker[]
   isEditMode: boolean
   voteModal: boolean
+  showLabel: boolean
 }>()
 
 const emit = defineEmits(['map-click', 'edit-marker', 'marker-click'])
@@ -29,7 +30,7 @@ const bounds = ref([
   [0, 0],
   [props.imageHeight, props.imageWidth],
 ])
-const center = ref([props.imageHeight, props.imageWidth])
+const center = ref<[number, number]>([props.imageHeight / 2, props.imageWidth / 2])
 const zoom = ref(0)
 const minZoom = ref(-0.5)
 const maxZoom = ref(4)
@@ -44,14 +45,22 @@ const mapOptions = ref({
   wheelDebounceTime: 40,
   zoomSnap: 0.1,
 })
+const hoveringMarker = ref<Marker | null>(null)
 
 const toCapitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
 const getMarkerIcon = (marker: Marker) => {
   const isSelected = selectedMarkerId.value === marker.id
 
+  const labelContent =
+    hoveringMarker.value && hoveringMarker.value.id === marker.id
+      ? `<span>${toCapitalize(marker.label)}</span>`
+      : props.showLabel
+        ? `<span>${toCapitalize(marker.label)}</span>`
+        : ''
+
   return L.divIcon({
-    html: `<div class="marker-text ${isSelected ? 'active-marker' : ''}">${toCapitalize(marker.label || marker.id.toString())}</div>`,
+    html: `<div class="marker-text ${isSelected ? 'active-marker' : ''} ${!props.showLabel && !(hoveringMarker.value?.id === marker.id) ? 'label-hidden' : ''}">${labelContent}</div>`,
     className: 'text-marker-icon',
     iconSize: undefined,
     iconAnchor: [0, 0],
@@ -66,6 +75,14 @@ const handleMapClick = (event: L.LeafletMouseEvent) =>
 const handleMarkerClick = (marker: Marker) => {
   selectedMarkerId.value = marker.id
   emit(props.isEditMode ? 'edit-marker' : 'marker-click', marker)
+}
+
+const handleMarkerMouseover = (marker: Marker) => {
+  hoveringMarker.value = marker
+}
+
+const handleMarkerMouseout = () => {
+  hoveringMarker.value = null
 }
 
 watch(
@@ -106,6 +123,8 @@ onMounted(() => {
         :icon="getMarkerIcon(marker) as unknown as L.Icon"
         :lat-lng="[marker.y, marker.x]"
         @click="handleMarkerClick(marker)"
+        @mouseout="handleMarkerMouseout"
+        @mouseover="handleMarkerMouseover(marker)"
       />
     </l-map>
   </div>
@@ -138,11 +157,35 @@ onMounted(() => {
 :deep(.marker-text) {
   @apply font-medium text-base text-white whitespace-nowrap absolute text-center cursor-pointer transition-all duration-300 z-10 -translate-1/2;
   @apply bg-default/75 backdrop-blur rounded-full px-3 py-1;
+  @apply transition-all duration-300 ease-in-out;
 }
 
 :deep(.marker-text:hover),
 :deep(.active-marker) {
   @apply bg-primary text-slate-900 font-semibold z-[1000] shadow-xl;
+  @apply transition-all duration-300 ease-in-out;
+}
+
+:deep(.label-hidden) {
+  @apply p-0 w-4 h-4 flex items-center justify-center bg-default/75 border-transparent ring-2 ring-primary/50 rounded-full backdrop-blur;
+  @apply transition-all duration-300 ease-in-out;
+}
+
+:deep(.active-marker.label-hidden) {
+  @apply bg-primary;
+  @apply p-0 w-5 h-5;
+}
+
+:deep(.label-hidden span) {
+  @apply hidden;
+}
+
+:deep(.label-hidden:hover) {
+  @apply p-1 w-auto h-auto bg-primary border-none;
+}
+
+:deep(.label-hidden:hover span) {
+  @apply block;
 }
 
 :deep(.leaflet-marker-pane .leaflet-marker-icon:hover) {
