@@ -13,9 +13,13 @@ import { middleware } from '#start/kernel'
 import authRoutes from '#start/routes/auth'
 import adminRoutes from '#start/routes/admin'
 
+const StoreSuggestionController = () =>
+  import('#suggestions/controllers/store_suggestion_controller')
+const UpdateSuggestionController = () =>
+  import('#suggestions/controllers/update_suggestion_controller')
+
 const MapsController = () => import('#maps/controllers/maps_controller')
 const MarkersController = () => import('#markers/controllers/markers_controller')
-const SuggestionsController = () => import('#suggestions/controllers/suggestions_controller')
 
 authRoutes()
 adminRoutes()
@@ -35,9 +39,7 @@ router
       })
       .use([middleware.auth(), middleware.userRole()])
 
-    router.get('/markers/suggestions', [SuggestionsController, 'index'])
-    router.post('/markers/suggestions', [SuggestionsController, 'store'])
-    router.patch('/markers/suggestions/:id', [SuggestionsController, 'update'])
-    router.delete('/markers/suggestions/:id', [SuggestionsController, 'destroy'])
+    router.post('/markers/suggestions', [StoreSuggestionController, 'execute'])
+    router.patch('/markers/suggestions/:id', [UpdateSuggestionController, 'execute'])
   })
   .use(middleware.silentAuth())
