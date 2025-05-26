@@ -35,19 +35,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare roles: string[]
 
-  // TODO : Update migration
-
   @column()
-  declare description: string
+  declare bio: string
 
   @column()
   declare avatarUrl: string
-
-  @column()
-  declare followersCount: number
-
-  @column()
-  declare followingCount: number
 
   @hasMany(() => MarkerSuggest)
   declare suggestions: HasMany<typeof MarkerSuggest>

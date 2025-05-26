@@ -17,10 +17,13 @@ export default class StoreSuggestionController {
         voteRatio: 0,
       })
 
+      const marker = await suggestion.related('marker').query().firstOrFail()
+      const map = await marker.related('map').query().firstOrFail()
+
       await Post.create({
         userId: user?.id,
         category: 'suggestion',
-        content: `Suggestion: ${data.label}`,
+        content: `<span class="font-semibold capitalize">${user?.userName} </span>a suggéré un nouveau call <span class="font-bold">"${data.label}" </span> a la place de <span class="font-bold">"${marker.label}" </span> sur <a class="underline" href="${`/cartes/` + map.slug}">${map.name}</a>`,
       })
 
       return response.status(201).json(suggestion)
