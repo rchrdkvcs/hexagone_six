@@ -120,119 +120,16 @@ const tabsItems = ref<TabsItem[]>([
       >
         <template #feed>
           <div class="p-4 size-full flex flex-col gap-4">
-            <UserPost>
-              <p>
-                <b>B34roff</b> à proposé un nouveau call "Archives" sur
-                <ULink to="bank" class="underline">Bank</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> à upVoté la suggestion "Bleu" sur
-                <ULink to="bank" class="underline">Oregon</ULink> suggéré par
-                <ULink to="someUser" class="underline">someUser</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> à upVoté la suggestion "Top Red" sur
-                <ULink to="bank" class="underline">Bank</ULink> suggéré par
-                <ULink to="someUser" class="underline">unAutreUser</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> à suggéré "Bas Bleu" sur
-                <ULink to="bank" class="underline">Bank</ULink> au lieu de "Soda"
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a ajouté une photo pour le call "Bas Bleu" sur
-                <ULink to="maps/villa" class="underline">Bank</ULink>
-              </p>
-              <img src="/public/images/maps/bank/thumbnail.jpg" alt="Photo" class="rounded-md" />
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a créé un nouveau plan d'attaque pour
-                <ULink to="maps/villa" class="underline">Villa</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a modifié le call "Petit Bureau" en "Mini Office" sur
-                <ULink to="maps/coastline" class="underline">Coastline</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a partagé une nouvelle position de Maestro sur
-                <ULink to="maps/theme-park" class="underline">Theme Park</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a validé la suggestion "Cave à Vin" sur
-                <ULink to="maps/villa" class="underline">Villa</ULink> proposée par
-                <ULink to="users/frost-main" class="underline">FrostMain</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a créé un nouveau lineup pour
-                <ULink to="operators/capitao" class="underline">Capitão</ULink> sur
-                <ULink to="maps/clubhouse" class="underline">Club House</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a suggéré "Escalier Rouge" au lieu de "Main Stairs" sur
-                <ULink to="maps/kanal" class="underline">Kanal</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> a évalué 5/5 le strat de défense pour
-                <ULink to="maps/border" class="underline">Border</ULink> créé par
-                <ULink to="users/tactical-sage" class="underline">TacticalSage</ULink>
-              </p>
+            <UserPost v-for="post in user.posts" :key="post.id">
+              <p>{{ post.content }}</p>
             </UserPost>
           </div>
         </template>
 
         <template #propositions>
           <div class="p-4 size-full flex flex-col gap-4">
-            <UserPost>
-              <p>
-                <b>B34roff</b> à proposé un nouveau call "Archives" sur
-                <ULink to="bank" class="underline">Oregon</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> à proposé un nouveau call "Bureau" sur
-                <ULink to="bank" class="underline">Bank</ULink>
-              </p>
-            </UserPost>
-
-            <UserPost>
-              <p>
-                <b>B34roff</b> à proposé un nouveau call "Esca Z" sur
-                <ULink to="bank" class="underline">Club House</ULink>
-              </p>
+            <UserPost v-for="post in user.posts" :key="post.id">
+              <p>{{ post.content }}</p>
             </UserPost>
           </div>
         </template>
