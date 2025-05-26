@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { InferPageProps } from '@adonisjs/inertia/types'
 import { ref } from 'vue'
+import UserPost from '~/components/users/UserPost.vue'
 
 import type ShowUserController from '#users/controllers/show_user_controller'
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { TabsItem } from '@nuxt/ui'
-import UserPost from '~/components/users/UserPost.vue'
 
 defineProps<{
   user: InferPageProps<ShowUserController, 'render'>
