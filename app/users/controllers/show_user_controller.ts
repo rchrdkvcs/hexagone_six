@@ -5,7 +5,11 @@ export default class ShowUserController {
   async render({ inertia, params }: HttpContext) {
     const { userName } = params
 
-    const user = await User.query().where('userName', userName).preload('suggestions').firstOrFail()
+    const user = await User.query()
+      .where('userName', userName)
+      .preload('suggestions')
+      .preload('posts')
+      .firstOrFail()
 
     return inertia.render('users/show', { user })
   }
