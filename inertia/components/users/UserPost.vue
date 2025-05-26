@@ -1,46 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { DropdownMenuItem } from '@nuxt/ui'
+import { useTimeAgo } from '~/composables/use_time_ago'
 
-const dropdownItems = ref<DropdownMenuItem[]>([
-  {
-    label: 'Signaler',
-    icon: 'lucide:flag',
-  },
-  {
-    label: 'Partager',
-    icon: 'lucide:share-2',
-  },
-])
+import type Post from '#users/models/post'
+
+const props = defineProps<{ userName: string; avatarUrl: string; post: Post }>()
+
+const { formattedTime } = useTimeAgo(props.post.createdAt)
 </script>
 
 <template>
   <div class="flex flex-col gap-2 p-2 rounded-md hover:bg-muted group">
     <div class="flex items-center gap-2 relative">
-      <UAvatar class="w-8 h-8" src="https://avatar.iran.liara.run/public/35" />
+      <UAvatar :src="avatarUrl" class="w-8 h-8" />
       <div class="flex flex-col">
-        <span class="text-sm font-semibold">B34roff</span>
-        <span class="text-muted text-xs">Il y a 2 heures</span>
+        <span class="text-sm font-semibold">
+          {{ userName }}
+        </span>
+        <span class="text-muted text-xs">{{ formattedTime }}</span>
       </div>
-
-      <UDropdownMenu
-        :items="dropdownItems"
-        :ui="{ content: 'w-48' }"
-        class="absolute top-0 right-0"
-      >
-        <UButton
-          class="rounded-full"
-          color="neutral"
-          icon="lucide:ellipsis-vertical"
-          variant="ghost"
-        />
-      </UDropdownMenu>
     </div>
 
     <div class="w-full flex flex-col gap-1.5">
-      <slot />
+      <p v-html="post.content" />
     </div>
   </div>
 </template>
-
-<style scoped></style>

@@ -8,6 +8,8 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.string('email').notNullable().unique()
       table.string('user_name').nullable().unique()
+      table.string('bio').nullable()
+      table.string('avatar_url').nullable()
       table.string('password').nullable()
       table.string('provider').nullable()
       table.string('provider_id').nullable().unique()

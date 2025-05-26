@@ -1,15 +1,28 @@
 <script lang="ts" setup>
-import { InferPageProps } from '@adonisjs/inertia/types'
-import { ref } from 'vue'
+import { capitalize, computed, ref } from 'vue'
+import { useDateFormat } from '@vueuse/shared'
+import { useUser } from '~/composables/use_user'
 import UserPost from '~/components/users/UserPost.vue'
+import EditModal from '~/components/users/EditModal.vue'
 
-import type ShowUserController from '#users/controllers/show_user_controller'
-import type { DropdownMenuItem } from '@nuxt/ui'
-import type { TabsItem } from '@nuxt/ui'
+import type { DropdownMenuItem, TabsItem } from '@nuxt/ui'
+import type User from '#users/models/user'
 
-defineProps<{
-  user: InferPageProps<ShowUserController, 'render'>
+const props = defineProps<{
+  userProfile: User
 }>()
+
+const actualUser = useUser()
+const overlay = useOverlay()
+const editModal = overlay.create(EditModal)
+
+const feedData = computed(() => props.userProfile.posts)
+const propositionsData = computed(() =>
+  props.userProfile.posts.filter((p) => p.category === 'proposition')
+)
+const suggestionData = computed(() =>
+  props.userProfile.posts.filter((p) => p.category === 'suggestion')
+)
 
 const dropdownItems = ref<DropdownMenuItem[]>([
   {
@@ -47,13 +60,33 @@ const tabsItems = ref<TabsItem[]>([
     <UCard class="shadow-lg sticky top-24 h-fit">
       <template #header>
         <div class="flex items-center gap-4 relative">
-          <UAvatar class="w-16 h-16" src="https://avatar.iran.liara.run/public/35" />
-          <div class="flex flex-col">
-            <h1 class="text-2xl font-bold capitalize">{{ user.userName }}</h1>
-            <span class="text-muted text-sm">Membre depuis tah l'époque</span>
+          <UAvatar
+            :alt="capitalize(userProfile.userName)"
+            :src="userProfile.avatarUrl"
+            class="size-16 ring-2 ring-muted"
+            size="3xl"
+          />
+          <div class="flex flex-col gap-1">
+            <div class="flex gap-2 items-center">
+              <h1 class="text-xl font-bold capitalize">{{ userProfile.userName }}</h1>
+              <UButton
+                v-if="actualUser?.id === userProfile.id"
+                class="w-fit rounded-full"
+                color="neutral"
+                icon="lucide:edit-2"
+                size="sm"
+                variant="soft"
+                @click="editModal.open({ user: userProfile })"
+              />
+            </div>
+            <span class="text-muted text-xs">
+              Membres depuis le
+              {{ useDateFormat(userProfile.createdAt as unknown as Date, 'DD/MM/YYYY') }}
+            </span>
           </div>
 
           <UDropdownMenu
+            v-if="actualUser?.id !== userProfile.id"
             :content="{
               align: 'start',
               side: 'bottom',
@@ -76,33 +109,8 @@ const tabsItems = ref<TabsItem[]>([
       </template>
 
       <div class="flex flex-col gap-4">
-        <div class="grid grid-cols-2 bg-muted rounded-md py-1 divide-x divide-accented">
-          <p class="flex flex-col items-center">
-            <span class="text-xl font-semibold">127</span>
-            <span class="text-muted text-sm">Followers</span>
-          </p>
-          <p class="flex flex-col items-center">
-            <span class="text-xl font-semibold">36</span>
-            <span class="text-muted text-sm">Following</span>
-          </p>
-        </div>
-
-        <div class="flex flex-wrap gap-2">
-          <UButton class="w-fit rounded-full" color="neutral" icon="lucide:plus" label="Suivre" />
-          <UButton
-            class="w-fit rounded-full"
-            color="neutral"
-            icon="lucide:edit-2"
-            label="Modifier"
-            variant="soft"
-          />
-        </div>
-
         <p class="text-muted text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          {{ userProfile.bio || "Cet utilisateur n'a pas encore écrit de bio." }}
         </p>
       </div>
     </UCard>
@@ -120,29 +128,37 @@ const tabsItems = ref<TabsItem[]>([
       >
         <template #feed>
           <div class="p-4 size-full flex flex-col gap-4">
-            <UserPost v-for="post in user.posts" :key="post.id">
-              <p>{{ post.content }}</p>
-            </UserPost>
+            <UserPost
+              v-for="post in feedData"
+              :key="post.id"
+              :avatarUrl="userProfile.avatarUrl"
+              :post="post"
+              :userName="userProfile.userName"
+            />
           </div>
         </template>
 
         <template #propositions>
           <div class="p-4 size-full flex flex-col gap-4">
-            <UserPost v-for="post in user.posts" :key="post.id">
-              <p>{{ post.content }}</p>
-            </UserPost>
+            <UserPost
+              v-for="post in propositionsData"
+              :key="post.id"
+              :avatarUrl="userProfile.avatarUrl"
+              :post="post"
+              :userName="userProfile.userName"
+            />
           </div>
         </template>
 
         <template #suggestions>
           <div class="p-4 size-full flex flex-col gap-4">
-            <div class="flex flex-col items-center justify-center py-16 text-center">
-              <UIcon name="lucide:lightbulb" class="mb-4 size-16 animate-pulse opacity-75" />
-              <h3 class="text-xl font-medium text-default mb-2">Aucune suggestion</h3>
-              <p class="text-muted max-w-md mb-6">
-                {{ user.userName }} n'a pas encore fait de suggestions
-              </p>
-            </div>
+            <UserPost
+              v-for="post in suggestionData"
+              :key="post.id"
+              :avatarUrl="userProfile.avatarUrl"
+              :post="post"
+              :userName="userProfile.userName"
+            />
           </div>
         </template>
       </UTabs>
