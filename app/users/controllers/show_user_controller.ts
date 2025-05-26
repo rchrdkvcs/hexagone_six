@@ -5,7 +5,7 @@ export default class ShowUserController {
   async render({ inertia, params }: HttpContext) {
     const { userName } = params
 
-    const user = await User.findByOrFail('userName', userName)
+    const user = await User.query().where('userName', userName).preload('suggestions').firstOrFail()
 
     return inertia.render('users/show', { user })
   }
