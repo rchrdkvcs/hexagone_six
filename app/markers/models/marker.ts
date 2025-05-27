@@ -24,6 +24,9 @@ export default class Marker extends BaseModel {
   @column()
   declare mapId: string
 
+  @column({ prepare: (value) => JSON.stringify(value) })
+  declare imageUrls: string[]
+
   @belongsTo(() => Map)
   declare map: BelongsTo<typeof Map>
 
