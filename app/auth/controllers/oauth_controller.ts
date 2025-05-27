@@ -29,9 +29,10 @@ export default class OauthController {
     const user = await User.firstOrCreate(
       {
         email: connectingUser.email,
+        provider: provider,
       },
       {
-        userName: connectingUser.nickName,
+        userName: connectingUser.nickName.toLowerCase(),
         provider: provider,
         provider_id: connectingUser.id,
         avatarUrl: connectingUser.avatarUrl,

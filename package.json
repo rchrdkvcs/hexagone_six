@@ -64,6 +64,7 @@
     "@adonisjs/vite": "^4.0.0",
     "@inertiajs/vue3": "^2.0.8",
     "@nuxt/ui": "^3.1.2",
+    "@rlanz/ally-twitch": "^0.1.2",
     "@tailwindcss/vite": "^4.1.7",
     "@vinejs/vine": "^3.0.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
