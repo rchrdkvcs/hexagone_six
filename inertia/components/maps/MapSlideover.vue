@@ -131,6 +131,55 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
     })
   }
 }
+
+const clickOnPhotoUpload = () => {
+  const input = document.getElementById('markerPhoto') as HTMLInputElement
+
+  if (input) {
+    input.click()
+  }
+}
+
+const handlePhotoUpload = async (event: Event) => {
+  const files = (event.target as HTMLInputElement).files
+  if (!files?.length) return
+
+  const toastId = `photo-${props.marker.id}-${Date.now()}`
+  const formData = new FormData()
+  formData.append('photo', files[0])
+  formData.append('markerId', props.marker.id.toString())
+
+  toast.add({
+    id: toastId,
+    title: 'Ajout de la photo',
+    description: 'Veuillez patienter pendant le téléchargement de la photo.',
+    icon: 'lucide:loader',
+    color: 'neutral',
+  })
+
+  try {
+    const response = await axios.post('/markers/photos', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+
+    props.marker.imageUrls.push(response.data.imageUrl)
+
+    toast.update(toastId, {
+      title: 'Photo ajoutée',
+      description: 'Votre photo a été ajoutée avec succès.',
+      icon: 'lucide:check',
+      color: 'success',
+    })
+  } catch (error) {
+    toast.update(toastId, {
+      title: 'Erreur',
+      description:
+        error.response?.data?.message || "Une erreur est survenue lors de l'ajout de la photo.",
+      icon: 'lucide:x',
+      color: 'error',
+    })
+  }
+}
 </script>
 
 <template>
@@ -141,10 +190,46 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
     class="z-50 bg-default/75 backdrop-blur-md"
   >
     <template #body>
-      <div
-        class="w-full aspect-video bg-muted ring ring-muted rounded-lg mb-4 flex items-center justify-center"
-      >
-        <p class="font-medium text-muted text-xl">Photos placeholder</p>
+      <div class="w-full aspect-video mb-4 bg-muted rounded-lg">
+        <div
+          v-if="marker.imageUrls.length === 0"
+          class="flex flex-col items-center justify-center gap-4 p-8 text-center size-full"
+        >
+          <UIcon class="size-8" name="lucide:camera" />
+          <h3 class="text-sm font-medium">Il n'y a pas d'images pour ce marqueur</h3>
+          <UButton
+            class="cursor-pointer"
+            color="neutral"
+            icon="lucide:plus"
+            label="Soumettre une image"
+            variant="subtle"
+            @click="clickOnPhotoUpload"
+          />
+        </div>
+
+        <UCarousel
+          v-else
+          v-slot="{ item }"
+          :items="marker.imageUrls"
+          :ui="{
+            viewport: 'rounded-lg',
+            dots: 'bottom-3',
+            dot: 'w-6 h-1',
+          }"
+          autoplay
+          class="bg-muted rounded-lg w-full aspect-video"
+          dots
+        >
+          <img :alt="marker.label" :src="item as string" class="w-full object-cover aspect-video" />
+        </UCarousel>
+
+        <input
+          id="markerPhoto"
+          accept="image/*"
+          class="hidden"
+          type="file"
+          @change="handlePhotoUpload"
+        />
       </div>
 
       <UTabs
@@ -168,24 +253,33 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
     </template>
 
     <template #footer>
-      <form class="size-full" @submit.prevent="handleSuggestionSubmit">
-        <UButtonGroup class="w-full" size="lg">
-          <UInput
-            v-model="suggest"
-            class="w-full"
-            color="neutral"
-            placeholder="Faire une suggestion"
-            variant="subtle"
-          />
-          <UButton
-            :disabled="suggest === ''"
-            class="cursor-pointer"
-            color="primary"
-            icon="lucide:send"
-            type="submit"
-          />
-        </UButtonGroup>
-      </form>
+      <div class="flex flex-col w-full gap-2">
+        <form class="size-full" @submit.prevent="handleSuggestionSubmit">
+          <UButtonGroup class="w-full" size="lg">
+            <UInput
+              v-model="suggest"
+              class="w-full"
+              color="neutral"
+              placeholder="Faire une suggestion"
+              variant="subtle"
+            />
+            <UButton
+              class="cursor-pointer"
+              color="neutral"
+              icon="lucide:camera"
+              variant="subtle"
+              @click="clickOnPhotoUpload"
+            />
+            <UButton
+              :disabled="suggest === ''"
+              class="cursor-pointer"
+              color="primary"
+              icon="lucide:send"
+              type="submit"
+            />
+          </UButtonGroup>
+        </form>
+      </div>
     </template>
   </USlideover>
 </template>
