@@ -21,6 +21,8 @@ const suggestionData = computed(() =>
   props.userProfile.posts.filter((p) => p.category === 'suggestion')
 )
 
+const votesData = computed(() => props.userProfile.posts.filter((p) => p.category === 'votes'))
+
 const tabsItems = ref<TabsItem[]>([
   {
     label: 'Feed',
@@ -33,6 +35,10 @@ const tabsItems = ref<TabsItem[]>([
   {
     label: 'Suggestions',
     slot: 'suggestions' as const,
+  },
+  {
+    label: 'Votes',
+    slot: 'votes' as const,
   },
 ])
 </script>
@@ -104,6 +110,26 @@ const tabsItems = ref<TabsItem[]>([
             <UserPost
               v-else
               v-for="post in suggestionData"
+              :key="post.id"
+              :avatarUrl="userProfile.avatarUrl"
+              :post="post"
+              :userName="userProfile.userName"
+            />
+          </div>
+        </template>
+
+        <template #votes>
+          <div class="p-4 size-full flex flex-col gap-4">
+            <EmptyFeed
+              v-if="votesData.length === 0"
+              icon="lucide:message-circle"
+              title="Aucune suggestion disponible"
+              description="Cet utilisateur n'a pas encore partagé de suggestions."
+            />
+
+            <UserPost
+              v-else
+              v-for="post in votesData"
               :key="post.id"
               :avatarUrl="userProfile.avatarUrl"
               :post="post"
