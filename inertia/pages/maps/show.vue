@@ -82,7 +82,7 @@ const toggleEditMode = () => {
       description: 'Vous pouvez maintenant ajouter, modifier ou supprimer des marqueurs.',
       icon: 'lucide:shield',
     })
-  } else if (isEditMode.value === true) {
+  } else if (isEditMode.value) {
     toast.add({
       title: 'Mode édition désactivé',
       description: 'Vous ne pouvez plus ajouter, modifier ou supprimer des marqueurs.',

@@ -26,6 +26,8 @@ export default class StoreSuggestionController {
         content: `<span class="font-semibold capitalize">${user?.userName} </span>a suggéré un nouveau call <span class="font-bold">"${data.label}" </span> a la place de <span class="font-bold">"${marker.label}" </span> sur <a class="underline" href="${`/cartes/` + map.slug}">${map.name}</a>`,
       })
 
+      await suggestion.load('user')
+
       return response.status(201).json(suggestion)
     } catch (error) {
       return response.status(400).json({
