@@ -32,7 +32,7 @@ const showPassword = ref(false)
       variant="subtle"
     >
       <template #header>
-        <h1 class="text-2xl font-bold">Connectez-vous à R6Calls</h1>
+        <h1 class="text-2xl font-bold">Connectez-vous à HexaCall</h1>
         <p class="text-muted text-sm">Accédez à votre compte pour commencer l'aventure !</p>
       </template>
 
@@ -91,9 +91,9 @@ const showPassword = ref(false)
 
         <USeparator label="Ou continuer avec" />
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-2">
           <UButton
-            class="w-full justify-center cursor-pointer"
+            class="w-full justify-center"
             color="neutral"
             external
             icon="ic:baseline-discord"
@@ -105,7 +105,19 @@ const showPassword = ref(false)
           />
 
           <UButton
-            class="w-full justify-center cursor-pointer"
+            class="w-full justify-center"
+            color="neutral"
+            external
+            icon="mdi:twitch"
+            label="Twitch"
+            size="xl"
+            target="_self"
+            to="/twitch/redirect"
+            variant="subtle"
+          />
+
+          <UButton
+            class="w-full justify-center"
             color="neutral"
             external
             icon="mdi:google"
