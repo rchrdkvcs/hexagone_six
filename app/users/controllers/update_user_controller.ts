@@ -7,21 +7,23 @@ export default class UpdateUserController {
     vine.object({
       userName: vine
         .string()
-        .maxLength(16)
         .minLength(4)
+        .maxLength(16)
         .toLowerCase()
         .regex(/^[a-z0-9_-]+$/)
-        .unique(async (db, value) => {
+        .unique(async (db, value, field) => {
+          const userId = field.data.params.id
+
           return await db
             .from('users')
             .where('user_name', value)
+            .whereNot('id', userId)
             .first()
             .then((user) => {
               return !user
             })
-        })
-        .optional(),
-      bio: vine.string().maxLength(500).optional(),
+        }),
+      bio: vine.string().maxLength(500),
     })
   )
 

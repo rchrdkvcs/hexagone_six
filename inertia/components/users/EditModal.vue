@@ -5,6 +5,7 @@ import { useForm } from '@inertiajs/vue3'
 import type User from '#users/models/user'
 
 const props = defineProps<{ user: User }>()
+const emit = defineEmits(['close'])
 
 onMounted(() => {
   form.userName = props.user.userName
@@ -15,16 +16,20 @@ const form = useForm({
   userName: '',
   bio: '',
 })
+
+const submitForm = () => {
+  form.post('/membres/' + props.user.id, {
+    onSuccess: () => {
+      emit('close')
+    },
+  })
+}
 </script>
 
 <template>
   <UModal :open="true" title="Modifier mes informations" @close="$emit('close')">
     <template #body>
-      <form
-        id="edit-user-form"
-        class="flex flex-col gap-4"
-        @submit.prevent="form.post('/membres/' + user.id)"
-      >
+      <form id="edit-user-form" class="flex flex-col gap-4" @submit.prevent="submitForm">
         <UFormField :error="form.errors.userName" label="Nom d'utilisateur" name="userName">
           <UInput v-model="form.userName" :placeholder="user.userName" class="w-full" />
         </UFormField>
