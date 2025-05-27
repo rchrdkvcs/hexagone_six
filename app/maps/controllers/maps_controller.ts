@@ -15,7 +15,9 @@ export default class MapsController {
 
     await map.load('markers', (query) => {
       query.preload('suggestions', (suggestionQuery) => {
-        suggestionQuery.preload('user')
+        suggestionQuery.preload('user', (userQuery) => {
+          userQuery.preload('votes')
+        })
       })
     })
 

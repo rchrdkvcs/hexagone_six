@@ -1,13 +1,39 @@
 <script lang="ts" setup>
 import type Suggestion from '#suggestions/models/suggestion'
+import { ref } from 'vue'
 
 defineProps<{
   suggestions: Suggestion[]
 }>()
 
-defineEmits<{
+const localVotes = ref<{ suggestionId: string; voteType: string }[]>([])
+
+const emit = defineEmits<{
   (e: 'vote', suggestion: Suggestion, voteType: 'up' | 'down'): void
 }>()
+
+function voteOnSuggestion(suggestion: Suggestion, voteType: 'up' | 'down') {
+  emit('vote', suggestion, voteType)
+  localVotes.value = localVotes.value.filter((vote) => vote.suggestionId !== suggestion.id)
+  localVotes.value.push({
+    suggestionId: suggestion.id,
+    voteType: voteType === 'up' ? 'upVote' : 'downVote',
+  })
+}
+
+function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
+  const voteTypeValue = voteType === 'up' ? 'upVote' : 'downVote'
+
+  return (
+    localVotes.value.some(
+      (vote) => vote.suggestionId === suggestion.id && vote.voteType === voteTypeValue
+    ) ||
+    suggestion.user.votes?.some(
+      (vote) => vote.suggestionId === suggestion.id && vote.voteType === voteTypeValue
+    ) ||
+    false
+  )
+}
 </script>
 
 <template>
@@ -17,10 +43,8 @@ defineEmits<{
       :key="suggestion.id"
       :index="index"
       :suggestion="suggestion"
-      :ui="{
-        body: '!py-2 !px-3',
-      }"
-      :class="{ 'bg-warning/50 ring-warning/75': index === 0 }"
+      :ui="{ body: '!py-2 !px-3' }"
+      :class="{ 'bg-warning/35 ring-warning/50 backdrop-blur-3xl': index === 0 }"
     >
       <div class="flex justify-between items-center">
         <h3 class="font-medium text-base flex flex-col gap-1">
@@ -38,21 +62,27 @@ defineEmits<{
 
         <div class="w-32 flex items-center justify-center p-1.5">
           <UButton
-            class="cursor-pointer hover:bg-error"
-            color="neutral"
+            @click="voteOnSuggestion(suggestion, 'down')"
+            :active="hasVoted(suggestion, 'down')"
+            :disabled="hasVoted(suggestion, 'down')"
             icon="lucide:arrow-down"
-            variant="soft"
-            @click="$emit('vote', suggestion, 'down')"
-          />
-          <span class="text-base font-medium w-full text-center">
-            {{ suggestion.voteRatio }}
-          </span>
-          <UButton
-            class="cursor-pointer hover:bg-success"
+            variant="ghost"
             color="neutral"
+            activeVariant="subtle"
+            activeColor="error"
+            class="cursor-pointer"
+          />
+          <span class="text-lg font-medium w-full text-center">{{ suggestion.voteRatio }}</span>
+          <UButton
+            @click="voteOnSuggestion(suggestion, 'up')"
+            :active="hasVoted(suggestion, 'up')"
+            :disabled="hasVoted(suggestion, 'up')"
             icon="lucide:arrow-up"
-            variant="soft"
-            @click="$emit('vote', suggestion, 'up')"
+            variant="ghost"
+            color="neutral"
+            activeVariant="subtle"
+            activeColor="success"
+            class="cursor-pointer"
           />
         </div>
       </div>

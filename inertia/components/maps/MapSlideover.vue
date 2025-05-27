@@ -16,6 +16,7 @@ const props = defineProps<{
 }>()
 
 const suggestions = computed(() => props.marker.suggestions)
+const user = useUser()
 const toast = useToast()
 const suggest = ref('')
 
@@ -41,10 +42,17 @@ const tabItems = ref<TabsItem[]>([
 ])
 
 const handleSuggestionSubmit = async () => {
-  const user = useUser()
+  const toastId = user.value?.id + props.marker.id + suggest.value
+
+  toast.add({
+    id: toastId,
+    title: 'Envoi de la suggestion',
+    icon: 'lucide:loader',
+    color: 'neutral',
+  })
 
   if (!user.value) {
-    toast.add({
+    toast.update(toastId, {
       title: 'Connexion requise',
       icon: 'lucide:user',
       color: 'warning',
@@ -68,14 +76,14 @@ const handleSuggestionSubmit = async () => {
 
       suggest.value = ''
 
-      toast.add({
+      toast.update(toastId, {
         title: 'Suggestion ajoutée',
         description: 'Merci pour votre suggestion !',
         icon: 'lucide:check',
         color: 'success',
       })
     } catch (error) {
-      toast.add({
+      toast.update(toastId, {
         title: 'Erreur',
         description: "Une erreur est survenue lors de l'ajout de la suggestion.",
         icon: 'lucide:x',
@@ -100,11 +108,12 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
       [voteProperty]: voteType === 'up' ? 1 : -1,
     })
 
-    const updatedSuggestion = { ...suggestion, ...response.data }
+    const index = suggestions.value.findIndex((s) => s.id === suggestion.id)
 
-    const index = suggestions.value.findIndex((s: Suggestion) => s.id === suggestion.id)
     if (index !== -1) {
-      suggestions.value[index] = updatedSuggestion
+      const updatedSuggestions = [...suggestions.value]
+      updatedSuggestions[index] = response.data
+      props.marker.suggestions = updatedSuggestions
     }
 
     toast.update(suggestion.id, {
@@ -128,7 +137,7 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
   <USlideover
     :dismissible="false"
     :overlay="false"
-    :title="marker.label"
+    :title="`${marker.label} (${suggestions.length})`"
     class="z-50 bg-default/75 backdrop-blur-md"
   >
     <template #body>
@@ -142,6 +151,7 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
         :items="tabItems"
         :ui="{
           root: 'gap-0',
+          list: 'sticky top-0 z-1 p-2',
           trigger: 'cursor-pointer',
         }"
         class="w-full"
@@ -158,22 +168,24 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
     </template>
 
     <template #footer>
-      <UButtonGroup class="w-full" size="lg">
-        <UInput
-          v-model="suggest"
-          class="w-full"
-          color="neutral"
-          placeholder="Faire une suggestion"
-          variant="subtle"
-        />
-        <UButton
-          :disabled="suggest === ''"
-          class="cursor-pointer"
-          color="primary"
-          icon="lucide:send"
-          @click="handleSuggestionSubmit"
-        />
-      </UButtonGroup>
+      <form class="size-full" @submit.prevent="handleSuggestionSubmit">
+        <UButtonGroup class="w-full" size="lg">
+          <UInput
+            v-model="suggest"
+            class="w-full"
+            color="neutral"
+            placeholder="Faire une suggestion"
+            variant="subtle"
+          />
+          <UButton
+            :disabled="suggest === ''"
+            class="cursor-pointer"
+            color="primary"
+            icon="lucide:send"
+            type="submit"
+          />
+        </UButtonGroup>
+      </form>
     </template>
   </USlideover>
 </template>

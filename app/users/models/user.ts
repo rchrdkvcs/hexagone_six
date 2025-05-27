@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import crypto from 'node:crypto'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, beforeCreate, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import crypto from 'node:crypto'
-import MarkerSuggest from '#suggestions/models/suggestion'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Suggestion from '#suggestions/models/suggestion'
 import Post from '#users/models/post'
+import Vote from '#votes/models/vote'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -41,8 +42,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare avatarUrl: string
 
-  @hasMany(() => MarkerSuggest)
-  declare suggestions: HasMany<typeof MarkerSuggest>
+  @hasMany(() => Suggestion)
+  declare suggestions: HasMany<typeof Suggestion>
+
+  @hasMany(() => Vote)
+  declare votes: HasMany<typeof Vote>
 
   @hasMany(() => Post)
   declare posts: HasMany<typeof Post>
