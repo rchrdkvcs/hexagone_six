@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Suggestion from '#suggestions/models/suggestion'
 import Vote from '#votes/models/vote'
+import Post from '#users/models/post'
 
 export default class UpdateSuggestionController {
   async execute({ response, request, params, auth }: HttpContext) {
@@ -11,6 +12,11 @@ export default class UpdateSuggestionController {
 
       let existingVote = null
       const suggestion = await Suggestion.findOrFail(suggestionId)
+      await suggestion.load('marker')
+
+      const marker = suggestion.marker
+      await marker.load('map')
+      const map = marker.map
 
       try {
         existingVote = await Vote.query()
@@ -22,6 +28,7 @@ export default class UpdateSuggestionController {
       }
 
       const userId = auth.user ? auth.user.id : null
+      let voteAction = ''
 
       if (existingVote) {
         if (
@@ -40,6 +47,7 @@ export default class UpdateSuggestionController {
 
           existingVote.voteType = 'downVote'
           await existingVote.save()
+          voteAction = 'a changé son vote en négatif pour'
         }
 
         if (data.upVote && existingVote.voteType === 'downVote') {
@@ -48,6 +56,7 @@ export default class UpdateSuggestionController {
 
           existingVote.voteType = 'upVote'
           await existingVote.save()
+          voteAction = 'a changé son vote en positif pour'
         }
       } else {
         await Vote.create({
@@ -57,19 +66,31 @@ export default class UpdateSuggestionController {
           suggestionId,
         })
 
-        if (data.upVote) suggestion.upVote += 1
-        if (data.downVote) suggestion.downVote += 1
+        if (data.upVote) {
+          suggestion.upVote += 1
+          voteAction = 'a voté positivement pour'
+        }
+        if (data.downVote) {
+          suggestion.downVote += 1
+          voteAction = 'a voté négativement pour'
+        }
       }
 
       if (data.isApproved !== undefined) {
         suggestion.isApproved = data.isApproved
+        voteAction = data.isApproved ? 'a approuvé' : 'a rejeté'
       }
 
       suggestion.voteRatio = suggestion.upVote - suggestion.downVote
       await suggestion.save()
 
-      // Load the user relationship before returning the suggestion
       await suggestion.load('user')
+
+      await Post.create({
+        userId: auth.user?.id,
+        category: 'suggestion',
+        content: `<span class="font-semibold capitalize">${auth.user?.userName} </span>${voteAction} la suggestion <span class="font-bold">"${suggestion.label}" </span> à la place de <span class="font-bold">"${marker.label}" </span> sur <a class="underline" href="${'/cartes/' + map.slug}">${map.name}</a>`,
+      })
 
       return response.status(200).json(suggestion)
     } catch (error) {

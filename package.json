@@ -68,7 +68,7 @@
     "@vinejs/vine": "^3.0.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "@vue/server-renderer": "^3.5.13",
-    "@vueuse/core": "^13.1.0",
+    "@vueuse/core": "^13.2.0",
     "axios": "^1.9.0",
     "date-fns": "^4.1.0",
     "edge.js": "^6.2.1",

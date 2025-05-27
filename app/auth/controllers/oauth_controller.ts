@@ -2,16 +2,13 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from '#users/models/user'
 
 export default class OauthController {
-  public async render({ params, ally, session, request }: HttpContext) {
+  public async render({ params, ally }: HttpContext) {
     const { provider } = params
-    const returnUrl = request.input('returnUrl', '/')
-
-    session.put('returnUrl', returnUrl)
 
     return ally.use(provider).redirect()
   }
 
-  public async execute({ params, ally, auth, response, session }: HttpContext) {
+  public async execute({ params, ally, auth, response }: HttpContext) {
     const { provider } = params
     const social = ally.use(provider)
 
@@ -37,12 +34,12 @@ export default class OauthController {
         userName: connectingUser.nickName,
         provider: provider,
         provider_id: connectingUser.id,
+        avatarUrl: connectingUser.avatarUrl,
       }
     )
 
     await auth.use('web').login(user)
 
-    const returnUrl = session.pull('returnUrl', '/')
-    return response.redirect(returnUrl)
+    return response.redirect().back()
   }
 }

@@ -3,8 +3,9 @@ import { Link } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import { useUser } from '~/composables/use_user'
 import { useAccess } from '~/composables/use_access'
-import type { NavigationMenuItem } from '@nuxt/ui'
 import AppLogo from '~/components/utils/AppLogo.vue'
+
+import type { NavigationMenuItem } from '@nuxt/ui'
 
 const user = useUser()
 
@@ -35,9 +36,9 @@ const profileItems = computed<NavigationMenuItem[]>(() => [
               ]
             : []),
           {
-            label: 'Mes callouts',
-            icon: 'i-lucide-map-pin',
-            to: '/profile/callouts',
+            label: 'Mon profil',
+            icon: 'lucide:user',
+            to: '/membres/' + user.value?.userName,
           },
           {
             label: 'Déconnexion',

@@ -29,7 +29,7 @@ defineEmits<{
             Proposée par :
             <ULink
               :class="index === 0 ? 'text-elevated' : 'text-muted'"
-              :to="`/${suggestion.user.userName}`"
+              :to="`/membres/${suggestion.user.userName.toLowerCase()}`"
               class="underline"
               >{{ suggestion.user.userName }}</ULink
             >
