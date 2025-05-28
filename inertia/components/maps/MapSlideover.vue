@@ -54,6 +54,7 @@ const handleSuggestionSubmit = async () => {
   if (!user.value) {
     toast.update(toastId, {
       title: 'Connexion requise',
+      description: 'Vous devez être connecté pour faire une suggestion.',
       icon: 'lucide:user',
       color: 'warning',
       orientation: 'horizontal',
@@ -133,10 +134,27 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
 }
 
 const clickOnPhotoUpload = () => {
-  const input = document.getElementById('markerPhoto') as HTMLInputElement
+  if (!user.value) {
+    toast.add({
+      title: 'Connexion requise',
+      description: 'Vous devez être connecté pour soumettre une photo.',
+      icon: 'lucide:user',
+      color: 'warning',
+      orientation: 'horizontal',
+      actions: [
+        {
+          label: 'Se connecter',
+          to: '/login',
+          color: 'neutral',
+        },
+      ],
+    })
+  } else {
+    const input = document.getElementById('markerPhoto') as HTMLInputElement
 
-  if (input) {
-    input.click()
+    if (input) {
+      input.click()
+    }
   }
 }
 
