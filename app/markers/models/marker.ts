@@ -5,6 +5,13 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import MarkerSuggest from '#suggestions/models/suggestion'
 import Map from '#maps/models/map'
 
+interface MarkerImage {
+  url: string
+  order?: number
+  title?: string
+  tag?: string
+}
+
 export default class Marker extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
@@ -25,7 +32,7 @@ export default class Marker extends BaseModel {
   declare mapId: string
 
   @column({ prepare: (value) => JSON.stringify(value) })
-  declare imageUrls: string[]
+  declare images: MarkerImage[]
 
   @belongsTo(() => Map)
   declare map: BelongsTo<typeof Map>

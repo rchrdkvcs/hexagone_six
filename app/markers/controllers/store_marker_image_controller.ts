@@ -27,14 +27,18 @@ export default class StoreMarkerImageController {
 
     const imageUrl = await drive.use().getSignedUrl(key)
 
-    marker.imageUrls.push(imageUrl)
+    const uploadedImage = {
+      url: imageUrl,
+      order: marker.images.length + 1,
+    }
+
+    marker.images.push(uploadedImage)
 
     await marker.save()
 
     return response.ok({
       message: 'Image uploaded successfully',
-      imageUrl,
-      imageUrls: marker.imageUrls,
+      uploadedImage,
     })
   }
 }

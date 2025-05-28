@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.float('x').notNullable()
       table.float('y').notNullable()
       table.integer('stage').notNullable()
-      table.json('image_urls').nullable().defaultTo([])
+      table.json('images').nullable().defaultTo([])
       table.uuid('map_id').references('maps.id').onDelete('CASCADE')
 
       table.timestamp('created_at').notNullable()
