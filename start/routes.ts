@@ -13,6 +13,9 @@ import { middleware } from '#start/kernel'
 import authRoutes from '#start/routes/auth'
 import adminRoutes from '#start/routes/admin'
 
+const StoreMarkerImageController = () =>
+  import('#markers/controllers/store_marker_image_controller')
+
 const UpdateUserController = () => import('#users/controllers/update_user_controller')
 
 const ShowUserController = () => import('#users/controllers/show_user_controller')
@@ -38,6 +41,7 @@ router
     router
       .group(() => {
         router.post('/markers', [MarkersController, 'store'])
+        router.post('/markers/photos', [StoreMarkerImageController, 'execute'])
         router.patch('/markers/:id', [MarkersController, 'update'])
         router.delete('/markers/:id', [MarkersController, 'destroy'])
       })
