@@ -162,7 +162,7 @@ const handlePhotoUpload = async (event: Event) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
-    props.marker.imageUrls.push(response.data.imageUrl)
+    props.marker.images.push(response.data.uploadedImage)
 
     toast.update(toastId, {
       title: 'Photo ajoutée',
@@ -180,6 +180,14 @@ const handlePhotoUpload = async (event: Event) => {
     })
   }
 }
+
+const imageUrls = computed(() => {
+  const sortedObject = props.marker.images.sort((a, b) => {
+    return a.order - b.order
+  })
+
+  return sortedObject.map((image: any) => image.url)
+})
 </script>
 
 <template>
@@ -192,7 +200,7 @@ const handlePhotoUpload = async (event: Event) => {
     <template #body>
       <div class="w-full aspect-video mb-4 bg-muted rounded-lg">
         <div
-          v-if="marker.imageUrls.length === 0"
+          v-if="marker.images.length === 0"
           class="flex flex-col items-center justify-center gap-4 p-8 text-center size-full"
         >
           <UIcon class="size-8" name="lucide:camera" />
@@ -210,7 +218,7 @@ const handlePhotoUpload = async (event: Event) => {
         <UCarousel
           v-else
           v-slot="{ item }"
-          :items="marker.imageUrls"
+          :items="imageUrls"
           :ui="{
             viewport: 'rounded-lg',
             dots: 'bottom-3',

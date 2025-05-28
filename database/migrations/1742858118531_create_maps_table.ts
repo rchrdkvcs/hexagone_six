@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.string('name').notNullable()
       table.string('slug').notNullable()
+      table.json('images').nullable().defaultTo([])
       table.integer('stage_count').notNullable()
     })
   }
