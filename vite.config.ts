@@ -20,6 +20,11 @@ export default defineConfig({
           secondary: 'blue',
           neutral: 'slate',
         },
+        button: {
+          slots: {
+            base: 'cursor-pointer',
+          },
+        },
       },
     }),
 

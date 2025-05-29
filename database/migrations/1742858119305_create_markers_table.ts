@@ -7,8 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table.string('label').notNullable()
-      table.float('x').notNullable()
-      table.float('y').notNullable()
+      table.enu('type', ['point', 'polygone']).notNullable()
+      table.json('coordinates').notNullable().defaultTo([])
+      table.uuid('user_id').references('users.id').onDelete('CASCADE')
       table.integer('stage').notNullable()
       table.json('images').nullable().defaultTo([])
       table.uuid('map_id').references('maps.id').onDelete('CASCADE')

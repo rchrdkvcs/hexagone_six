@@ -4,12 +4,18 @@ import { DateTime } from 'luxon'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import MarkerSuggest from '#suggestions/models/suggestion'
 import Map from '#maps/models/map'
+import User from '#users/models/user'
 
 interface MarkerImage {
   url: string
   order?: number
   title?: string
   tag?: string
+}
+
+interface Coordinates {
+  x: number
+  y: number
 }
 
 export default class Marker extends BaseModel {
@@ -20,19 +26,25 @@ export default class Marker extends BaseModel {
   declare label: string
 
   @column()
-  declare x: number
+  declare type: 'point' | 'polygone'
 
-  @column()
-  declare y: number
+  @column({ prepare: (value) => JSON.stringify(value) })
+  declare coordinates: Coordinates[]
 
   @column()
   declare stage: number
 
-  @column()
-  declare mapId: string
-
   @column({ prepare: (value) => JSON.stringify(value) })
   declare images: MarkerImage[]
+
+  @column()
+  declare userId: string
+
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
+
+  @column()
+  declare mapId: string
 
   @belongsTo(() => Map)
   declare map: BelongsTo<typeof Map>
