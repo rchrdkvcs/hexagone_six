@@ -210,9 +210,8 @@ const imageUrls = computed(() => {
 
 <template>
   <USlideover
-    :dismissible="false"
-    :overlay="false"
     :title="`${marker.label} (${suggestions.length})`"
+    :description="`Proposé par ${marker.user?.userName}`"
     class="z-50 bg-default/75 backdrop-blur-md"
   >
     <template #body>
@@ -262,7 +261,7 @@ const imageUrls = computed(() => {
         :items="tabItems"
         :ui="{
           root: 'gap-0',
-          list: 'sticky top-0 z-1 p-2',
+          list: 'sticky top-0 z-1 p-1.5',
           trigger: 'cursor-pointer',
         }"
         class="w-full"

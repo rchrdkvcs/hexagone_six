@@ -19,6 +19,7 @@ export default class MapsController {
           userQuery.preload('votes')
         })
       })
+      query.preload('user')
     })
 
     return inertia.render('maps/show', { map })
