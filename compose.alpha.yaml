@@ -6,3 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
+    volumes:
+      - storage:/var/lib/app/storage
+
+volumes:
+  storage:
