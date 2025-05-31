@@ -140,7 +140,7 @@ const handleStageChange = (stage: number) => {
       @stageChange="handleStageChange"
     />
 
-    <UTooltip arrow text="Afficher/Masquer les étiquettes" placement="top">
+    <UTooltip arrow text="Afficher/Masquer les étiquettes" placement="top" v-if="user">
       <UButton
         :active="showLabel"
         :icon="showLabel ? 'lucide:eye-off' : 'lucide:eye'"
