@@ -167,9 +167,10 @@ const handleStageChange = (stage: number) => {
 
   <div v-else class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4">
     <UButton
-      label="Quitter le mode édition"
+      :label="`Quitter le mode ${editMode === 'marker' ? 'marqueur' : 'polygone'}`"
       icon="lucide:x"
       class="rounded-full backdrop-blur-lg"
+      variant="subtle"
       size="xl"
       @click="editMode = null"
     />
@@ -184,6 +185,7 @@ const handleStageChange = (stage: number) => {
       />
 
       <UButton
+        v-if="editMode === 'polygon' && newPolygone && newPolygone.coordinates.length > 2"
         icon="lucide:check"
         class="rounded-full backdrop-blur-lg"
         size="xl"

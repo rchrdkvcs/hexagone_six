@@ -1,10 +1,19 @@
-import { BaseModel, beforeCreate, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import {
+  afterCreate,
+  BaseModel,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasMany,
+} from '@adonisjs/lucid/orm'
 import crypto from 'node:crypto'
 import { DateTime } from 'luxon'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import MarkerSuggest from '#suggestions/models/suggestion'
 import Map from '#maps/models/map'
 import User from '#users/models/user'
+import Suggestion from '#suggestions/models/suggestion'
+import Vote from '#votes/models/vote'
 
 interface MarkerImage {
   url: string
@@ -23,13 +32,13 @@ export default class Marker extends BaseModel {
   declare id: string
 
   @column()
-  declare label: string
-
-  @column()
   declare type: 'point' | 'polygone'
 
   @column({ prepare: (value) => JSON.stringify(value) })
   declare coordinates: Coordinates[]
+
+  @column()
+  declare label: string
 
   @column()
   declare stage: number
@@ -39,6 +48,9 @@ export default class Marker extends BaseModel {
 
   @column()
   declare userId: string
+
+  @column()
+  declare userIp: string
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
@@ -61,5 +73,37 @@ export default class Marker extends BaseModel {
   @beforeCreate()
   static generateUuid(marker: Marker) {
     marker.id = crypto.randomUUID()
+  }
+
+  @afterCreate()
+  static async createInitialSuggestion(marker: Marker) {
+    const suggestion = await Suggestion.create({
+      label: marker.label,
+      isApproved: false,
+      upVote: 1,
+      downVote: 0,
+      voteRatio: 1,
+      userId: marker.userId,
+      markerId: marker.id,
+    })
+
+    await Vote.create({
+      userId: marker.userId,
+      userIp: marker.userIp,
+      voteType: 'upVote',
+      suggestionId: suggestion.id,
+    })
+  }
+
+  async updateLabelFromBestSuggestion() {
+    const topSuggestion = await Suggestion.query()
+      .where('marker_id', this.id)
+      .orderBy('vote_ratio', 'desc')
+      .first()
+
+    if (topSuggestion && topSuggestion.label !== this.label) {
+      this.label = topSuggestion.label
+      await this.save()
+    }
   }
 }
