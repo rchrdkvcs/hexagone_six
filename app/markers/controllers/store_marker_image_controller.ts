@@ -9,7 +9,7 @@ export default class StoreMarkerImageController {
     vine.object({
       markerId: vine.string().uuid(),
       photo: vine.file({
-        size: '5mb',
+        size: '15mb',
         extnames: ['jpg', 'jpeg', 'png'],
       }),
     })
@@ -25,7 +25,7 @@ export default class StoreMarkerImageController {
     const key = `markers/${cuid()}.${image.extname}`
     await image.moveToDisk(key)
 
-    const imageUrl = await drive.use().getSignedUrl(key)
+    const imageUrl = await drive.use().getUrl(key)
 
     const uploadedImage = {
       url: imageUrl,
