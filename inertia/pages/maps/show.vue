@@ -140,7 +140,7 @@ const handleStageChange = (stage: number) => {
       @stageChange="handleStageChange"
     />
 
-    <UTooltip arrow text="Afficher/Masquer les étiquettes" placement="top" v-if="user">
+    <UTooltip arrow text="Afficher/Masquer les étiquettes" placement="top">
       <UButton
         :active="showLabel"
         :icon="showLabel ? 'lucide:eye-off' : 'lucide:eye'"
@@ -153,6 +153,7 @@ const handleStageChange = (stage: number) => {
     </UTooltip>
 
     <UDropdownMenu
+      v-if="user"
       arrow
       :items="dropDownItems"
       :ui="{
