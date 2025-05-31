@@ -1,183 +1,210 @@
 <script lang="ts" setup>
 import { Head } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
-import MapLeaflet from '~/components/maps/MapLeaflet.vue'
-import { InferPageProps } from '@adonisjs/inertia/types'
-import type MapsController from '../../../app/maps/controllers/maps_controller'
-import { type Marker, useMarkers } from '~/composables/use_markers'
-import MarkerModal from '~/components/maps/MarkerModal.vue'
-import MapSlideover from '~/components/maps/MapSlideover.vue'
-import { useAccess } from '~/composables/use_access'
+import { ref, computed } from 'vue'
+import { useUser } from '~/composables/use_user'
 import Maps from '~/layouts/maps.vue'
+import MapLeaflet from '~/components/maps/MapLeaflet.vue'
+import MarkerModal from '~/components/maps/MarkerModal.vue'
+import PolygoneModal from '~/components/maps/PolygoneModal.vue'
+import StageNav from '~/components/maps/StageNav.vue'
+
+import type Map from '#maps/models/map'
+import type { DropdownMenuItem } from '@nuxt/ui'
+import type { LeafletMouseEvent } from 'leaflet'
 
 defineOptions({
   layout: Maps,
 })
 
 const props = defineProps<{
-  map: InferPageProps<MapsController, 'show'>['map']
+  map: Map
 }>()
 
-const totalImages = ref(props.map.stageCount ?? 0)
+const user = useUser()
 const currentImageIndex = ref(1)
 const imageUrl = computed(() => `/images/maps/${props.map.slug}/${currentImageIndex.value}.jpg`)
-const imageWidth = ref(1600)
-const imageHeight = ref(900)
 
-const isEditMode = ref(false)
-const showPopup = ref(false)
-const tempMarkerPosition = ref<{ x: number; y: number } | null>(null)
-const selectedMarker = ref<Marker | null>(null)
-const viewModalMarker = ref<Marker | null>(null)
-const showViewModal = ref(false)
-const toast = useToast()
+const markers = computed(() => {
+  return props.map.markers.filter((marker) => marker.stage === currentImageIndex.value)
+})
+
 const overlay = useOverlay()
-const slideover = overlay.create(MapSlideover)
+const markerModal = overlay.create(MarkerModal)
+const polygoneModal = overlay.create(PolygoneModal)
+const newPolygone = ref<{
+  coordinates: { x: number; y: number }[]
+} | null>(null)
 const showLabel = ref(true)
 
-const { stageMarkers, addMarker, updateMarker, deleteMarker } = useMarkers(
-  props.map.markers,
-  props.map.id,
-  () => currentImageIndex.value,
-  true
-)
+const editMode = ref<'marker' | 'polygon' | null>(null)
 
-const handleMapClick = (position: { x: number; y: number }) => {
-  if (!isEditMode.value) return
+const dropDownItems = ref<DropdownMenuItem[]>([
+  {
+    label: 'Marqueurs',
+    icon: 'lucide:map-pin',
+    onClick: () => {
+      editMode.value = 'marker'
+    },
+  },
+  {
+    label: 'Polygones',
+    icon: 'lucide:hexagon',
+    onClick: () => {
+      editMode.value = 'polygon'
+    },
+  },
+])
 
-  tempMarkerPosition.value = position
-  selectedMarker.value = null
-  showPopup.value = true
+const handelMapClick = (event: LeafletMouseEvent) => {
+  if (editMode.value && !user.value) {
+    const toast = useToast()
+
+    toast.add({
+      title: 'Connexion requise',
+      description: 'Vous devez être connecté pour faire une suggestion.',
+      icon: 'lucide:user',
+      color: 'warning',
+      orientation: 'horizontal',
+      actions: [
+        {
+          label: 'Se connecter',
+          to: '/login',
+          color: 'neutral',
+        },
+      ],
+    })
+  }
+
+  if (editMode.value && user.value) {
+    const { map } = props
+
+    if (editMode.value === 'marker') {
+      markerModal.open({ event, map, stage: currentImageIndex.value })
+    } else if (editMode.value === 'polygon') {
+      if (!newPolygone.value) {
+        newPolygone.value = { coordinates: [] }
+      }
+      newPolygone.value.coordinates.push({ x: event.latlng.lng, y: event.latlng.lat })
+    }
+  }
 }
 
-const handleMarkerClick = (marker: Marker) => {
-  if (isEditMode.value) {
-    selectedMarker.value = marker
-    tempMarkerPosition.value = null
-    showPopup.value = true
+const handlePolygoneModal = () => {
+  if (newPolygone.value && newPolygone.value.coordinates.length > 2) {
+    polygoneModal.open({
+      coordinates: newPolygone.value.coordinates,
+      map: props.map,
+      stage: currentImageIndex.value,
+    })
+    newPolygone.value = null
   } else {
-    viewModalMarker.value = marker
-    slideover.open({ marker })
-  }
-}
-
-const handleEditMarker = (marker: Marker) => {
-  if (!isEditMode.value) return
-
-  selectedMarker.value = marker
-  tempMarkerPosition.value = null
-  showPopup.value = true
-}
-
-const closePopup = () => {
-  showPopup.value = false
-  tempMarkerPosition.value = null
-  selectedMarker.value = null
-}
-
-const toggleEditMode = () => {
-  if (isEditMode.value === false) {
+    const toast = useToast()
     toast.add({
-      title: 'Mode édition activé',
-      description: 'Vous pouvez maintenant ajouter, modifier ou supprimer des marqueurs.',
-      icon: 'lucide:shield',
+      title: 'Erreur',
+      description: 'Un polygone doit avoir au moins 3 points.',
+      icon: 'lucide:x-circle',
+      color: 'error',
     })
-  } else if (isEditMode.value) {
-    toast.add({
-      title: 'Mode édition désactivé',
-      description: 'Vous ne pouvez plus ajouter, modifier ou supprimer des marqueurs.',
-      icon: 'lucide:shield',
-    })
-  }
-
-  isEditMode.value = !isEditMode.value
-  if (!isEditMode.value) closePopup()
-}
-
-const loadImage = (index: number) => {
-  if (index >= 1 && index <= totalImages.value) {
-    currentImageIndex.value = index
   }
 }
 
 const handleLabelView = () => {
   showLabel.value = !showLabel.value
-  toast.add({
-    title: showLabel.value
-      ? 'Affichage des étiquettes activé'
-      : 'Affichage des étiquettes désactivé',
-    icon: 'lucide:eye',
-  })
+}
+
+const handleStageChange = (stage: number) => {
+  currentImageIndex.value = stage
+  newPolygone.value = null
 }
 </script>
 
 <template>
-  <Head :title="props.map.name" />
+  <Head :title="map.name" />
 
-  <div
-    class="fixed bottom-4 left-1/2 -translate-x-1/2 z-999 flex gap-2 bg-default/75 backdrop-blur border border-default rounded-full p-2 shadow-lg"
-  >
-    <UButton
-      v-for="index in totalImages"
-      :key="index"
-      :label="`Etage ${index}`"
-      :active="index === currentImageIndex"
-      activeColor="primary"
-      activeVariant="solid"
-      variant="ghost"
-      class="rounded-full cursor-pointer font-semibold transition-all duration-200 ease-in-out"
-      color="neutral"
-      @click="loadImage(index)"
-      size="lg"
-    />
-
-    <UButton
-      :active="showLabel"
-      :icon="showLabel ? 'lucide:eye-off' : 'lucide:eye'"
-      class="rounded-full cursor-pointer"
-      size="lg"
-      variant="ghost"
-      @click="handleLabelView"
-    />
-
-    <UButton
-      v-if="useAccess() >= 2"
-      :active="isEditMode"
-      activeColor="primary"
-      variant="ghost"
-      @click="toggleEditMode"
-      activeVariant="solid"
-      class="rounded-full cursor-pointer"
-      icon="lucide:pencil"
-      size="lg"
-    />
-  </div>
-
-  <MarkerModal
-    :is-edit-mode="isEditMode"
-    :selected-marker="selectedMarker"
-    :show-popup="showPopup"
-    :temp-marker-position="tempMarkerPosition"
-    @close="closePopup"
-    @close-popup="closePopup"
-    @add-marker="addMarker"
-    @update-marker="updateMarker"
-    @delete-marker="deleteMarker"
+  <MapLeaflet
+    :key="currentImageIndex"
+    :markers="markers"
+    :polygonesPreview="newPolygone"
+    :showLabel="showLabel"
+    :imageUrl="imageUrl"
+    @mapClick="handelMapClick"
   />
 
-  <div class="fixed top-0 left-0 size-full overflow-hidden">
-    <MapLeaflet
-      ref="map"
-      :imageHeight="imageHeight"
-      :imageUrl="imageUrl"
-      :imageWidth="imageWidth"
-      :is-edit-mode="isEditMode"
-      :markers="stageMarkers"
-      :voteModal="showViewModal"
-      :showLabel="showLabel"
-      @map-click="handleMapClick"
-      @edit-marker="handleEditMarker"
-      @marker-click="handleMarkerClick"
+  <div
+    v-if="!editMode"
+    class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2"
+  >
+    <StageNav
+      :currentStage="currentImageIndex"
+      :stages="props.map.stageCount"
+      @stageChange="handleStageChange"
     />
+
+    <UTooltip arrow text="Afficher/Masquer les étiquettes" placement="top">
+      <UButton
+        :active="showLabel"
+        :icon="showLabel ? 'lucide:eye-off' : 'lucide:eye'"
+        class="rounded-full backdrop-blur-lg"
+        size="xl"
+        color="neutral"
+        variant="subtle"
+        @click="handleLabelView"
+      />
+    </UTooltip>
+
+    <UDropdownMenu
+      arrow
+      :items="dropDownItems"
+      :ui="{
+        content: 'w-48',
+      }"
+    >
+      <UTooltip arrow text="Proposer un marqueur ou un polygone" placement="top">
+        <UButton icon="lucide:plus" class="rounded-full backdrop-blur-lg" size="xl" />
+      </UTooltip>
+    </UDropdownMenu>
+  </div>
+
+  <div v-else class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4">
+    <UButton
+      :label="`Quitter le mode ${editMode === 'marker' ? 'marqueur' : 'polygone'}`"
+      icon="lucide:x"
+      class="rounded-full backdrop-blur-lg"
+      variant="subtle"
+      size="xl"
+      @click="editMode = null"
+    />
+
+    <UPopover arrow>
+      <UButton
+        color="neutral"
+        variant="subtle"
+        class="rounded-full backdrop-blur-lg"
+        size="xl"
+        icon="lucide:circle-help"
+      />
+
+      <UButton
+        v-if="editMode === 'polygon' && newPolygone && newPolygone.coordinates.length > 2"
+        icon="lucide:check"
+        class="rounded-full backdrop-blur-lg"
+        size="xl"
+        @click="handlePolygoneModal"
+      />
+
+      <template #content>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold mb-2">Mode édition</h3>
+          <p class="text-sm text-default/80 mb-4">
+            Sélectionnez un type de marqueur ou de polygone pour commencer à ajouter des éléments
+            sur la carte.
+          </p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>Marqueurs : Ajoutez des points d'intérêt sur la carte.</li>
+            <li>Polygones : Définissez des zones spécifiques sur la carte.</li>
+          </ul>
+        </div>
+      </template>
+    </UPopover>
   </div>
 </template>

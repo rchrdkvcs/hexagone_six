@@ -1,194 +1,228 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import { LImageOverlay, LMap, LMarker } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import MapSlideover from '~/components/maps/MapSlideover.vue'
 
-interface Marker {
-  id: number | string
-  x: number
-  y: number
-  label: string
-  stage: number
-}
+import type Marker from '#markers/models/marker'
 
 const props = defineProps<{
   imageUrl: string
-  imageWidth: number
-  imageHeight: number
   markers: Marker[]
-  isEditMode: boolean
-  voteModal: boolean
   showLabel: boolean
+  polygonesPreview: { coordinates: { x: number; y: number }[] } | null
 }>()
 
-const emit = defineEmits(['map-click', 'edit-marker', 'marker-click'])
-const selectedMarkerId = ref<number | string | null>(null)
-const map = ref(null)
-const crs = L.CRS.Simple
+const emits = defineEmits(['mapClick'])
+
+const overlay = useOverlay()
+const slideover = overlay.create(MapSlideover)
+const mapElement = ref<HTMLElement | null>(null)
 const bounds = ref([
   [0, 0],
-  [props.imageHeight, props.imageWidth],
+  [900, 1600],
 ])
-const center = ref<[number, number]>([props.imageHeight / 2, props.imageWidth / 2])
-const zoom = ref(0)
-const minZoom = ref(-0.5)
-const maxZoom = ref(4)
-const mapOptions = ref({
-  attributionControl: false,
-  zoomControl: false,
-  wheelPxPerZoomLevel: 150,
-  zoomDelta: 0.1,
-  smoothWheelZoom: true,
-  smoothSensitivity: 1.5,
-  scrollWheelZoom: true,
-  wheelDebounceTime: 40,
-  zoomSnap: 0.1,
+const mapInstance = ref<L.Map | null>(null)
+const previewPolygonLayer = ref<L.Polygon | null>(null)
+const markerLayers = ref<L.Layer[]>([])
+
+onMounted(() => {
+  if (!mapElement.value) return
+
+  const map = L.map(mapElement.value, {
+    crs: L.CRS.Simple,
+    attributionControl: false,
+    zoomControl: false,
+    wheelPxPerZoomLevel: 150,
+    zoomDelta: 0.1,
+    scrollWheelZoom: true,
+    wheelDebounceTime: 40,
+    zoomSnap: 0.1,
+    minZoom: -0.5,
+    maxZoom: 4,
+  })
+
+  mapInstance.value = map
+
+  L.imageOverlay(props.imageUrl, bounds.value as L.LatLngBoundsExpression).addTo(map)
+
+  addMarkers()
+  addPreviewPolygon()
+
+  map
+    .fitBounds(bounds.value as L.LatLngBoundsExpression)
+    .on('click', (event) => emits('mapClick', event))
 })
-const hoveringMarker = ref<Marker | null>(null)
 
-const toCapitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+const addMarkers = () => {
+  if (!mapInstance.value) return
 
-const getMarkerIcon = (marker: Marker) => {
-  const isSelected = selectedMarkerId.value === marker.id
+  markerLayers.value.forEach((layer) => {
+    if (mapInstance.value) {
+      mapInstance.value.removeLayer(layer)
+    }
+  })
 
-  const labelContent =
-    hoveringMarker.value && hoveringMarker.value.id === marker.id
-      ? `<span>${toCapitalize(marker.label)}</span>`
-      : props.showLabel
-        ? `<span>${toCapitalize(marker.label)}</span>`
-        : ''
+  markerLayers.value = []
 
-  return L.divIcon({
-    html: `<div class="marker-text ${isSelected ? 'active-marker' : ''} ${!props.showLabel && !(hoveringMarker.value?.id === marker.id) ? 'label-hidden' : ''}">${labelContent}</div>`,
-    className: 'text-marker-icon',
-    iconSize: undefined,
-    iconAnchor: [0, 0],
+  props.markers.forEach((marker) => {
+    if (marker.coordinates?.length) {
+      if (marker.type === 'point') {
+        const textIcon = L.divIcon({
+          className: 'text-marker',
+          html: props.showLabel
+            ? `<div class="text-label">${marker.label}</div>`
+            : `<div class="hidden-label"><span class="marker-label">${marker.label}</span></div>`,
+          iconSize: undefined,
+        })
+
+        const markerLayer = L.marker([marker.coordinates[0].y, marker.coordinates[0].x], {
+          icon: textIcon,
+        })
+          .addTo(mapInstance.value as L.Map)
+          .on('click', () => slideover.open({ marker }))
+
+        markerLayers.value.push(markerLayer)
+      } else {
+        const polygonPoints = marker.coordinates.map((coord) => [
+          coord.y,
+          coord.x,
+        ]) as L.LatLngExpression[]
+
+        const polygonLayer = L.polygon(polygonPoints, {
+          className: props.showLabel ? 'polygon-with-label' : 'polygon-hover-label',
+          color: '#ff6467',
+          fillColor: '#0f172b',
+          fillOpacity: 0.25,
+          weight: 2,
+        }).addTo(mapInstance.value as L.Map)
+
+        if (props.showLabel) {
+          polygonLayer.bindTooltip(marker.label, {
+            permanent: true,
+            direction: 'center',
+            className: 'polygon-tooltip-visible',
+            interactive: false,
+          })
+        } else {
+          polygonLayer.bindTooltip(marker.label, {
+            permanent: false,
+            direction: 'center',
+            className: 'polygon-tooltip-hover',
+            interactive: false,
+          })
+        }
+
+        polygonLayer.on('click', () => slideover.open({ marker }))
+        markerLayers.value.push(polygonLayer)
+      }
+    }
   })
 }
 
-const onMapReady = (mapInstance: any) => mapInstance.fitBounds(bounds.value)
+const addPreviewPolygon = () => {
+  if (!mapInstance.value) return
 
-const handleMapClick = (event: L.LeafletMouseEvent) =>
-  emit('map-click', { x: event.latlng.lng, y: event.latlng.lat })
+  if (previewPolygonLayer.value) {
+    mapInstance.value.removeLayer(previewPolygonLayer.value)
+    previewPolygonLayer.value = null
+  }
 
-const handleMarkerClick = (marker: Marker) => {
-  selectedMarkerId.value = marker.id
-  emit(props.isEditMode ? 'edit-marker' : 'marker-click', marker)
-}
+  if (props.polygonesPreview && props.polygonesPreview?.coordinates?.length > 0) {
+    const polygonPoints = props.polygonesPreview.coordinates.map((c) => [
+      c.y,
+      c.x,
+    ]) as L.LatLngExpression[]
 
-const handleMarkerMouseover = (marker: Marker) => {
-  hoveringMarker.value = marker
-}
-
-const handleMarkerMouseout = () => {
-  hoveringMarker.value = null
+    previewPolygonLayer.value = L.polygon(polygonPoints, {
+      color: 'blue',
+      fillColor: 'blue',
+      fillOpacity: 0.2,
+    }).addTo(mapInstance.value as L.Map)
+  }
 }
 
 watch(
-  () => props.voteModal,
-  (newValue) => {
-    if (!newValue) selectedMarkerId.value = null
+  () => props.showLabel,
+  () => {
+    if (mapInstance.value) {
+      addMarkers()
+    }
   }
 )
 
-onMounted(() => {
-  const iconRetinaUrl = new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href
-  const iconUrl = new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href
-  const shadowUrl = new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href
+watch(
+  () => props.polygonesPreview,
+  () => {
+    if (mapInstance.value) {
+      addPreviewPolygon()
+    }
+  },
+  { deep: true }
+)
 
-  delete (L.Icon.Default.prototype as any)._getIconUrl
-  L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
-})
+watch(
+  () => props.markers,
+  () => {
+    if (mapInstance.value) {
+      addMarkers()
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <template>
-  <div class="image-map-container">
-    <l-map
-      ref="map"
-      :bounds="bounds"
-      :center="center"
-      :crs="crs"
-      :max-zoom="maxZoom"
-      :min-zoom="minZoom"
-      :options="mapOptions"
-      :zoom="zoom"
-      @click="handleMapClick"
-      @ready="onMapReady"
-    >
-      <l-image-overlay :bounds="bounds" :url="imageUrl" />
-      <l-marker
-        v-for="marker in markers"
-        :key="`${marker.id}-${voteModal}-${selectedMarkerId}`"
-        :icon="getMarkerIcon(marker) as unknown as L.Icon"
-        :lat-lng="[marker.y, marker.x]"
-        @click="handleMarkerClick(marker)"
-        @mouseout="handleMarkerMouseout"
-        @mouseover="handleMarkerMouseover(marker)"
-      />
-    </l-map>
+  <div class="fixed top-0 left-0 size-full overflow-hidden z-0">
+    <div ref="mapElement" class="size-full" />
   </div>
 </template>
 
-<style scoped>
-@reference "tailwindcss";
-@reference "@nuxt/ui";
+<style>
+@reference 'tailwindcss';
+@reference '@nuxt/ui';
 
-.image-map-container {
-  @apply size-full bg-transparent;
-}
-
-:deep(.leaflet-container),
-:deep(.leaflet-pane),
-:deep(.leaflet-map-pane canvas),
-:deep(.leaflet-tile-pane),
-:deep(.leaflet-overlay-pane) {
+.leaflet-container {
   @apply bg-transparent;
 }
 
-:deep(.text-marker-icon) {
-  @apply bg-transparent border-none relative left-0 top-0;
+.leaflet-image-layer {
+  @apply rounded-lg ring ring-default;
 }
 
-:deep(.leaflet-image-layer) {
-  @apply border border-default rounded-lg;
+.leaflet-marker-icon {
+  @apply -translate-x-1/2 -translate-y-1/2;
 }
 
-:deep(.marker-text) {
-  @apply font-medium text-base text-white whitespace-nowrap absolute text-center cursor-pointer transition-all duration-300 z-10 -translate-1/2;
-  @apply bg-default/75 backdrop-blur rounded-full px-3 py-1;
-  @apply transition-all duration-300 ease-in-out;
+.text-label {
+  @apply text-sm font-medium whitespace-nowrap;
+  @apply bg-default/75 backdrop-blur-lg rounded-full px-3 py-1;
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:text-primary;
 }
 
-:deep(.marker-text:hover),
-:deep(.active-marker) {
-  @apply bg-primary text-slate-900 font-semibold z-[1000] shadow-xl;
-  @apply transition-all duration-300 ease-in-out;
+.hidden-label {
+  @apply bg-default/75 backdrop-blur-lg rounded-full size-4;
+  @apply transition-all duration-200 ease-in-out;
+  @apply ring-2 ring-primary hover:ring-transparent;
+  @apply hover:size-auto hover:px-3 hover:py-1;
 }
 
-:deep(.label-hidden) {
-  @apply p-0 w-4 h-4 flex items-center justify-center bg-default/75 border-transparent ring-2 ring-primary/50 rounded-full backdrop-blur;
-  @apply transition-all duration-300 ease-in-out;
-}
-
-:deep(.active-marker.label-hidden) {
-  @apply bg-primary;
-  @apply p-0 w-5 h-5;
-}
-
-:deep(.label-hidden span) {
+.hidden-label .marker-label {
   @apply hidden;
 }
 
-:deep(.label-hidden:hover) {
-  @apply p-1 w-auto h-auto bg-primary border-none;
+.hidden-label:hover .marker-label {
+  @apply block whitespace-nowrap text-sm font-medium;
 }
 
-:deep(.label-hidden:hover span) {
-  @apply block;
+.polygon-tooltip-visible {
+  @apply bg-transparent border-none shadow-none backdrop-blur-none;
+  @apply text-base text-white font-medium;
 }
 
-:deep(.leaflet-marker-pane .leaflet-marker-icon:hover) {
-  @apply z-50;
+.polygon-tooltip-hover {
+  @apply bg-transparent border-none shadow-none backdrop-blur-none;
+  @apply text-base text-white font-medium;
 }
 </style>

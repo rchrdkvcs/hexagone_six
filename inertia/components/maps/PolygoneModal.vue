@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { LeafletMouseEvent } from 'leaflet'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
 
@@ -7,9 +6,9 @@ import type Map from '#maps/models/map'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  stage: number
   map: Map
-  event: LeafletMouseEvent
+  coordinates: { x: number; y: number }[]
+  stage: number
 }>()
 
 const emit = defineEmits(['close'])
@@ -19,17 +18,17 @@ const toast = useToast()
 
 const label = ref('')
 
-const handleMarkerSubmit = async () => {
-  const { event, map, stage } = props
+const handlePolygoneSubmit = async () => {
+  const { map, coordinates, stage } = props
 
   try {
     const response = await axios.post('/markers', {
       mapId: map.id,
       userId: user.value?.id,
       label: label.value,
-      type: 'point',
+      type: 'polygone',
       stage: stage,
-      coordinates: [{ x: event.latlng.lng, y: event.latlng.lat }],
+      coordinates: coordinates,
     })
 
     map.markers.push(response.data.marker)
@@ -61,7 +60,7 @@ const handleMarkerSubmit = async () => {
     </template>
 
     <template #body>
-      <form id="newMarkerForm" @submit.prevent="handleMarkerSubmit">
+      <form id="newPolygoneForm" @submit.prevent="handlePolygoneSubmit">
         <UFormField label="Nom du marqueur" required>
           <UInput v-model="label" class="w-full" placeholder="Armurerie" type="text" />
         </UFormField>
@@ -71,7 +70,7 @@ const handleMarkerSubmit = async () => {
     <template #footer>
       <div class="ml-auto space-x-2">
         <UButton color="error" variant="ghost" @click="emit('close')">Annuler</UButton>
-        <UButton color="neutral" form="newMarkerForm" type="submit">Enregistrer</UButton>
+        <UButton color="neutral" form="newPolygoneForm" type="submit">Enregistrer</UButton>
       </div>
     </template>
   </UModal>
