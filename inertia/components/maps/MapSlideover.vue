@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { InferPageProps } from '@adonisjs/inertia/types'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
 import SuggestionsList from '~/components/maps/SuggestionsList.vue'
 
 import type { TabsItem } from '@nuxt/ui'
-import type MapsController from '#maps/controllers/maps_controller'
+import type Marker from '#markers/models/marker'
 import type Suggestion from '#suggestions/models/suggestion'
-
-type Marker = InferPageProps<MapsController, 'show'>['map']['markers']
 
 const props = defineProps<{
   marker: Marker
@@ -42,17 +39,8 @@ const tabItems = ref<TabsItem[]>([
 ])
 
 const handleSuggestionSubmit = async () => {
-  const toastId = user.value?.id + props.marker.id + suggest.value
-
-  toast.add({
-    id: toastId,
-    title: 'Envoi de la suggestion',
-    icon: 'lucide:loader',
-    color: 'neutral',
-  })
-
   if (!user.value) {
-    toast.update(toastId, {
+    toast.add({
       title: 'Connexion requise',
       description: 'Vous devez être connecté pour faire une suggestion.',
       icon: 'lucide:user',
@@ -77,14 +65,14 @@ const handleSuggestionSubmit = async () => {
 
       suggest.value = ''
 
-      toast.update(toastId, {
+      toast.add({
         title: 'Suggestion ajoutée',
         description: 'Merci pour votre suggestion !',
         icon: 'lucide:check',
         color: 'success',
       })
     } catch (error) {
-      toast.update(toastId, {
+      toast.add({
         title: 'Erreur',
         description: "Une erreur est survenue lors de l'ajout de la suggestion.",
         icon: 'lucide:x',
@@ -268,11 +256,11 @@ const imageUrls = computed(() => {
         size="sm"
       >
         <template #top>
-          <SuggestionsList :suggestions="topSuggestions" @vote="handleVote" />
+          <SuggestionsList :suggestions="topSuggestions" @vote="handleVote" :user-id="user?.id" />
         </template>
 
         <template #all>
-          <SuggestionsList :suggestions="allSuggestions" @vote="handleVote" />
+          <SuggestionsList :suggestions="allSuggestions" @vote="handleVote" :user-id="user?.id" />
         </template>
       </UTabs>
     </template>

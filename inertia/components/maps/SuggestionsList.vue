@@ -2,11 +2,13 @@
 import type Suggestion from '#suggestions/models/suggestion'
 import { ref } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   suggestions: Suggestion[]
+  userId?: string
 }>()
 
 const localVotes = ref<{ suggestionId: string; voteType: string }[]>([])
+const currentUserId = ref<string>(props.userId || '')
 
 const emit = defineEmits<{
   (e: 'vote', suggestion: Suggestion, voteType: 'up' | 'down'): void
@@ -29,7 +31,10 @@ function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
       (vote) => vote.suggestionId === suggestion.id && vote.voteType === voteTypeValue
     ) ||
     suggestion.user.votes?.some(
-      (vote) => vote.suggestionId === suggestion.id && vote.voteType === voteTypeValue
+      (vote) =>
+        vote.suggestionId === suggestion.id &&
+        vote.voteType === voteTypeValue &&
+        vote.userId === currentUserId.value
     ) ||
     false
   )

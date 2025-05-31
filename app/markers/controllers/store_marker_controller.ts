@@ -22,12 +22,19 @@ export default class StoreMarkerController {
   async execute({ response, request }: HttpContext) {
     try {
       const data = await request.validateUsing(StoreMarkerController.validator)
-      const { id } = await Marker.create(data)
+      const { id } = await Marker.create({
+        ...data,
+        userIp: request.ip(),
+      })
 
       const marker = await Marker.findOrFail(id)
 
       await marker.load('user')
-      await marker.load('suggestions')
+      await marker.load('suggestions', (query) => {
+        query.preload('user', (userQuery) => {
+          userQuery.preload('votes')
+        })
+      })
 
       return response.status(201).json({
         success: true,

@@ -1,5 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
+import {
+  afterDelete,
+  afterSave,
+  BaseModel,
+  beforeCreate,
+  belongsTo,
+  column,
+} from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import crypto from 'node:crypto'
 import Marker from '#markers/models/marker'
@@ -45,5 +52,14 @@ export default class Suggestion extends BaseModel {
   @beforeCreate()
   static generateUuid(suggestion: Suggestion) {
     suggestion.id = crypto.randomUUID()
+  }
+
+  @afterSave()
+  @afterDelete()
+  static async updateMarkerLabel(suggestion: Suggestion) {
+    const marker = await Marker.find(suggestion.markerId)
+    if (marker) {
+      await marker.updateLabelFromBestSuggestion()
+    }
   }
 }
