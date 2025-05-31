@@ -14,7 +14,7 @@ const driveConfig = defineConfig({
       location: app.makePath('storage'),
       serveFiles: true,
       routeBasePath: '/storage',
-      visibility: 'private',
+      visibility: 'public',
     }),
   },
 })
