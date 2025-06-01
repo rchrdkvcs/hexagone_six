@@ -26,31 +26,29 @@
         </div>
 
         <div class="flex flex-wrap gap-3 md:gap-4">
+          <UButton icon="lucide:map" label="Voir les cartes" size="lg" to="/cartes" />
           <UButton
-            class="rounded-full"
-            icon="lucide:map"
-            label="Voir les cartes"
-            size="lg"
-            to="/cartes"
-          />
-          <UButton
-            class="rounded-full"
             color="neutral"
             icon="lucide:info"
             label="En apprendre plus"
             size="md"
-            to="/cartes"
+            to="#features"
             variant="soft"
           />
         </div>
       </div>
-    </div>
 
-    <!--    <div class="w-full flex justify-center py-4 md:py-0 px-4 text-center">-->
-    <!--      <h2 class="text-sm md:text-base text-muted">-->
-    <!--        Un projet soutenue par des acteurs majeures de la scène-->
-    <!--        <span class="font-medium">Rainbow Six Siege</span>-->
-    <!--      </h2>-->
-    <!--    </div>-->
+      <div class="flex items-center justify-center gap-2 relative group h-fit md:h-full">
+        <img
+          src="/public/images/logo.png"
+          alt="Logo of Hexagone Six"
+          class="size-48 md:size-64 xl:size-96"
+        />
+
+        <span
+          class="bg-[#89b0c2] dark:bg-[#52729A] size-48 md:size-64 xl:size-96 absolute top-1/2 -translate-y-1/2 rounded-full blur-[320px] -z-1 transition-all duration-300 ease-in-out"
+        />
+      </div>
+    </div>
   </UContainer>
 </template>

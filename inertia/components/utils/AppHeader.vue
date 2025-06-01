@@ -61,10 +61,10 @@ function toggleMobileMenu() {
   <header class="bg-default/75 backdrop-blur border-b border-default h-16 sticky top-0 z-50">
     <div class="size-full max-w-7xl mx-auto grid md:grid-cols-3 grid-cols-2 items-center px-4">
       <Link
-        class="flex justify-start w-fit text-toned hover:text-default transition-all duration-200 ease-in-out"
+        class="flex justify-start items-center gap-2 w-fit text-toned hover:text-default transition-all duration-200 ease-in-out"
         href="/"
       >
-        <AppLogo class="h-5 w-fit" />
+        <AppLogo />
       </Link>
 
       <UNavigationMenu

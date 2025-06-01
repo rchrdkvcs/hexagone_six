@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <UContainer class="w-full space-y-6 md:space-y-8 flex flex-col py-8 md:py-16">
+  <UContainer class="w-full space-y-6 md:space-y-8 flex flex-col py-8 md:py-16" id="features">
     <div class="space-y-2 px-4 md:px-0">
       <h2 class="text-2xl md:text-3xl font-bold">Des fonctionnalités pensées pour la communauté</h2>
       <p class="text-base md:text-lg text-muted">
