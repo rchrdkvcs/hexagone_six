@@ -21,7 +21,7 @@ const { formattedTime } = useTimeAgo(props.post.createdAt)
     </div>
 
     <div class="w-full flex flex-col gap-1.5">
-      <p v-html="post.content" />
+      <p class="text-sm md:text-base" v-html="post.content" />
     </div>
   </div>
 </template>

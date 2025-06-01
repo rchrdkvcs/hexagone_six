@@ -44,8 +44,10 @@ const tabsItems = ref<TabsItem[]>([
 </script>
 
 <template>
-  <UContainer class="grid grid-cols-[320px_680px] gap-8 py-8 w-fit">
-    <UserCard :userProfile="userProfile" />
+  <UContainer
+    class="grid grid-cols-1 md:grid-cols-[320px_680px] gap-4 md:gap-8 py-4 md:py-8 w-full"
+  >
+    <UserCard :userProfile="userProfile" class="w-full md:w-auto" />
 
     <div class="flex flex-col bg-default ring ring-default rounded-md w-full h-fit">
       <UTabs

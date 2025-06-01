@@ -8,7 +8,7 @@
           class="px-3 py-1.5 rounded-full bg-elevated border border-accented flex gap-2 items-center max-w-full overflow-hidden"
         >
           <UIcon class="size-5 flex-shrink-0" name="fxemoji:franceflag" />
-          <p class="text-sm sm:text-base whitespace-nowrap text-ellipsis overflow-hidden">
+          <p class="text-sm sm:text-base text-ellipsis overflow-hidden">
             Le premier site dédié a la communauté
             <span class="font-semibold">Rainbow Six Francais</span> !
           </p>

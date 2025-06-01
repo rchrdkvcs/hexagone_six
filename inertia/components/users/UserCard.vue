@@ -32,7 +32,7 @@ const dropdownItems = ref<DropdownMenuItem[]>([
 </script>
 
 <template>
-  <UCard class="shadow-lg sticky top-24 h-fit">
+  <UCard class="shadow-lg md:sticky top-24 h-fit">
     <template #header>
       <div class="flex items-center gap-4 relative">
         <UAvatar

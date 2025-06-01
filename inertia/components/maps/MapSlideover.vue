@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
+import { useWindowSize } from '@vueuse/core'
 import SuggestionsList from '~/components/maps/SuggestionsList.vue'
 
 import type { TabsItem } from '@nuxt/ui'
@@ -17,8 +18,11 @@ const user = useUser()
 const toast = useToast()
 const suggest = ref('')
 
+const { width } = useWindowSize()
+const maxItems = computed(() => (width.value <= 768 ? 3 : 10))
+
 const topSuggestions = computed(() =>
-  [...suggestions.value].sort((a, b) => b.voteRatio - a.voteRatio).slice(0, 10)
+  [...suggestions.value].sort((a, b) => b.voteRatio - a.voteRatio).slice(0, maxItems.value)
 )
 
 const allSuggestions = computed(() =>
@@ -27,7 +31,7 @@ const allSuggestions = computed(() =>
 
 const tabItems = ref<TabsItem[]>([
   {
-    label: 'Top 10',
+    label: `Top ${maxItems.value}`,
     icon: 'lucide:star',
     slot: 'top' as const,
   },
