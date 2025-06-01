@@ -28,16 +28,19 @@ const links = ref<NavigationMenuItem[]>([
 </script>
 
 <template>
-  <footer class="bg-default/75 backdrop-blur border-t border-default py-8">
-    <UContainer class="flex justify-between items-center">
-      <div>
+  <footer class="bg-default/75 backdrop-blur border-t border-default py-4 md:py-8">
+    <UContainer
+      class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+    >
+      <div class="text-center md:text-left">
         <p class="text-xl font-bold mb-1">HexaCalls</p>
         <p class="text-muted text-sm">&copy; {{ actualYear }} Tous droits réservés</p>
       </div>
 
-      <UNavigationMenu :items="socialLinks" variant="link" />
-
-      <UNavigationMenu :items="links" variant="link" />
+      <div class="flex flex-col md:flex-row items-center md:space-y-0 md:space-x-8">
+        <UNavigationMenu :items="socialLinks" variant="link" />
+        <UNavigationMenu :items="links" variant="link" />
+      </div>
     </UContainer>
   </footer>
 </template>

@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <UContainer class="w-full space-y-6 md:space-y-8 flex flex-col py-8 md:py-16">
+  <UContainer class="w-full space-y-6 md:space-y-8 flex flex-col py-8 md:py-16" id="features">
     <div class="space-y-2 px-4 md:px-0">
       <h2 class="text-2xl md:text-3xl font-bold">Des fonctionnalités pensées pour la communauté</h2>
       <p class="text-base md:text-lg text-muted">
@@ -38,7 +38,7 @@
           </p>
         </div>
 
-        <div class="w-full h-48 md:h-auto overflow-hidden">
+        <div class="w-full h-48 md:h-auto overflow-hidden rounded-lg">
           <img
             alt="Image d'illustration du système de vote"
             class="rounded-lg object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
@@ -70,7 +70,7 @@
             </p>
           </template>
 
-          <div class="w-full h-40 md:h-auto overflow-hidden">
+          <div class="w-full h-40 md:h-auto overflow-hidden rounded-lg">
             <img
               alt="Image d'illustration du système de vote"
               class="rounded-md object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
@@ -101,7 +101,7 @@
             </p>
           </template>
 
-          <div class="w-full h-40 md:h-auto overflow-hidden">
+          <div class="w-full h-40 md:h-auto overflow-hidden rounded-lg">
             <img
               alt="Image d'illustration du système de vote"
               class="rounded-md object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
