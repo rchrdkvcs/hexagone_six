@@ -49,11 +49,17 @@ const profileItems = computed<NavigationMenuItem[]>(() => [
       : undefined,
   },
 ])
+
+const isMobileMenuOpen = ref(false)
+
+function toggleMobileMenu() {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
 </script>
 
 <template>
   <header class="bg-default/75 backdrop-blur border-b border-default h-16 sticky top-0 z-50">
-    <div class="size-full max-w-7xl mx-auto grid grid-cols-3 items-center px-4">
+    <div class="size-full max-w-7xl mx-auto grid md:grid-cols-3 grid-cols-2 items-center px-4">
       <Link
         class="flex justify-start w-fit text-toned hover:text-default transition-all duration-200 ease-in-out"
         href="/"
@@ -74,6 +80,29 @@ const profileItems = computed<NavigationMenuItem[]>(() => [
         content-orientation="vertical"
         variant="link"
       />
+
+      <div class="flex md:hidden justify-end">
+        <UButton
+          :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
+          color="neutral"
+          variant="ghost"
+          size="xl"
+          @click="toggleMobileMenu"
+        />
+      </div>
+    </div>
+
+    <div
+      v-if="isMobileMenuOpen"
+      class="md:hidden bg-default/90 backdrop-blur p-4 border-b border-default"
+    >
+      <UNavigationMenu
+        :items="navItems"
+        class="mb-4"
+        content-orientation="vertical"
+        variant="link"
+      />
+      <UNavigationMenu :items="profileItems" content-orientation="vertical" variant="link" />
     </div>
   </header>
 </template>

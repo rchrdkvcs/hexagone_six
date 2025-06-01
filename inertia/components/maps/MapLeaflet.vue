@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, shallowRef, watch } from 'vue'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import MapSlideover from '~/components/maps/MapSlideover.vue'
@@ -17,14 +17,14 @@ const emits = defineEmits(['mapClick'])
 
 const overlay = useOverlay()
 const slideover = overlay.create(MapSlideover)
-const mapElement = ref<HTMLElement | null>(null)
-const bounds = ref([
+const mapElement = shallowRef<HTMLElement | null>(null)
+const bounds = shallowRef([
   [0, 0],
   [900, 1600],
 ])
-const mapInstance = ref<L.Map | null>(null)
-const previewPolygonLayer = ref<L.Polygon | null>(null)
-const markerLayers = ref<L.Layer[]>([])
+const mapInstance = shallowRef<L.Map | null>(null)
+const previewPolygonLayer = shallowRef<L.Polygon | null>(null)
+const markerLayers = shallowRef<L.Layer[]>([])
 
 onMounted(() => {
   if (!mapElement.value) return
@@ -58,9 +58,7 @@ const addMarkers = () => {
   if (!mapInstance.value) return
 
   markerLayers.value.forEach((layer) => {
-    if (mapInstance.value) {
-      mapInstance.value.removeLayer(layer)
-    }
+    mapInstance.value?.removeLayer(layer)
   })
 
   markerLayers.value = []

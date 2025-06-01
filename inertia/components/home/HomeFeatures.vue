@@ -38,7 +38,7 @@
           </p>
         </div>
 
-        <div class="w-full h-48 md:h-auto overflow-hidden">
+        <div class="w-full h-48 md:h-auto overflow-hidden rounded-lg">
           <img
             alt="Image d'illustration du système de vote"
             class="rounded-lg object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
@@ -70,7 +70,7 @@
             </p>
           </template>
 
-          <div class="w-full h-40 md:h-auto overflow-hidden">
+          <div class="w-full h-40 md:h-auto overflow-hidden rounded-lg">
             <img
               alt="Image d'illustration du système de vote"
               class="rounded-md object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
@@ -101,7 +101,7 @@
             </p>
           </template>
 
-          <div class="w-full h-40 md:h-auto overflow-hidden">
+          <div class="w-full h-40 md:h-auto overflow-hidden rounded-lg">
             <img
               alt="Image d'illustration du système de vote"
               class="rounded-md object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
