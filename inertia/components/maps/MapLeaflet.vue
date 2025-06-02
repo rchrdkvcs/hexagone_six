@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, shallowRef, watch } from 'vue'
+import { onMounted, ref, shallowRef, watch } from 'vue'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import MapSlideover from '~/components/maps/MapSlideover.vue'
@@ -11,6 +11,7 @@ const props = defineProps<{
   markers: Marker[]
   showLabel: boolean
   polygonesPreview: { coordinates: { x: number; y: number }[] } | null
+  editMode: 'marker' | 'polygon' | null
 }>()
 
 const emits = defineEmits(['mapClick'])
@@ -25,6 +26,7 @@ const bounds = shallowRef([
 const mapInstance = shallowRef<L.Map | null>(null)
 const previewPolygonLayer = shallowRef<L.Polygon | null>(null)
 const markerLayers = shallowRef<L.Layer[]>([])
+const selectedMarker = ref<Marker | null>(null)
 
 onMounted(() => {
   if (!mapElement.value) return
@@ -54,6 +56,15 @@ onMounted(() => {
     .on('click', (event) => emits('mapClick', event))
 })
 
+const handleSlideover = (marker: Marker) => {
+  if (props.editMode === null) {
+    selectedMarker.value = marker
+    slideover.open({ marker }).result.then(() => {
+      selectedMarker.value = null
+    })
+  }
+}
+
 const addMarkers = () => {
   if (!mapInstance.value) return
 
@@ -66,11 +77,10 @@ const addMarkers = () => {
   props.markers.forEach((marker) => {
     if (marker.coordinates?.length) {
       if (marker.type === 'point') {
+        const isSelected = selectedMarker.value?.id === marker.id
         const textIcon = L.divIcon({
           className: 'text-marker',
-          html: props.showLabel
-            ? `<div class="text-label">${marker.label}</div>`
-            : `<div class="hidden-label"><span class="marker-label">${marker.label}</span></div>`,
+          html: `<div class="${props.showLabel || isSelected ? 'text-label' : 'hidden-label'} ${isSelected ? 'selected' : ''}">${props.showLabel || isSelected ? marker.label : `<span class="marker-label">${marker.label}</span>`}</div>`,
           iconSize: undefined,
         })
 
@@ -78,7 +88,7 @@ const addMarkers = () => {
           icon: textIcon,
         })
           .addTo(mapInstance.value as L.Map)
-          .on('click', () => slideover.open({ marker }))
+          .on('click', () => handleSlideover(marker))
 
         markerLayers.value.push(markerLayer)
       } else {
@@ -89,7 +99,7 @@ const addMarkers = () => {
 
         const polygonLayer = L.polygon(polygonPoints, {
           className: props.showLabel ? 'polygon-with-label' : 'polygon-hover-label',
-          color: '#ff6467',
+          color: '#0f172b',
           fillColor: '#0f172b',
           fillOpacity: 0.25,
           weight: 2,
@@ -99,19 +109,21 @@ const addMarkers = () => {
           polygonLayer.bindTooltip(marker.label, {
             permanent: true,
             direction: 'center',
-            className: 'polygon-tooltip-visible',
-            interactive: false,
+            className: `polygon-tooltip ${
+              selectedMarker.value?.id === marker.id ? 'selected' : ''
+            }`,
           })
         } else {
           polygonLayer.bindTooltip(marker.label, {
-            permanent: false,
+            permanent: selectedMarker.value?.id === marker.id,
             direction: 'center',
-            className: 'polygon-tooltip-hover',
-            interactive: false,
+            className: `polygon-tooltip ${
+              selectedMarker.value?.id === marker.id ? 'selected' : ''
+            }`,
           })
         }
 
-        polygonLayer.on('click', () => slideover.open({ marker }))
+        polygonLayer.on('click', () => handleSlideover(marker))
         markerLayers.value.push(polygonLayer)
       }
     }
@@ -168,10 +180,22 @@ watch(
   },
   { deep: true }
 )
+
+watch(
+  () => selectedMarker.value,
+  () => {
+    if (mapInstance.value) {
+      addMarkers()
+    }
+  }
+)
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 size-full overflow-hidden z-0">
+  <div
+    class="fixed top-0 left-0 size-full overflow-hidden z-0"
+    :class="{ 'edit-mode': editMode !== null }"
+  >
     <div ref="mapElement" class="size-full" />
   </div>
 </template>
@@ -192,11 +216,27 @@ watch(
   @apply -translate-x-1/2 -translate-y-1/2;
 }
 
+/* Nouveau style pour le mode édition */
+.edit-mode {
+  cursor: crosshair !important;
+}
+
+/* Pour s'assurer que le curseur s'applique à toute la carte */
+.edit-mode .leaflet-container,
+.edit-mode .leaflet-interactive {
+  cursor: crosshair !important;
+}
+
 .text-label {
   @apply text-sm font-medium whitespace-nowrap;
   @apply bg-default/75 backdrop-blur-lg rounded-full px-3 py-1;
   @apply transition-all duration-200 ease-in-out;
   @apply hover:text-primary;
+}
+
+.text-label.selected,
+.hidden-label.selected {
+  @apply bg-primary backdrop-blur-lg rounded-full px-3 py-1 text-slate-900;
 }
 
 .hidden-label {
@@ -214,13 +254,13 @@ watch(
   @apply block whitespace-nowrap text-sm font-medium;
 }
 
-.polygon-tooltip-visible {
-  @apply bg-transparent border-none shadow-none backdrop-blur-none;
-  @apply text-base text-white font-medium;
+.polygon-tooltip {
+  @apply border-none shadow-none text-default;
+  @apply text-sm font-medium whitespace-nowrap;
+  @apply bg-default/75 backdrop-blur-lg rounded-full px-3 py-1;
 }
 
-.polygon-tooltip-hover {
-  @apply bg-transparent border-none shadow-none backdrop-blur-none;
-  @apply text-base text-white font-medium;
+.polygon-tooltip.selected {
+  @apply bg-primary backdrop-blur-lg rounded-full px-3 py-1 text-slate-900;
 }
 </style>

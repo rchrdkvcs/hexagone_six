@@ -40,14 +40,14 @@ const editMode = ref<'marker' | 'polygon' | null>(null)
 
 const dropDownItems = ref<DropdownMenuItem[]>([
   {
-    label: 'Marqueurs',
+    label: 'Marqueur',
     icon: 'lucide:map-pin',
     onClick: () => {
       editMode.value = 'marker'
     },
   },
   {
-    label: 'Polygones',
+    label: 'Zone',
     icon: 'lucide:hexagon',
     onClick: () => {
       editMode.value = 'polygon'
@@ -124,9 +124,10 @@ const handleStageChange = (stage: number) => {
   <MapLeaflet
     :key="currentImageIndex"
     :markers="markers"
-    :polygonesPreview="newPolygone"
-    :showLabel="showLabel"
-    :imageUrl="imageUrl"
+    :polygones-preview="newPolygone"
+    :show-label="showLabel"
+    :image-url="imageUrl"
+    :edit-mode="editMode"
     @mapClick="handelMapClick"
   />
 
@@ -168,12 +169,17 @@ const handleStageChange = (stage: number) => {
 
   <div v-else class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4">
     <UButton
-      :label="`Quitter le mode ${editMode === 'marker' ? 'marqueur' : 'polygone'}`"
+      :label="`Quitter le mode ${editMode === 'marker' ? 'marqueur' : 'zone'}`"
       icon="lucide:x"
       class="rounded-full backdrop-blur-lg"
       variant="subtle"
       size="xl"
-      @click="editMode = null"
+      @click="
+        () => {
+          editMode = null
+          newPolygone = null
+        }
+      "
     />
 
     <UPopover arrow>

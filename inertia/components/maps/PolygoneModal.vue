@@ -54,14 +54,14 @@ const handlePolygoneSubmit = async () => {
 </script>
 
 <template>
-  <UModal title="Ajouter un marqueur" description="">
+  <UModal title="Ajouter une zone" description="">
     <template #header>
-      <h2 class="text-lg font-semibold">Ajouter un marqueur</h2>
+      <h2 class="text-lg font-semibold">Ajouter une zone</h2>
     </template>
 
     <template #body>
       <form id="newPolygoneForm" @submit.prevent="handlePolygoneSubmit">
-        <UFormField label="Nom du marqueur" required>
+        <UFormField label="Nom de la zone" required>
           <UInput v-model="label" class="w-full" placeholder="Armurerie" type="text" />
         </UFormField>
       </form>
