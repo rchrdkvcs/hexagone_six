@@ -12,8 +12,8 @@ const user = useUser()
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
-      label: 'Cartes',
-      icon: 'lucide:map',
+      label: 'HexaCalls',
+      icon: 'lucide:map-pin',
       to: '/cartes',
     },
   ],
@@ -21,9 +21,7 @@ const navItems = ref<NavigationMenuItem[]>([
 
 const profileItems = computed<NavigationMenuItem[]>(() => [
   {
-    label: user.value ? user.value.userName : 'Se connecter',
-    icon: user.value ? 'i-lucide-user' : 'i-lucide-log-in',
-    to: user.value ? '' : '/login',
+    slot: 'profile' as const,
     children: user.value
       ? [
           ...(useAccess() >= 2
@@ -79,7 +77,19 @@ function toggleMobileMenu() {
         class="w-full justify-end hidden md:flex"
         content-orientation="vertical"
         variant="link"
-      />
+      >
+        <template #profile>
+          <div
+            v-if="user"
+            class="flex items-center gap-2 cursor-pointer transition-all ease-in-out duration-200"
+          >
+            <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
+            <span class="hidden md:inline capitalize">{{ user.userName }}</span>
+          </div>
+
+          <UButton v-else variant="subtle" label="Se connecter" icon="lucide:log-in" to="/login" />
+        </template>
+      </UNavigationMenu>
 
       <div class="flex md:hidden justify-end">
         <UButton
@@ -94,15 +104,36 @@ function toggleMobileMenu() {
 
     <div
       v-if="isMobileMenuOpen"
-      class="md:hidden bg-default/90 backdrop-blur p-4 border-b border-default"
+      class="md:hidden bg-default/90 backdrop-blur px-4 border-b border-default"
     >
+      <div class="border-b border-default">
+        <UNavigationMenu :items="profileItems" content-orientation="vertical" variant="link">
+          <template #profile>
+            <div
+              v-if="user"
+              class="flex items-center gap-2 cursor-pointer transition-all ease-in-out duration-200"
+            >
+              <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
+              <span class="capitalize">{{ user.userName }}</span>
+            </div>
+
+            <UButton
+              v-else
+              variant="subtle"
+              label="Se connecter"
+              icon="lucide:log-in"
+              to="/login"
+            />
+          </template>
+        </UNavigationMenu>
+      </div>
+
       <UNavigationMenu
         :items="navItems"
         class="mb-4"
         content-orientation="vertical"
         variant="link"
       />
-      <UNavigationMenu :items="profileItems" content-orientation="vertical" variant="link" />
     </div>
   </header>
 </template>

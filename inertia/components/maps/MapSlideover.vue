@@ -2,7 +2,6 @@
 import { computed, ref } from 'vue'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
-import { useWindowSize } from '@vueuse/core'
 import SuggestionsList from '~/components/maps/SuggestionsList.vue'
 
 import type { TabsItem } from '@nuxt/ui'
@@ -13,16 +12,15 @@ const props = defineProps<{
   marker: Marker
 }>()
 
+const emits = defineEmits(['close'])
+
 const suggestions = computed(() => props.marker.suggestions)
 const user = useUser()
 const toast = useToast()
 const suggest = ref('')
 
-const { width } = useWindowSize()
-const maxItems = computed(() => (width.value <= 768 ? 3 : 10))
-
 const topSuggestions = computed(() =>
-  [...suggestions.value].sort((a, b) => b.voteRatio - a.voteRatio).slice(0, maxItems.value)
+  [...suggestions.value].sort((a, b) => b.voteRatio - a.voteRatio).slice(0, 3)
 )
 
 const allSuggestions = computed(() =>
@@ -31,7 +29,7 @@ const allSuggestions = computed(() =>
 
 const tabItems = ref<TabsItem[]>([
   {
-    label: `Top ${maxItems.value}`,
+    label: 'Top 3',
     icon: 'lucide:star',
     slot: 'top' as const,
   },
@@ -202,9 +200,9 @@ const imageUrls = computed(() => {
 
 <template>
   <USlideover
-    :title="`${marker.label} (${suggestions.length})`"
-    :description="`Proposé par ${marker.user?.userName}`"
+    :title="`Hexacall : ${marker.label}`"
     class="z-50 bg-default/75 backdrop-blur-md"
+    :overlay="false"
   >
     <template #body>
       <div class="w-full aspect-video mb-4 bg-muted rounded-lg">

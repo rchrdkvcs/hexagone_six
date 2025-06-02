@@ -21,11 +21,17 @@
         </p>
 
         <div class="flex gap-4 mt-4">
-          <UButton color="primary" icon="mdi:discord" label="Rejoindre Discord" size="lg" to="#" />
           <UButton
-            icon="lucide:map"
-            label="Explorer les cartes"
-            size="lg"
+            color="primary"
+            icon="mdi:discord"
+            label="Rejoindre le Discord"
+            size="xl"
+            to="#"
+          />
+          <UButton
+            icon="lucide:map-pin"
+            label="Découvrir HexaCalls"
+            size="xl"
             to="/cartes"
             variant="outline"
           />
