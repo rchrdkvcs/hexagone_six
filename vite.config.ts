@@ -15,6 +15,11 @@ export default defineConfig({
     ui({
       inertia: true,
       ui: {
+        colors: {
+          primary: 'red',
+          secondary: 'blue',
+          neutral: 'slate',
+        },
         button: {
           slots: {
             base: 'cursor-pointer',

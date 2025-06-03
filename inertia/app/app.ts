@@ -9,7 +9,7 @@ import ui from '@nuxt/ui/vue-plugin'
 createInertiaApp({
   progress: { color: '#ff6467' },
 
-  title: (title) => (title ? `HexaCalls - ${title}` : 'HexaCalls'),
+  title: (title) => (title ? `Hexagone Six - ${title}` : 'Hexagone Six'),
 
   resolve: (name) => {
     return resolvePageComponent(

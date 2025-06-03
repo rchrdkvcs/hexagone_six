@@ -12,7 +12,7 @@
           <UBadge class="p-2" color="primary" variant="subtle">
             <UIcon class="size-5 md:size-6" name="lucide:award" />
           </UBadge>
-          <h2 class="text-2xl md:text-3xl font-bold">Rejoignez la communauté</h2>
+          <h2 class="text-2xl md:text-3xl font-bold">Essayez HexaCall maintenant !</h2>
         </div>
 
         <p class="text-base md:text-lg text-muted leading-relaxed">
@@ -21,37 +21,23 @@
         </p>
 
         <div class="flex gap-4 mt-4">
+          <UButton icon="lucide:map" label="Découvre HexaCall" size="xl" to="/cartes" />
           <UButton
-            color="primary"
             icon="mdi:discord"
             label="Rejoindre le Discord"
             size="xl"
             to="#"
-          />
-          <UButton
-            icon="lucide:map-pin"
-            label="Découvrir HexaCalls"
-            size="xl"
-            to="/cartes"
-            variant="outline"
+            variant="subtle"
           />
         </div>
       </div>
 
-      <div class="relative flex justify-center items-center p-4 md:p-0">
-        <div class="relative flex items-center justify-center">
-          <img
-            alt="Vue mobile de la plateforme"
-            class="w-2/5 h-auto rounded-xl border-2 border-default shadow-xl transform -rotate-16 -translate-x-4 md:-translate-x-4 z-10 transition-all duration-500 hover:scale-105"
-            src="/public/images/landing/mobile1.png"
-          />
+      <div class="flex items-center justify-center gap-2 relative group h-fit md:h-full">
+        <img src="/public/images/logo.png" alt="Logo of Hexagone Six" class="size-48" />
 
-          <img
-            alt="Vue mobile de la carte interactive"
-            class="w-2/4 h-auto rounded-xl border-2 border-default shadow-2xl z-20 transition-all duration-500 hover:scale-105"
-            src="/public/images/landing/mobile2.png"
-          />
-        </div>
+        <span
+          class="bg-primary/25 size-3/4 absolute top-1/2 -translate-y-1/2 rounded-full blur-3xl -z-1"
+        />
       </div>
     </UCard>
   </UContainer>

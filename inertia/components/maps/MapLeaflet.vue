@@ -99,8 +99,8 @@ const addMarkers = () => {
 
         const polygonLayer = L.polygon(polygonPoints, {
           className: props.showLabel ? 'polygon-with-label' : 'polygon-hover-label',
-          color: '#0f172b',
-          fillColor: '#0f172b',
+          color: '#ff6467',
+          fillColor: '#ff6467',
           fillOpacity: 0.25,
           weight: 2,
         }).addTo(mapInstance.value as L.Map)

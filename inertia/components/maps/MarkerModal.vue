@@ -20,19 +20,17 @@ const toast = useToast()
 const label = ref('')
 
 const handleMarkerSubmit = async () => {
-  const { event, map, stage } = props
-
   try {
     const response = await axios.post('/markers', {
-      mapId: map.id,
+      mapId: props.map.id,
       userId: user.value?.id,
       label: label.value,
       type: 'point',
-      stage: stage,
-      coordinates: [{ x: event.latlng.lng, y: event.latlng.lat }],
+      stage: props.stage,
+      coordinates: [{ x: props.event.latlng.lng, y: props.event.latlng.lat }],
     })
 
-    map.markers.push(response.data.marker)
+    props.map.markers.push(response.data.marker)
 
     toast.add({
       title: 'Point proposé',

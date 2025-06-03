@@ -19,19 +19,17 @@ const toast = useToast()
 const label = ref('')
 
 const handlePolygoneSubmit = async () => {
-  const { map, coordinates, stage } = props
-
   try {
     const response = await axios.post('/markers', {
-      mapId: map.id,
+      mapId: props.map.id,
       userId: user.value?.id,
       label: label.value,
       type: 'polygone',
-      stage: stage,
-      coordinates: coordinates,
+      stage: props.stage,
+      coordinates: props.coordinates,
     })
 
-    map.markers.push(response.data.marker)
+    props.map.markers.push(response.data.marker)
 
     toast.add({
       title: 'Point proposé',

@@ -203,12 +203,12 @@ const handleStageChange = (stage: number) => {
         <div class="p-4">
           <h3 class="text-lg font-semibold mb-2">Mode édition</h3>
           <p class="text-sm text-default/80 mb-4">
-            Sélectionnez un type de marqueur ou de polygone pour commencer à ajouter des éléments
-            sur la carte.
+            Sélectionnez un type de marqueur ou de zone pour commencer à ajouter des éléments sur la
+            carte.
           </p>
           <ul class="list-disc pl-5 space-y-2">
             <li>Marqueurs : Ajoutez des points d'intérêt sur la carte.</li>
-            <li>Polygones : Définissez des zones spécifiques sur la carte.</li>
+            <li>Zones : Définissez des zones spécifiques sur la carte.</li>
           </ul>
         </div>
       </template>

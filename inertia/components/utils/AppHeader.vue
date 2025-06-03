@@ -1,51 +1,92 @@
 <script lang="ts" setup>
-import { Link } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import { useUser } from '~/composables/use_user'
 import { useAccess } from '~/composables/use_access'
 import AppLogo from '~/components/utils/AppLogo.vue'
 
-import type { NavigationMenuItem } from '@nuxt/ui'
+import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui'
 
 const user = useUser()
 
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
-      label: 'HexaCalls',
-      icon: 'lucide:map-pin',
+      slot: 'logo' as const,
+    },
+  ],
+  [
+    {
+      label: 'HexaCall',
+      icon: 'lucide:map',
       to: '/cartes',
+    },
+    {
+      label: 'Lan',
+      icon: 'lucide:computer',
+      to: '/lan',
+    },
+    {
+      label: 'Matériel',
+      icon: 'lucide:headphones',
+      to: '/materiel',
+    },
+    {
+      label: 'HexaOpti',
+      icon: 'lucide:biceps-flexed',
+      to: '/hexaopti',
+    },
+    {
+      label: 'Partenaires',
+      icon: 'lucide:handshake',
+      to: '/partenaires',
+    },
+  ],
+  [
+    {
+      slot: 'profile' as const,
     },
   ],
 ])
 
-const profileItems = computed<NavigationMenuItem[]>(() => [
-  {
-    slot: 'profile' as const,
-    children: user.value
-      ? [
-          ...(useAccess() >= 2
-            ? [
-                {
-                  label: 'Administration',
-                  icon: 'i-lucide-shield-check',
-                  to: '/admin',
-                },
-              ]
-            : []),
-          {
-            label: 'Mon profil',
-            icon: 'lucide:user',
-            to: '/membres/' + user.value?.userName,
-          },
-          {
-            label: 'Déconnexion',
-            icon: 'i-lucide-log-out',
-            to: '/logout',
-          },
-        ]
-      : undefined,
-  },
+const items = ref<DropdownMenuItem[][]>([
+  [
+    {
+      label: user.value?.userName,
+      avatar: {
+        src: user.value?.avatarUrl,
+      },
+      type: 'label',
+      class: 'capitalize',
+    },
+  ],
+  [
+    {
+      label: 'Profile',
+      icon: 'i-lucide-user',
+      to: '/membres/' + user.value?.userName,
+    },
+    {
+      label: 'Paramètres',
+      icon: 'i-lucide-cog',
+      to: '/settings',
+    },
+    {
+      label: 'Administration',
+      icon: 'i-lucide-shield-check',
+      to: '/admin',
+      class: computed(() => {
+        return useAccess() > 2 ? '' : 'hidden'
+      }),
+    },
+  ],
+  [
+    {
+      label: 'Logout',
+      icon: 'i-lucide-log-out',
+      to: '/logout',
+      color: 'error',
+    },
+  ],
 ])
 
 const isMobileMenuOpen = ref(false)
@@ -56,38 +97,45 @@ function toggleMobileMenu() {
 </script>
 
 <template>
-  <header class="bg-default/75 backdrop-blur border-b border-default h-16 sticky top-0 z-50">
-    <div class="size-full max-w-7xl mx-auto grid md:grid-cols-3 grid-cols-2 items-center px-4">
-      <Link
-        class="flex justify-start items-center gap-2 w-fit text-toned hover:text-default transition-all duration-200 ease-in-out"
-        href="/"
-      >
-        <AppLogo />
-      </Link>
-
+  <header class="bg-default/75 backdrop-blur border-b border-default h-16 sticky top-0 z-20">
+    <div class="size-full max-w-7xl mx-auto items-center px-4">
       <UNavigationMenu
         :items="navItems"
-        class="w-full justify-center hidden md:flex"
         content-orientation="vertical"
         variant="link"
-      />
-
-      <UNavigationMenu
-        :items="profileItems"
-        class="w-full justify-end hidden md:flex"
-        content-orientation="vertical"
-        variant="link"
+        class="items-center h-full"
       >
-        <template #profile>
-          <div
-            v-if="user"
-            class="flex items-center gap-2 cursor-pointer transition-all ease-in-out duration-200"
+        <template #logo>
+          <ULink
+            class="flex justify-start items-center gap-2 w-fit text-toned hover:text-default transition-all duration-200 ease-in-out"
+            to="/"
           >
-            <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
-            <span class="hidden md:inline capitalize">{{ user.userName }}</span>
-          </div>
+            <AppLogo />
+          </ULink>
+        </template>
 
-          <UButton v-else variant="subtle" label="Se connecter" icon="lucide:log-in" to="/login" />
+        <template #profile>
+          <UDropdownMenu
+            v-if="user"
+            :items="items"
+            :ui="{
+              content: 'w-48 z-20',
+            }"
+          >
+            <UButton color="neutral" variant="ghost" class="py-1 px-2 rounded-full">
+              <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
+              <span class="capitalize">{{ user.userName }}</span>
+            </UButton>
+          </UDropdownMenu>
+
+          <UButton
+            v-else
+            variant="subtle"
+            color="neutral"
+            label="Se connecter"
+            icon="lucide:log-in"
+            to="/login"
+          />
         </template>
       </UNavigationMenu>
 
