@@ -194,7 +194,13 @@ const imageUrls = computed(() => {
     return a.order - b.order
   })
 
-  return sortedObject.map((image: any) => image.url)
+  const urls = sortedObject.map((image: any) => image.url)
+
+  if (urls.length > 0) {
+    urls.push('upload-placeholder')
+  }
+
+  return urls
 })
 </script>
 
@@ -211,7 +217,7 @@ const imageUrls = computed(() => {
           class="flex flex-col items-center justify-center gap-4 p-8 text-center size-full"
         >
           <UIcon class="size-8" name="lucide:camera" />
-          <h3 class="text-sm font-medium">Il n'y a pas d'images pour ce marqueur</h3>
+          <h3 class="text-sm font-medium">Il n'y a pas d'images pour ce call</h3>
           <UButton
             class="cursor-pointer"
             color="neutral"
@@ -235,7 +241,36 @@ const imageUrls = computed(() => {
           class="bg-muted rounded-lg w-full aspect-video"
           dots
         >
-          <img :alt="marker.label" :src="item as string" class="w-full object-cover aspect-video" />
+          <div
+            v-if="item === 'upload-placeholder'"
+            class="flex flex-col items-center justify-center gap-4 p-8 text-center size-full"
+          >
+            <UIcon class="size-8" name="lucide:camera" />
+            <h3 class="text-sm font-medium">Il n'y a plus d'images pour ce call</h3>
+            <UButton
+              class="cursor-pointer"
+              color="neutral"
+              icon="lucide:plus"
+              label="Ajoutez plus de photos"
+              variant="subtle"
+              @click="clickOnPhotoUpload"
+            />
+          </div>
+
+          <div v-else class="relative w-full h-full">
+            <img
+              :alt="marker.label"
+              :src="item as string"
+              class="w-full object-cover aspect-video"
+            />
+            <UButton
+              class="absolute bottom-3 right-3 z-10 rounded-full backdrop-blur-lg"
+              color="neutral"
+              icon="lucide:plus"
+              variant="subtle"
+              @click="clickOnPhotoUpload"
+            />
+          </div>
         </UCarousel>
 
         <input

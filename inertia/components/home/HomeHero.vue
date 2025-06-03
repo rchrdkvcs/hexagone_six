@@ -7,8 +7,13 @@
   >
     <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 py-8 md:py-0">
       <div class="col-span-1 md:col-span-2 flex flex-col gap-6 justify-center items-start">
-        <div class="px-3 py-1 rounded-full bg-elevated border border-accented">
-          <p class="text-sm md:text-base">Le premier site de naming Siege X participatif !</p>
+        <div
+          class="px-3 py-1 rounded-full bg-elevated border border-accented flex items-center gap-2"
+        >
+          <UIcon class="size-5 flex-shrink-0" name="fxemoji:franceflag" />
+          <p class="text-sm md:text-base">
+            Le <span class="font-semibold">1er</span> site de naming Siege X participatif !
+          </p>
         </div>
 
         <div class="space-y-3 md:space-y-4">
@@ -17,20 +22,22 @@
           </h1>
           <p class="text-base md:text-lg text-muted max-w-2/3">
             Débutant ou PRO, ici, chaque joueur parle le même langage. Améliorez votre communication
-            grâce à HexaCalls.
+            grâce à HexaCall.
           </p>
         </div>
       </div>
 
-      <div class="flex items-center justify-center gap-2 relative group h-fit md:h-full">
+      <div class="relative flex justify-center items-center size-full">
         <img
-          src="/public/images/logo.png"
-          alt="Logo of Hexagone Six"
-          class="size-48 md:size-64 xl:size-96"
+          alt="Vue mobile de la plateforme"
+          class="w-full max-w-[250px] md:max-w-[320px] lg:max-w-[380px] rounded-xl border-2 border-default shadow-xl transform -rotate-16 -translate-x-6 translate-y-3 md:-translate-x-8 transition-all duration-500 hover:scale-105"
+          src="/public/images/landing/mobile1.png"
         />
 
-        <span
-          class="bg-primary/25 size-64 md:size-80 xl:size-[500px] absolute top-1/2 -translate-y-1/2 rounded-full blur-3xl -z-1"
+        <img
+          alt="Vue mobile de la carte interactive"
+          class="w-full max-w-[250px] md:max-w-[320px] lg:max-w-[380px] rounded-xl border-2 border-default shadow-2xl transition-all duration-500 hover:scale-105 z-10"
+          src="/public/images/landing/mobile2.png"
         />
       </div>
     </div>
