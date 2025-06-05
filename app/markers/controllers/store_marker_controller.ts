@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Marker from '#markers/models/marker'
 import vine from '@vinejs/vine'
+import Post from '#users/models/post'
+import Map from '#maps/models/map'
 
 export default class StoreMarkerController {
   static validator = vine.compile(
@@ -19,7 +21,9 @@ export default class StoreMarkerController {
     })
   )
 
-  async execute({ response, request }: HttpContext) {
+  async execute({ response, request, auth }: HttpContext) {
+    const user = await auth.authenticate()
+
     try {
       const data = await request.validateUsing(StoreMarkerController.validator)
       const { id } = await Marker.create({
@@ -34,6 +38,14 @@ export default class StoreMarkerController {
         query.preload('user', (userQuery) => {
           userQuery.preload('votes')
         })
+      })
+
+      const map = await Map.findOrFail(data.mapId)
+
+      await Post.create({
+        userId: user.id,
+        category: 'proposition',
+        content: `<span class="font-semibold capitalize">${user.userName} </span>a fait une nouvelle propositions <span class="font-bold">"${data.label}" sur <a class="underline" href="${`/cartes/` + map.slug}">${map.name}</a>`,
       })
 
       return response.status(201).json({

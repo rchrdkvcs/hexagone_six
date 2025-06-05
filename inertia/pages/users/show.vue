@@ -124,9 +124,9 @@ const tabsItems = ref<TabsItem[]>([
           <div class="p-4 size-full flex flex-col gap-4">
             <EmptyFeed
               v-if="votesData.length === 0"
-              icon="lucide:message-circle"
-              title="Aucune suggestion disponible"
-              description="Cet utilisateur n'a pas encore partagé de suggestions."
+              icon="lucide:arrow-right-left"
+              title="Aucun vote disponible"
+              description="Cet utilisateur n'a pas encore voté."
             />
 
             <UserPost
