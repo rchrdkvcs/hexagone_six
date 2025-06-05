@@ -21,11 +21,12 @@ const props = defineProps<{
 }>()
 
 const user = useUser()
-const currentImageIndex = ref(1)
-const imageUrl = computed(() => `/images/maps/${props.map.slug}/${currentImageIndex.value}.jpg`)
+const currentLevel = ref(props.map.levels.find((level) => level.isDefault)?.level as number)
+
+const imageUrl = computed(() => `/images/maps/${props.map.slug}/${currentLevel.value}.jpg`)
 
 const markers = computed(() => {
-  return props.map.markers.filter((marker) => marker.stage === currentImageIndex.value)
+  return props.map.markers.filter((marker) => marker.stage === currentLevel.value)
 })
 
 const overlay = useOverlay()
@@ -79,7 +80,7 @@ const handelMapClick = (event: LeafletMouseEvent) => {
     const { map } = props
 
     if (editMode.value === 'marker') {
-      markerModal.open({ event, map, stage: currentImageIndex.value })
+      markerModal.open({ event, map, stage: currentLevel.value })
     } else if (editMode.value === 'polygon') {
       if (!newPolygone.value) {
         newPolygone.value = { coordinates: [] }
@@ -94,7 +95,7 @@ const handlePolygoneModal = () => {
     polygoneModal.open({
       coordinates: newPolygone.value.coordinates,
       map: props.map,
-      stage: currentImageIndex.value,
+      stage: currentLevel.value,
     })
     newPolygone.value = null
   } else {
@@ -113,7 +114,7 @@ const handleLabelView = () => {
 }
 
 const handleStageChange = (stage: number) => {
-  currentImageIndex.value = stage
+  currentLevel.value = stage
   newPolygone.value = null
 }
 </script>
@@ -122,7 +123,7 @@ const handleStageChange = (stage: number) => {
   <Head :title="map.name" />
 
   <MapLeaflet
-    :key="currentImageIndex"
+    :key="currentLevel"
     :markers="markers"
     :polygones-preview="newPolygone"
     :show-label="showLabel"
@@ -136,8 +137,8 @@ const handleStageChange = (stage: number) => {
     class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2"
   >
     <StageNav
-      :currentStage="currentImageIndex"
-      :stages="props.map.stageCount"
+      :currentLevel="currentLevel"
+      :levels="props.map.levels"
       @stageChange="handleStageChange"
     />
 

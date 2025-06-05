@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import type Map from '#maps/models/map'
+
 defineProps<{
-  stages: number
-  currentStage: number
+  levels: Map['levels']
+  currentLevel: number
 }>()
 </script>
 
@@ -10,31 +12,26 @@ defineProps<{
     class="flex gap-1.5 md:bg-default/75 md:backdrop-blur md:border border-default rounded-full md:p-1.5 shadow-lg"
   >
     <UButton
-      v-for="index in stages"
-      :key="index"
-      :active="index === currentStage"
-      :label="`Etage ${index}`"
+      v-for="level in levels"
+      :key="level.level"
+      :active="level.level === currentLevel"
+      :label="level.name"
       activeColor="primary"
       activeVariant="solid"
       class="rounded-full hidden md:block"
       color="neutral"
       variant="ghost"
-      @click="$emit('stageChange', index)"
+      @click="$emit('stageChange', level.level)"
     />
 
     <UDropdownMenu
       class="md:hidden"
       :items="
-        [...Array(stages).keys()].map((stage) => ({
-          label: `Etage ${stage + 1}`,
-          onClick: () => $emit('stageChange', stage + 1),
+        levels.map((level) => ({
+          label: level.name,
+          click: () => $emit('stageChange', level.level),
         }))
       "
-      :content="{
-        align: 'start',
-        side: 'bottom',
-        sideOffset: 8,
-      }"
       :ui="{
         content: 'w-32',
       }"

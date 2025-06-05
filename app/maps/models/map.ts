@@ -11,6 +11,12 @@ interface MapImage {
   tag?: string
 }
 
+interface MapLevel {
+  level: number
+  name: string
+  isDefault?: boolean
+}
+
 export default class Map extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
@@ -21,8 +27,8 @@ export default class Map extends BaseModel {
   @column()
   declare slug: string
 
-  @column()
-  declare stageCount: number
+  @column({ prepare: (value) => JSON.stringify(value) })
+  declare levels: MapLevel[]
 
   @column({ prepare: (value) => JSON.stringify(value) })
   declare images: MapImage[]
