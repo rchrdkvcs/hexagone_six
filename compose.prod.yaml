@@ -1,8 +1,13 @@
 services:
   app:
-    container_name: r6calls_app
+    container_name: hexagone_six
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - '4000:3000'
+    volumes:
+      - storage:/app/storage
+
+volumes:
+  storage:

@@ -13,22 +13,22 @@ import { middleware } from '#start/kernel'
 import authRoutes from '#start/routes/auth'
 import adminRoutes from '#start/routes/admin'
 import hexacallRoutes from '#start/routes/hexacall'
-const ShowLanController = () => import('../app/lan/controllers/show_lan_controller.js')
+import userRoutes from '#start/routes/user'
+import lanRoutes from '#start/routes/lan'
+
+const SponsorsController = () => import('../app/pages/controllers/sponsors_controller.js')
 const HomeController = () => import('../app/pages/controllers/home_controller.js')
-const IndexLanController = () => import('../app/lan/controllers/index_lan_controller.js')
-const ShowLanGalleryController = () =>
-  import('../app/lan/controllers/show_lan_gallery_controller.js')
 
 authRoutes()
 adminRoutes()
+userRoutes()
 hexacallRoutes()
+lanRoutes()
 
 router
   .group(() => {
     router.get('/', [HomeController, 'render'])
 
-    router.get('/lan', [IndexLanController, 'render'])
-    router.get('/lan/:year', [ShowLanController, 'render'])
-    router.get('/lan/:year/galleries', [ShowLanGalleryController, 'render'])
+    router.get('/partenaires', [SponsorsController, 'render'])
   })
   .use(middleware.silentAuth())

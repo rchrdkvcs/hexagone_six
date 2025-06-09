@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: r6calls_app
+    container_name: hexagone_six_alpha
     build:
       context: .
       dockerfile: Dockerfile

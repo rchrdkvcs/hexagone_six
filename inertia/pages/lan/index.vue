@@ -2,7 +2,7 @@
 
 <template>
   <UContainer
-    class="w-full space-y-8 md:space-y-16 flex flex-col py-16 lg:py-24 h-[calc(100vh-64px)]"
+    class="w-full space-y-8 md:space-y-16 flex flex-col py-16 lg:py-24 min-h-[calc(100vh-64px)]"
   >
     <div class="space-y-2 px-4 md:px-0 z-0">
       <h1
