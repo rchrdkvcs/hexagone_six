@@ -12,6 +12,14 @@ html {
 
 :root {
   --ui-radius: 0.375rem;
+  --ui-container: 90rem;
+}
+
+.dark {
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-muted: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-900);
+  --ui-bg-accented: var(--ui-color-neutral-800);
 }
 
 .bg-container {

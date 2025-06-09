@@ -7,7 +7,7 @@ export default class MapsController {
     const playlists = await Playlist.all()
     const maps = await Map.query().preload('playlists')
 
-    return inertia.render('maps/index', { maps, playlists })
+    return inertia.render('hexacall/maps/index', { maps, playlists })
   }
 
   async show({ inertia, params }: HttpContext) {
@@ -22,6 +22,6 @@ export default class MapsController {
       query.preload('user')
     })
 
-    return inertia.render('maps/show', { map })
+    return inertia.render('hexacall/maps/show', { map })
   }
 }
