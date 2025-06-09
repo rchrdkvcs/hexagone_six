@@ -12,7 +12,7 @@ const navItems = ref<NavigationMenuItem[]>([
   [
     {
       label: 'Lan',
-      icon: 'lucide:computer',
+      icon: 'lucide:gamepad-2',
       to: '/lan',
     },
     {
@@ -21,19 +21,29 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/hexacall',
     },
     {
+      label: 'Partenaires',
+      icon: 'lucide:handshake',
+      to: '/partenaires',
+    },
+    {
       label: 'Matériel',
-      icon: 'lucide:headphones',
+      icon: 'lucide:mouse',
       to: '/materiel',
+      disabled: true,
+      badge: {
+        label: 'Bientôt disponible',
+        color: 'warning',
+      },
     },
     {
       label: 'HexaBoost',
       icon: 'lucide:biceps-flexed',
       to: '/hexaopti',
-    },
-    {
-      label: 'Partenaires',
-      icon: 'lucide:handshake',
-      to: '/partenaires',
+      disabled: true,
+      badge: {
+        label: 'Bientôt disponible',
+        color: 'warning',
+      },
     },
   ],
 ])
@@ -54,11 +64,6 @@ const profileItems = ref<DropdownMenuItem[][]>([
       label: 'Profile',
       icon: 'i-lucide-user',
       to: '/membres/' + user.value?.userName,
-    },
-    {
-      label: 'Paramètres',
-      icon: 'i-lucide-cog',
-      to: '/settings',
     },
     {
       label: 'Administration',
