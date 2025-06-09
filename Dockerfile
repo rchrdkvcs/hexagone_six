@@ -2,7 +2,7 @@ FROM node:latest AS base
 
 # Install bun
 WORKDIR /app
-RUN npm install -g bun
+RUN npm install -g bun@latest
 
 # All deps stage
 FROM base AS deps
@@ -25,9 +25,10 @@ RUN node ace build --ignore-ts-errors
 
 # Production stage
 FROM base
-ENV NODE_ENV=production
 WORKDIR /app
+
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
+
 EXPOSE 3000
 CMD ["node", "./bin/server.js"]

@@ -8,7 +8,8 @@ export default class extends BaseSchema {
       table.uuid('id').primary()
       table.string('name').notNullable()
       table.string('slug').notNullable()
-      table.integer('stage_count').notNullable()
+      table.json('levels').notNullable().defaultTo([])
+      table.json('images').nullable().defaultTo([])
     })
   }
 

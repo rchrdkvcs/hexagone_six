@@ -1,8 +1,0 @@
-services:
-  app:
-    container_name: r6calls_app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '4000:3000'

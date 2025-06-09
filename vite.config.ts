@@ -3,17 +3,35 @@ import { getDirname } from '@adonisjs/core/helpers'
 import inertia from '@adonisjs/inertia/client'
 import vue from '@vitejs/plugin-vue'
 import adonisjs from '@adonisjs/vite/client'
-import UnoCSS from 'unocss/vite'
+import tailwindcss from '@tailwindcss/vite'
+import ui from '@nuxt/ui/vite'
 
 export default defineConfig({
   plugins: [
     inertia({ ssr: { enabled: false } }),
     vue(),
+
+    tailwindcss(),
+    ui({
+      inertia: true,
+      ui: {
+        colors: {
+          primary: 'red',
+          secondary: 'blue',
+          neutral: 'slate',
+        },
+        button: {
+          slots: {
+            base: 'cursor-pointer',
+          },
+        },
+      },
+    }),
+
     adonisjs({
       entrypoints: ['inertia/app/app.ts'],
       reload: ['resources/views/**/*.edge'],
     }),
-    UnoCSS(),
   ],
 
   /**

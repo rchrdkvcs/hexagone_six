@@ -1,98 +1,216 @@
 <script lang="ts" setup>
-import AppButton from '~/components/utils/AppButton.vue'
-import { Link, usePage } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
-import type User from '#models/user'
-import { onClickOutside } from '@vueuse/core'
+import { useUser } from '~/composables/use_user'
+import { useAccess } from '~/composables/use_access'
+import AppLogo from '~/components/utils/AppLogo.vue'
 
-const navItems = [
-  { name: 'Accueil', href: '/' },
-  { name: 'Cartes', href: '/cartes' },
-]
+import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui'
 
-const route = computed(() => usePage().url)
-const user = usePage().props.user as User
+const user = useUser()
 
-const userMenuOpen = ref(false)
-const userMenuRef = ref(null)
+const navItems = ref<NavigationMenuItem[]>([
+  [
+    {
+      label: 'Lan',
+      icon: 'lucide:gamepad-2',
+      to: '/lan',
+    },
+    {
+      label: 'HexaCall',
+      icon: 'lucide:map-pin',
+      to: '/hexacall',
+    },
+    {
+      label: 'Partenaires',
+      icon: 'lucide:handshake',
+      to: '/partenaires',
+    },
+    {
+      label: 'Matériel',
+      icon: 'lucide:mouse',
+      to: '/materiel',
+      disabled: true,
+      badge: {
+        label: 'Bientôt disponible',
+        color: 'warning',
+      },
+    },
+    {
+      label: 'HexaBoost',
+      icon: 'lucide:biceps-flexed',
+      to: '/hexaopti',
+      disabled: true,
+      badge: {
+        label: 'Bientôt disponible',
+        color: 'warning',
+      },
+    },
+  ],
+])
 
-onClickOutside(userMenuRef, () => {
-  userMenuOpen.value = false
-})
+const profileItems = ref<DropdownMenuItem[][]>([
+  [
+    {
+      label: user.value?.userName,
+      avatar: {
+        src: user.value?.avatarUrl,
+      },
+      type: 'label',
+      class: 'capitalize',
+    },
+  ],
+  [
+    {
+      label: 'Profile',
+      icon: 'i-lucide-user',
+      to: '/membres/' + user.value?.userName,
+    },
+    {
+      label: 'Administration',
+      icon: 'i-lucide-shield-check',
+      to: '/admin',
+      class: computed(() => {
+        return useAccess() > 2 ? '' : 'hidden'
+      }),
+    },
+  ],
+  [
+    {
+      label: 'Logout',
+      icon: 'i-lucide-log-out',
+      to: '/logout',
+      color: 'error',
+    },
+  ],
+])
 
-const toggleUserMenu = () => {
-  userMenuOpen.value = !userMenuOpen.value
+const isMobileMenuOpen = ref(false)
+
+function toggleMobileMenu() {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 </script>
 
 <template>
-  <div
-    class="fixed top-0 z-50 w-full h-16 backdrop-blur-md bg-primary-800/50 border-b border-white/5 shadow-sm"
-  >
-    <div class="max-w-7xl mx-auto px-4 h-full grid grid-cols-3 items-center">
-      <!-- Logo -->
-      <Link class="w-fit hover:scale-105 transition ease-in-out duration-150" href="/">
-        <img alt="Logo" class="h-6" src="/public/images/logo.png" />
-      </Link>
-
-      <!-- Navigation -->
-      <nav class="hidden md:flex space-x-1 justify-center">
-        <AppButton
-          v-for="item in navItems"
-          :key="item.name"
-          :class="{
-            'bg-white/15 color-white !rounded-full':
-              (item.href === '/' && route === '/') ||
-              (item.href !== '/' && route.startsWith(item.href)),
+  <header class="bg-default/75 backdrop-blur-lg border-b border-default h-16 sticky top-0 z-20">
+    <UContainer class="flex items-center justify-between gap-3 h-full">
+      <div class="md:flex-1 flex items-center gap-1.5">
+        <ULink class="flex items-center" to="/">
+          <AppLogo class="text-default" />
+        </ULink>
+        <UPopover
+          arrow
+          :ui="{
+            content: 'w-64 z-20',
           }"
-          :href="item.href"
-          :label="item.name"
-          class="!rounded-full px-4"
-          variant="ghost"
-        />
-      </nav>
+        >
+          <UButton label="Beta" size="xs" variant="subtle" color="warning" class="rounded-full" />
 
-      <!-- User section -->
-      <div class="flex items-center justify-end">
-        <div v-if="user" ref="userMenuRef" class="relative">
-          <button
-            class="flex items-center gap-2 py-2 px-3 rounded-full bg-white/5 hover:bg-white/10 transition-all border border-white/10 cursor-pointer"
-            @click="toggleUserMenu"
-          >
-            <span class="color-white/90 font-medium hidden sm:block">{{ user.userName }}</span>
-            <i
-              :class="['i-mdi:chevron-down transition-transform', userMenuOpen ? 'rotate-180' : '']"
-            ></i>
-          </button>
+          <template #content>
+            <div class="p-4 space-y-2">
+              <p class="text-sm text-muted">
+                La version <strong> Beta </strong> est en cours de développement. Certaines
+                fonctionnalités peuvent ne pas être disponibles ou comporter des bugs.
+              </p>
 
-          <!-- Dropdown menu -->
-          <div
-            v-show="userMenuOpen"
-            class="absolute right-0 mt-2 w-48 py-2 bg-primary-800/50 rounded-xl shadow-lg border border-white/10 backdrop-blur-md"
-          >
-            <div class="px-4 py-2 border-b border-white/10">
-              <p class="color-white font-medium">{{ user.userName }}</p>
-              <p class="color-white/60 color-xs truncate">{{ user.email }}</p>
+              <p class="text-sm text-muted font-semibold">Vos retours sont précieux !</p>
+
+              <p class="text-sm text-muted">
+                N'hésitez pas à nous faire part de vos suggestions ou à signaler tout problème
+                rencontré en rejoignant notre
+                <ULink to="https://discord.com" class="underline text-default">discord</ULink>.
+              </p>
             </div>
-            <a
-              class="flex items-center gap-2 px-4 py-2 color-white/80 hover:color-white hover:bg-white/5 transition-colors"
-              href="/profil"
-            >
-              <i class="i-mdi:account-cog"></i>
-              <span>Paramètres</span>
-            </a>
-            <a
-              class="flex items-center gap-2 px-4 py-2 color-white/80 hover:color-white hover:bg-white/5 transition-colors"
-              href="/logout"
-            >
-              <i class="i-mdi:logout"></i>
-              <span>Se déconnecter</span>
-            </a>
-          </div>
-        </div>
-
-        <AppButton v-else href="/login" icon="i-mdi:login" label="Se connecter" />
+          </template>
+        </UPopover>
       </div>
+
+      <UNavigationMenu
+        :items="navItems"
+        content-orientation="vertical"
+        variant="link"
+        class="hidden md:flex"
+      />
+
+      <div class="flex items-center justify-end md:flex-1 gap-1.5">
+        <UDropdownMenu
+          v-if="user"
+          :items="profileItems"
+          :ui="{
+            content: 'w-48 z-20',
+          }"
+        >
+          <UButton color="neutral" variant="ghost" class="py-1 px-2 rounded-full">
+            <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
+            <span class="capitalize">{{ user.userName }}</span>
+          </UButton>
+        </UDropdownMenu>
+
+        <UButton
+          v-else
+          variant="subtle"
+          color="neutral"
+          label="Se connecter"
+          icon="lucide:log-in"
+          to="/login"
+        />
+
+        <UButton
+          size="lg"
+          class="lg:hidden"
+          variant="ghost"
+          color="neutral"
+          :icon="isMobileMenuOpen ? 'lucide:x' : 'lucide:menu'"
+          @click="toggleMobileMenu"
+        />
+      </div>
+    </UContainer>
+
+    <div
+      v-if="isMobileMenuOpen"
+      class="md:hidden bg-default/90 backdrop-blur px-4 border-b border-default"
+    >
+      <UNavigationMenu :items="navItems" class="mb-4" orientation="vertical" variant="link" />
     </div>
-  </div>
+  </header>
+
+  <svg
+    viewBox="0 0 1440 181"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="pointer-events-none absolute w-full top-16 transition-all text-primary shrink-0 -z-10 duration-[400ms]"
+  >
+    <mask id="path-1-inside-1_414_5526" fill="white"><path d="M0 0H1440V181H0V0Z"></path></mask>
+    <path d="M0 0H1440V181H0V0Z" fill="url(#paint0_linear_414_5526)" fill-opacity="0.15"></path>
+    <path
+      d="M0 2H1440V-2H0V2Z"
+      fill="url(#paint1_linear_414_5526)"
+      mask="url(#path-1-inside-1_414_5526)"
+    ></path>
+    <defs>
+      <linearGradient
+        id="paint0_linear_414_5526"
+        x1="720"
+        y1="0"
+        x2="720"
+        y2="181"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="currentColor" offset=""></stop>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"></stop>
+      </linearGradient>
+      <linearGradient
+        id="paint1_linear_414_5526"
+        x1="0"
+        y1="90.5"
+        x2="1440"
+        y2="90.5"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="currentColor" stop-opacity="0" offset=""></stop>
+        <stop offset="0.395" stop-color="currentColor"></stop>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
 </template>

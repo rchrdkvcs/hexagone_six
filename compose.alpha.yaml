@@ -1,0 +1,13 @@
+services:
+  app:
+    container_name: hexagone_six_alpha
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - storage:/app/storage
+
+volumes:
+  storage:

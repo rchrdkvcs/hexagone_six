@@ -1,5 +1,5 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-import Playlist from '#models/playlist'
+import Playlist from '#playlists/models/playlist'
 
 export default class extends BaseSeeder {
   async run() {
@@ -15,6 +15,9 @@ export default class extends BaseSeeder {
       },
       {
         label: 'Classé',
+      },
+      {
+        label: 'E-Sport',
       },
     ])
   }
