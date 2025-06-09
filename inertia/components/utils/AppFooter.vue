@@ -28,13 +28,16 @@ const links = ref<NavigationMenuItem[]>([
 </script>
 
 <template>
-  <footer class="bg-default/75 backdrop-blur border-t border-default py-4 md:py-8 lg:mt-24">
+  <footer class="bg-default border-t border-default py-4 md:py-8">
     <UContainer
       class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
     >
-      <div class="text-center md:text-left">
-        <p class="text-xl font-bold mb-1">Hexagone Six</p>
-        <p class="text-muted text-sm">&copy; {{ actualYear }} Tous droits réservés</p>
+      <div class="text-center md:text-left flex items-center space-x-4">
+        <img src="/public/images/logo.png" alt="Logo Hexagone Six" class="size-16 mb-2" />
+        <div>
+          <p class="text-xl font-bold mb-1">Hexagone Six</p>
+          <p class="text-muted text-sm">&copy; {{ actualYear }} Tous droits réservés</p>
+        </div>
       </div>
 
       <div class="flex flex-col md:flex-row items-center md:space-y-0 md:space-x-8">

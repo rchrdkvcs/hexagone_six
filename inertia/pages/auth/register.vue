@@ -30,8 +30,8 @@ const showPassword = ref(false)
       variant="subtle"
     >
       <template #header>
-        <h1 class="text-2xl font-bold">Connectez-vous à R6Calls</h1>
-        <p class="text-muted text-sm">Accédez à votre compte pour commencer l'aventure !</p>
+        <h1 class="text-2xl font-bold">Crée votre compte</h1>
+        <p class="text-muted text-sm">Accédez à de multiples ressource</p>
       </template>
 
       <form class="space-y-6" @submit.prevent="form.post('/register')">
