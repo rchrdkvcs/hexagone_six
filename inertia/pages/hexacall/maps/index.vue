@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { Head } from '@inertiajs/vue3'
-import MapCard from '~/components/maps/MapCard.vue'
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
-import type MapsController from '../../../app/maps/controllers/maps_controller'
+import MapsController from '#maps/controllers/maps_controller'
+import MapCard from '~/components/hexacall/maps/MapCard.vue'
 
 interface Playlist {
   id: string
@@ -65,7 +65,7 @@ const toggleFilter = (filter: string) => {
       <MapCard
         v-for="map in filteredMaps"
         :key="map.id"
-        :href="`/cartes/${map.slug}`"
+        :href="`/hexacall/cartes/${map.slug}`"
         :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
         :name="map.name"
       />

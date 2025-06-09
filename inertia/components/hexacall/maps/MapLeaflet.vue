@@ -2,7 +2,7 @@
 import { onMounted, ref, shallowRef, watch } from 'vue'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import MapSlideover from '~/components/maps/MapSlideover.vue'
+import MapSlideover from '~/components/hexacall/maps/MapSlideover.vue'
 
 import type Marker from '#markers/models/marker'
 

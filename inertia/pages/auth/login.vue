@@ -32,7 +32,7 @@ const showPassword = ref(false)
       variant="subtle"
     >
       <template #header>
-        <h1 class="text-2xl font-bold">Connectez-vous à HexaCall</h1>
+        <h1 class="text-2xl font-bold">Connectez-vous</h1>
         <p class="text-muted text-sm">Accédez à votre compte pour commencer l'aventure !</p>
       </template>
 

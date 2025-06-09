@@ -11,19 +11,14 @@ const user = useUser()
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
-      slot: 'logo' as const,
-    },
-  ],
-  [
-    {
-      label: 'HexaCall',
-      icon: 'lucide:map',
-      to: '/cartes',
-    },
-    {
       label: 'Lan',
       icon: 'lucide:computer',
       to: '/lan',
+    },
+    {
+      label: 'HexaCall',
+      icon: 'lucide:map-pin',
+      to: '/hexacall',
     },
     {
       label: 'Matériel',
@@ -31,7 +26,7 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/materiel',
     },
     {
-      label: 'HexaOpti',
+      label: 'HexaBoost',
       icon: 'lucide:biceps-flexed',
       to: '/hexaopti',
     },
@@ -41,14 +36,9 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/partenaires',
     },
   ],
-  [
-    {
-      slot: 'profile' as const,
-    },
-  ],
 ])
 
-const items = ref<DropdownMenuItem[][]>([
+const profileItems = ref<DropdownMenuItem[][]>([
   [
     {
       label: user.value?.userName,
@@ -97,91 +87,125 @@ function toggleMobileMenu() {
 </script>
 
 <template>
-  <header class="bg-default/75 backdrop-blur border-b border-default h-16 sticky top-0 z-20">
-    <div class="size-full max-w-7xl mx-auto items-center px-4">
+  <header class="bg-default/75 backdrop-blur-lg border-b border-default h-16 sticky top-0 z-20">
+    <UContainer class="flex items-center justify-between gap-3 h-full">
+      <div class="md:flex-1 flex items-center gap-1.5">
+        <ULink class="flex items-center" to="/">
+          <AppLogo class="text-default" />
+        </ULink>
+        <UPopover
+          arrow
+          :ui="{
+            content: 'w-64 z-20',
+          }"
+        >
+          <UButton label="Beta" size="xs" variant="subtle" color="warning" class="rounded-full" />
+
+          <template #content>
+            <div class="p-4 space-y-2">
+              <p class="text-sm text-muted">
+                La version <strong> Beta </strong> est en cours de développement. Certaines
+                fonctionnalités peuvent ne pas être disponibles ou comporter des bugs.
+              </p>
+
+              <p class="text-sm text-muted font-semibold">Vos retours sont précieux !</p>
+
+              <p class="text-sm text-muted">
+                N'hésitez pas à nous faire part de vos suggestions ou à signaler tout problème
+                rencontré en rejoignant notre
+                <ULink to="https://discord.com" class="underline text-default">discord</ULink>.
+              </p>
+            </div>
+          </template>
+        </UPopover>
+      </div>
+
       <UNavigationMenu
         :items="navItems"
         content-orientation="vertical"
         variant="link"
-        class="items-center h-full"
-      >
-        <template #logo>
-          <ULink
-            class="flex justify-start items-center gap-2 w-fit text-toned hover:text-default transition-all duration-200 ease-in-out"
-            to="/"
-          >
-            <AppLogo />
-          </ULink>
-        </template>
+        class="hidden md:flex"
+      />
 
-        <template #profile>
-          <UDropdownMenu
-            v-if="user"
-            :items="items"
-            :ui="{
-              content: 'w-48 z-20',
-            }"
-          >
-            <UButton color="neutral" variant="ghost" class="py-1 px-2 rounded-full">
-              <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
-              <span class="capitalize">{{ user.userName }}</span>
-            </UButton>
-          </UDropdownMenu>
+      <div class="flex items-center justify-end md:flex-1 gap-1.5">
+        <UDropdownMenu
+          v-if="user"
+          :items="profileItems"
+          :ui="{
+            content: 'w-48 z-20',
+          }"
+        >
+          <UButton color="neutral" variant="ghost" class="py-1 px-2 rounded-full">
+            <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
+            <span class="capitalize">{{ user.userName }}</span>
+          </UButton>
+        </UDropdownMenu>
 
-          <UButton
-            v-else
-            variant="subtle"
-            color="neutral"
-            label="Se connecter"
-            icon="lucide:log-in"
-            to="/login"
-          />
-        </template>
-      </UNavigationMenu>
-
-      <div class="flex md:hidden justify-end">
         <UButton
-          :icon="isMobileMenuOpen ? 'i-lucide-x' : 'i-lucide-menu'"
+          v-else
+          variant="subtle"
           color="neutral"
+          label="Se connecter"
+          icon="lucide:log-in"
+          to="/login"
+        />
+
+        <UButton
+          size="lg"
+          class="lg:hidden"
           variant="ghost"
-          size="xl"
+          color="neutral"
+          :icon="isMobileMenuOpen ? 'lucide:x' : 'lucide:menu'"
           @click="toggleMobileMenu"
         />
       </div>
-    </div>
+    </UContainer>
 
     <div
       v-if="isMobileMenuOpen"
       class="md:hidden bg-default/90 backdrop-blur px-4 border-b border-default"
     >
-      <div class="border-b border-default">
-        <UNavigationMenu :items="profileItems" content-orientation="vertical" variant="link">
-          <template #profile>
-            <div
-              v-if="user"
-              class="flex items-center gap-2 cursor-pointer transition-all ease-in-out duration-200"
-            >
-              <UAvatar :src="user.avatarUrl" :alt="user.userName" size="md" />
-              <span class="capitalize">{{ user.userName }}</span>
-            </div>
-
-            <UButton
-              v-else
-              variant="subtle"
-              label="Se connecter"
-              icon="lucide:log-in"
-              to="/login"
-            />
-          </template>
-        </UNavigationMenu>
-      </div>
-
-      <UNavigationMenu
-        :items="navItems"
-        class="mb-4"
-        content-orientation="vertical"
-        variant="link"
-      />
+      <UNavigationMenu :items="navItems" class="mb-4" orientation="vertical" variant="link" />
     </div>
   </header>
+
+  <svg
+    viewBox="0 0 1440 181"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="pointer-events-none absolute w-full top-16 transition-all text-primary shrink-0 -z-10 duration-[400ms]"
+  >
+    <mask id="path-1-inside-1_414_5526" fill="white"><path d="M0 0H1440V181H0V0Z"></path></mask>
+    <path d="M0 0H1440V181H0V0Z" fill="url(#paint0_linear_414_5526)" fill-opacity="0.15"></path>
+    <path
+      d="M0 2H1440V-2H0V2Z"
+      fill="url(#paint1_linear_414_5526)"
+      mask="url(#path-1-inside-1_414_5526)"
+    ></path>
+    <defs>
+      <linearGradient
+        id="paint0_linear_414_5526"
+        x1="720"
+        y1="0"
+        x2="720"
+        y2="181"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="currentColor" offset=""></stop>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"></stop>
+      </linearGradient>
+      <linearGradient
+        id="paint1_linear_414_5526"
+        x1="0"
+        y1="90.5"
+        x2="1440"
+        y2="90.5"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="currentColor" stop-opacity="0" offset=""></stop>
+        <stop offset="0.395" stop-color="currentColor"></stop>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
 </template>
