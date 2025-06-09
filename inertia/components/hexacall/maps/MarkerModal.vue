@@ -33,8 +33,8 @@ const handleMarkerSubmit = async () => {
     props.map.markers.push(response.data.marker)
 
     toast.add({
-      title: 'Point proposé',
-      description: 'Votre proposition de point a été ajoutée.',
+      title: 'Call proposé',
+      description: 'Votre proposition de call a été ajoutée.',
       icon: 'lucide:check',
       color: 'success',
     })

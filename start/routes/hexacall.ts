@@ -1,4 +1,5 @@
 import router from '@adonisjs/core/services/router'
+import { middleware } from '#start/kernel'
 
 const HexacallController = () => import('../../app/pages/controllers/hexacall_controller.js')
 const StoreMarkerController = () => import('#markers/controllers/store_marker_controller')
@@ -34,4 +35,5 @@ export default function hexacallRoutes() {
         .prefix('markers')
     })
     .prefix('hexacall')
+    .use(middleware.silentAuth())
 }
