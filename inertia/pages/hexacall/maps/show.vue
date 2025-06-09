@@ -44,14 +44,51 @@ const dropDownItems = ref<DropdownMenuItem[]>([
     label: 'Marqueur',
     icon: 'lucide:map-pin',
     onClick: () => {
-      editMode.value = 'marker'
+      if (user.value) {
+        editMode.value = 'marker'
+      } else {
+        const toast = useToast()
+        toast.add({
+          title: 'Connexion requise',
+          description: 'Vous devez être connecté pour faire une suggestion.',
+          icon: 'lucide:user',
+          color: 'warning',
+          orientation: 'horizontal',
+          actions: [
+            {
+              label: 'Se connecter',
+              to: '/login',
+              color: 'neutral',
+            },
+          ],
+        })
+      }
     },
   },
   {
     label: 'Zone',
     icon: 'lucide:hexagon',
     onClick: () => {
-      editMode.value = 'polygon'
+      if (user.value) {
+        editMode.value = 'polygon'
+        newPolygone.value = null
+      } else {
+        const toast = useToast()
+        toast.add({
+          title: 'Connexion requise',
+          description: 'Vous devez être connecté pour faire une suggestion.',
+          icon: 'lucide:user',
+          color: 'warning',
+          orientation: 'horizontal',
+          actions: [
+            {
+              label: 'Se connecter',
+              to: '/login',
+              color: 'neutral',
+            },
+          ],
+        })
+      }
     },
   },
 ])
@@ -155,7 +192,6 @@ const handleStageChange = (stage: number) => {
     </UTooltip>
 
     <UDropdownMenu
-      v-if="user"
       arrow
       :items="dropDownItems"
       :ui="{

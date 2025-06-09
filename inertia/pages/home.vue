@@ -19,9 +19,9 @@
 
     <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold">Hexagone Six</h1>
     <p class="text-base md:text-lg text-muted max-w-2xl text-center mt-4">
-      La plateforme de référence pour tous les joueurs Rainbow Six Siege en France. Que vous soyez
-      compétiteur, stratège ou joueur exigeant, vous trouverez ici les outils et événements pensés
-      pour maximiser votre performance sur Siege X.
+      La plateforme de référence pour tous les joueurs PC Rainbow Six Siege en France. Que vous
+      soyez compétiteur, stratège ou joueur exigeant, vous trouverez ici les outils et événements
+      pensés pour maximiser votre performance sur Siege X.
     </p>
 
     <ULink
