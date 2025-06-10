@@ -58,7 +58,7 @@ const handleSuggestionSubmit = async () => {
     })
   } else {
     try {
-      const response = await axios.post('/markers/suggestions', {
+      const response = await axios.post('/hexacall/markers/suggestions', {
         markerId: props.marker.id,
         label: suggest.value,
       })
@@ -95,7 +95,7 @@ const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
   })
 
   try {
-    const response = await axios.patch(`/markers/suggestions/${suggestion.id}`, {
+    const response = await axios.patch(`/hexacall/markers/suggestions/${suggestion.id}`, {
       [voteProperty]: voteType === 'up' ? 1 : -1,
     })
 
@@ -166,7 +166,7 @@ const handlePhotoUpload = async (event: Event) => {
   })
 
   try {
-    const response = await axios.post('/markers/photos', formData, {
+    const response = await axios.post('/hexacall/markers/photos', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
