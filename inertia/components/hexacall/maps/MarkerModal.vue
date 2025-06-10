@@ -21,7 +21,7 @@ const label = ref('')
 
 const handleMarkerSubmit = async () => {
   try {
-    const response = await axios.post('/markers', {
+    const response = await axios.post('/hexacall/markers', {
       mapId: props.map.id,
       userId: user.value?.id,
       label: label.value,
