@@ -23,14 +23,14 @@ export default function hexacallRoutes() {
 
       router
         .group(() => {
-          router.post('/markers', [StoreMarkerController, 'execute'])
-          router.post('/markers/photos', [StoreMarkerImageController, 'execute'])
-          router.post('/markers/suggestions', [StoreSuggestionController, 'execute'])
+          router.post('/', [StoreMarkerController, 'execute'])
+          router.post('/photos', [StoreMarkerImageController, 'execute'])
+          router.post('/suggestions', [StoreSuggestionController, 'execute'])
 
-          router.patch('/markers/:id', [UpdateMarkerController, 'execute'])
-          router.patch('/markers/suggestions/:id', [UpdateSuggestionController, 'execute'])
+          router.patch('/:id', [UpdateMarkerController, 'execute'])
+          router.patch('/suggestions/:id', [UpdateSuggestionController, 'execute'])
 
-          router.delete('/markers/:id', [DeleteMarkerController, 'execute'])
+          router.delete('/:id', [DeleteMarkerController, 'execute'])
         })
         .prefix('markers')
     })
