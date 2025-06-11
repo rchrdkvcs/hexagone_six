@@ -99,7 +99,6 @@
             <div class="flex items-center gap-2">
               <UIcon name="lucide:computer" class="text-primary size-6" />
               <h3 class="text-xl font-semibold">Matériel</h3>
-              <UBadge label="Bientôt Disponible" variant="subtle" color="warning" />
             </div>
           </template>
           <p>

@@ -24,11 +24,6 @@ const navItems = ref<NavigationMenuItem[]>([
       label: 'Matériel',
       icon: 'lucide:computer',
       to: '/materiel',
-      disabled: true,
-      badge: {
-        label: 'Bientôt disponible',
-        color: 'warning',
-      },
     },
     {
       label: 'HexaBoost',

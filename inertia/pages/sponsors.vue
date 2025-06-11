@@ -1,27 +1,4 @@
-<script setup lang="ts">
-const partners = [
-  {
-    name: 'MSI France',
-    logo: '/public/images/sponsors/msi.png',
-    description: `MSI est un leader mondial dans la conception et la fabrication de matériel gaming haute performance. Leurs produits innovants offrent une expérience de jeu incomparable avec des solutions de pointe pour les joueurs et créateurs de contenu.`,
-    website: 'https://www.msi.com/',
-  },
-  {
-    name: 'HOLY Energy',
-    logo: '/public/images/sponsors/holy.png',
-    description: `HOLY combine enfin un bon goût et une bonne conscience. La promesse que nous te faisons est simple : des produits de première qualité, un service de pointe et une communauté de passionnés. Fais maintenant partie de la révolution des soft drinks et juge par toi-même !`,
-    website: 'https://fr.weareholy.com/',
-    promoCode: 'HEXAGONE10',
-    promoValue: '-10%',
-  },
-  {
-    name: 'Hardware Modding',
-    logo: '/public/images/sponsors/hm.png',
-    description: `HardwareModding est la référence pour tous les passionnés de personnalisation et d'optimisation PC. Leur expertise et leurs produits exclusifs permettent de créer des configurations uniques.`,
-    website: '#',
-  },
-]
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UContainer class="w-full space-y-8 md:space-y-16 flex flex-col py-16 lg:py-24">

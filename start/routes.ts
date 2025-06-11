@@ -16,8 +16,9 @@ import hexacallRoutes from '#start/routes/hexacall'
 import userRoutes from '#start/routes/user'
 import lanRoutes from '#start/routes/lan'
 
-const SponsorsController = () => import('../app/pages/controllers/sponsors_controller.js')
 const HomeController = () => import('../app/pages/controllers/home_controller.js')
+const SponsorsController = () => import('../app/pages/controllers/sponsors_controller.js')
+const MaterialsController = () => import('../app/pages/controllers/materials_controller.js')
 
 authRoutes()
 adminRoutes()
@@ -30,5 +31,6 @@ router
     router.get('/', [HomeController, 'render'])
 
     router.get('/partenaires', [SponsorsController, 'render'])
+    router.get('/materiel', [MaterialsController, 'render'])
   })
   .use(middleware.silentAuth())
