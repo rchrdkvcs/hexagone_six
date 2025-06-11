@@ -44,7 +44,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://fr.weareholy.com/"
+            to="https://msi.com/"
             target="_blank"
             color="neutral"
             variant="subtle"
@@ -90,7 +90,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://www.hardwaremodding.fr/"
+            to="https://fr.weareholy.com/"
             target="_blank"
             color="neutral"
             variant="subtle"
@@ -128,7 +128,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://www.msi.com/"
+            to="https://www.hardwaremodding.fr/"
             target="_blank"
             color="neutral"
             variant="subtle"
