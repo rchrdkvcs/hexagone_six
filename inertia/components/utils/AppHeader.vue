@@ -58,7 +58,7 @@ const profileItems = ref<DropdownMenuItem[][]>([
     {
       label: 'Profile',
       icon: 'i-lucide-user',
-      to: '/membres/' + user.value?.userName,
+      to: '/membres/' + user.value?.userSlug,
     },
     {
       label: 'Administration',

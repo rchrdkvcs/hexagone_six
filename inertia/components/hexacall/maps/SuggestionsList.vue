@@ -58,7 +58,7 @@ function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
             Proposée par :
             <ULink
               :class="index === 0 ? 'text-elevated' : 'text-muted'"
-              :to="`/membres/${suggestion.user.userName.toLowerCase()}`"
+              :to="`/membres/${suggestion.user.userSlug}`"
               class="underline"
               >{{ suggestion.user.userName }}</ULink
             >
