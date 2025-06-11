@@ -22,7 +22,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Pro"
         description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
         price="1899,99 €"
-        imageUrl="/public/images/materials/clutch-x-pro.webp"
+        imageUrl="/images/materials/clutch-x-pro.webp"
         :config="{
           cpu: 'AMD Ryzen 7 9800X3D ',
           gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
@@ -44,7 +44,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Pro"
         description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
         price="1899,99 €"
-        imageUrl="/public/images/materials/clutch-x-pro.webp"
+        imageUrl="/images/materials/clutch-x-pro.webp"
         :config="{
           cpu: 'AMD Ryzen 7 9800X3D ',
           gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
@@ -66,7 +66,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Pro"
         description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
         price="1899,99 €"
-        imageUrl="/public/images/materials/clutch-x-pro.webp"
+        imageUrl="/images/materials/clutch-x-pro.webp"
         :config="{
           cpu: 'AMD Ryzen 7 9800X3D ',
           gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
@@ -88,7 +88,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Pro"
         description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
         price="1899,99 €"
-        imageUrl="/public/images/materials/clutch-x-pro.webp"
+        imageUrl="/images/materials/clutch-x-pro.webp"
         :config="{
           cpu: 'AMD Ryzen 7 9800X3D ',
           gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
