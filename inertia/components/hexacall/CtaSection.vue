@@ -20,7 +20,7 @@
 
       <div class="flex flex-col md:grid md:grid-cols-3 gap-4 z-0">
         <ULink
-          to="https://discord.com"
+          to="https://discord.gg/ABFsPxuYZr"
           class="flex rounded-lg bg-elevated/50 ring ring-default transition ease-in-out duration-250 hover:bg-elevated hover:ring-accented p-4 gap-4 items-center"
         >
           <UIcon
@@ -42,7 +42,7 @@
         </ULink>
 
         <ULink
-          to="https://twitter.com/hexagonesix"
+          to="https://x.com/hexagonesix"
           class="flex rounded-lg bg-elevated/50 ring ring-default transition ease-in-out duration-250 hover:bg-elevated hover:ring-accented p-4 gap-4 items-center"
         >
           <UIcon

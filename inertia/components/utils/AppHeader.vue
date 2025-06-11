@@ -21,13 +21,8 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/hexacall',
     },
     {
-      label: 'Partenaires',
-      icon: 'lucide:handshake',
-      to: '/partenaires',
-    },
-    {
       label: 'Matériel',
-      icon: 'lucide:mouse',
+      icon: 'lucide:computer',
       to: '/materiel',
       disabled: true,
       badge: {
@@ -44,6 +39,11 @@ const navItems = ref<NavigationMenuItem[]>([
         label: 'Bientôt disponible',
         color: 'warning',
       },
+    },
+    {
+      label: 'Partenaires',
+      icon: 'lucide:handshake',
+      to: '/partenaires',
     },
   ],
 ])
@@ -118,7 +118,9 @@ function toggleMobileMenu() {
               <p class="text-sm text-muted">
                 N'hésitez pas à nous faire part de vos suggestions ou à signaler tout problème
                 rencontré en rejoignant notre
-                <ULink to="https://discord.com" class="underline text-default">discord</ULink>.
+                <ULink to="https://discord.gg/ABFsPxuYZr" class="underline text-default"
+                  >discord</ULink
+                >.
               </p>
             </div>
           </template>

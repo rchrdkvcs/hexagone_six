@@ -8,7 +8,7 @@ const partners = [
   },
   {
     name: 'HOLY Energy',
-    logo: '/public/images/sponsors/holy.avif',
+    logo: '/public/images/sponsors/holy.png',
     description: `HOLY combine enfin un bon goût et une bonne conscience. La promesse que nous te faisons est simple : des produits de première qualité, un service de pointe et une communauté de passionnés. Fais maintenant partie de la révolution des soft drinks et juge par toi-même !`,
     website: 'https://fr.weareholy.com/',
     promoCode: 'HEXAGONE10',
@@ -16,7 +16,7 @@ const partners = [
   },
   {
     name: 'Hardware Modding',
-    logo: '/public/images/sponsors/hardwaremodding.png',
+    logo: '/public/images/sponsors/hm.png',
     description: `HardwareModding est la référence pour tous les passionnés de personnalisation et d'optimisation PC. Leur expertise et leurs produits exclusifs permettent de créer des configurations uniques.`,
     website: '#',
   },
