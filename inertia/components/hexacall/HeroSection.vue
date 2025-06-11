@@ -26,18 +26,21 @@
         alt="Image d'illustration de HexaCall"
         class="w-full hidden lg:block"
         src="/public/images/hexacall/hexacall.png"
+        loading="eager"
       />
 
       <img
         alt="Image d'illustration de HexaCall"
         class="absolute top-1/2 -translate-1/2 -right-1/2 z-10 w-48 md:w-72 hidden lg:block"
         src="/public/images/hexacall/slideover.png"
+        loading="eager"
       />
 
       <img
         alt="Image d'illustration de HexaCall"
         class="max-h-[40vh] w-auto sm:w-56 md:w-64 object-contain lg:w-36 lg:max-h-none lg:absolute lg:bottom-0 lg:left-0 lg:-translate-x-1/3 lg:translate-y-1/3 z-10"
         src="/public/images/hexacall/phone.png"
+        loading="eager"
       />
     </div>
 
