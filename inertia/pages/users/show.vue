@@ -2,10 +2,10 @@
 import { computed, ref } from 'vue'
 import UserPost from '~/components/users/UserPost.vue'
 import UserCard from '~/components/users/UserCard.vue'
+import EmptyFeed from '~/components/users/EmptyFeed.vue'
 
 import type { TabsItem } from '@nuxt/ui'
 import type User from '#users/models/user'
-import EmptyFeed from '~/components/users/EmptyFeed.vue'
 
 const props = defineProps<{
   userProfile: User

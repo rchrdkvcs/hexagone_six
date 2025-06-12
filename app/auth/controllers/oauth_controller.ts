@@ -27,7 +27,7 @@ export default class OauthController {
     const connectingUser = await social.user()
 
     const slugifiedUserName = () => {
-      return userName.toLowerCase().replace(/\s+/g, '-')
+      return connectingUser.nickName.toLowerCase().replace(/\s+/g, '-')
     }
 
     const user = await User.firstOrCreate(

@@ -2,9 +2,9 @@
 import { LeafletMouseEvent } from 'leaflet'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
+import { ref } from 'vue'
 
 import type Map from '#maps/models/map'
-import { ref } from 'vue'
 
 const props = defineProps<{
   stage: number

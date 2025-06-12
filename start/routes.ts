@@ -18,7 +18,7 @@ import lanRoutes from '#start/routes/lan'
 
 const HomeController = () => import('../app/pages/controllers/home_controller.js')
 const SponsorsController = () => import('../app/pages/controllers/sponsors_controller.js')
-const MaterialsController = () => import('../app/pages/controllers/materials_controller.js')
+const PcClutchController = () => import('../app/pages/controllers/pc_clutch_controller.js')
 
 authRoutes()
 adminRoutes()
@@ -31,6 +31,6 @@ router
     router.get('/', [HomeController, 'render'])
 
     router.get('/partenaires', [SponsorsController, 'render'])
-    router.get('/materiel', [MaterialsController, 'render'])
+    router.get('/pc-clutch', [PcClutchController, 'render'])
   })
   .use(middleware.silentAuth())

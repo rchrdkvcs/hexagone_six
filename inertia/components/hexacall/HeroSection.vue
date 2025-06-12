@@ -1,3 +1,5 @@
+<script lang="ts" setup></script>
+
 <template>
   <UContainer
     class="min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] h-full flex flex-col xl:grid gap-16 sm:gap-y-24 xl:grid-cols-2 lg:items-center relative py-16"

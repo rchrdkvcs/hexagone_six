@@ -21,9 +21,19 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/hexacall',
     },
     {
-      label: 'Matériel',
+      label: 'PC Clutch',
       icon: 'lucide:computer',
+      to: '/pc-clutch',
+    },
+    {
+      label: 'Matériel',
+      icon: 'lucide:mouse',
       to: '/materiel',
+      disabled: true,
+      badge: {
+        label: 'Bientôt disponible',
+        color: 'warning',
+      },
     },
     {
       label: 'HexaBoost',
