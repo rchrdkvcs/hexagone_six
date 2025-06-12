@@ -21,7 +21,28 @@ const { formattedTime } = useTimeAgo(props.post.createdAt)
     </div>
 
     <div class="w-full flex flex-col gap-1.5">
-      <p class="text-sm md:text-base" v-html="post.content" />
+      <p v-if="post.category === 'proposition'" class="text-sm md:text-base">
+        <span class="font-semibold capitalize">{{ userName }}</span> a fait une nouvelle
+        propositions
+        <span class="font-bold"
+          >"{{ post.label }}" sur
+          <a class="underline" :href="'/hexacall/cartes/' + post.mapSlug">{{ post.mapName }}</a>
+        </span>
+      </p>
+
+      <p v-if="post.category === 'suggestion'" class="text-sm md:text-base">
+        <span class="font-semibold capitalize">{{ userName }} </span> a suggéré un nouveau call
+        <span class="font-bold">"{{ post.label }}"</span> a la place de
+        <span class="font-bold">"{{ post.markerName }}" </span> sur
+        <a class="underline" :href="'/hexacall/cartes/' + post.mapSlug">{{ post.mapName }}</a>
+      </p>
+
+      <p v-if="post.category === 'votes'" class="text-sm md:text-base">
+        <span class="font-semibold capitalize">{{ userName }} </span> {{ post.voteAction }} la
+        suggestion <span class="font-bold">"{{ post.label }}" </span> à la place de
+        <span class="font-bold">"{{ post.markerName }}" </span> sur
+        <a class="underline" :href="'/hexacall/cartes/' + post.mapSlug">{{ post.mapName }}</a>
+      </p>
     </div>
   </div>
 </template>

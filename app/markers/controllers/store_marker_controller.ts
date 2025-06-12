@@ -45,7 +45,10 @@ export default class StoreMarkerController {
       await Post.create({
         userId: user.id,
         category: 'proposition',
-        content: `<span class="font-semibold capitalize">${user.userName} </span>a fait une nouvelle propositions <span class="font-bold">"${data.label}" sur <a class="underline" href="${`/cartes/` + map.slug}">${map.name}</a>`,
+        label: data.label,
+        markerName: marker.label,
+        mapName: map.name,
+        mapSlug: map.slug,
       })
 
       return response.status(201).json({

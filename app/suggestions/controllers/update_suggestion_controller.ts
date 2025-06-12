@@ -90,7 +90,11 @@ export default class UpdateSuggestionController {
         await Post.create({
           userId: auth.user?.id,
           category: 'votes',
-          content: `<span class="font-semibold capitalize">${auth.user?.userName} </span>${voteAction} la suggestion <span class="font-bold">"${suggestion.label}" </span> à la place de <span class="font-bold">"${marker.label}" </span> sur <a class="underline" href="${'/cartes/' + map.slug}">${map.name}</a>`,
+          label: suggestion.label,
+          markerName: marker.label,
+          mapName: map.name,
+          mapSlug: map.slug,
+          voteAction,
         })
       }
 
