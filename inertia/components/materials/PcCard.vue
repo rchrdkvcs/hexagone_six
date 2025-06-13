@@ -37,7 +37,7 @@ defineProps<{
     </template>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-      <img :src="imageUrl" :alt="`Image de ${name}`" class="rounded-lg ring ring-default" />
+      <img :src="imageUrl" :alt="`Image de ${name}`" class="rounded-lg" />
 
       <div class="space-y-2">
         <ul class="space-y-1">
