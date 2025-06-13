@@ -6,17 +6,15 @@ defineProps<{
   imageUrl: string
   config: {
     cpu: string
+    mb: string
     gpu: string
     ram: string
     storage: string
     cooling: string
+    pu: string
+    case: string
   }
-  performance: {
-    rainbowSixSiege: string
-    valorant: string
-    cs2: string
-    fortnite: string
-  }
+  performance: string[]
   link: string
   subDescription?: string
 }>()
@@ -48,6 +46,10 @@ defineProps<{
             - {{ config.cpu }}
           </li>
           <li>
+            <b>Carte Mere:</b> <br />
+            - {{ config.mb }}
+          </li>
+          <li>
             <b>GPU:</b> <br />
             - {{ config.gpu }}
           </li>
@@ -77,12 +79,11 @@ defineProps<{
           <UButton color="neutral" variant="ghost" label="Performances" icon="lucide:bar-chart-2" />
 
           <template #content>
-            <ul class="p-4">
-              <li><b>Rainbow Six Siege:</b> {{ performance.rainbowSixSiege }}</li>
-              <li><b>Valorant:</b> {{ performance.valorant }}</li>
-              <li><b>Counter-Strike 2:</b> {{ performance.cs2 }}</li>
-              <li><b>Fortnite:</b> {{ performance.fortnite }}</li>
-            </ul>
+            <div class="flex flex-col gap-1 p-3">
+              <p v-for="perf in performance">
+                {{ perf }}
+              </p>
+            </div>
           </template>
         </UPopover>
 

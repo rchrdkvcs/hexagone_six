@@ -19,91 +19,99 @@ import PcCard from '~/components/materials/PcCard.vue'
 
     <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-8">
       <PcCard
-        name="Clutch X Pro"
-        description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
-        price="1899,99 €"
-        imageUrl="/images/materials/clutch-x-pro.webp"
+        name="Clutch X Core"
+        description="Le point d’entrée sérieux dans la performance."
+        price="989.99 €"
+        imageUrl="/images/materials/clutch-x.webp"
         :config="{
-          cpu: 'AMD Ryzen 7 9800X3D ',
-          gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
-          ram: '32 Go DDR5 6000 MHz',
-          storage: '1 To NVMe Crucial E100 ',
-          cooling: 'MSI MAG AIO 360mm',
+          cpu: 'AMD Ryzen 5 7600',
+          mb: 'MSI PRO B650M-P',
+          gpu: 'MSI RTX 5060 8 Go VENTUS 2X OC',
+          ram: '16 Go DDR5 5200 MHz CL40',
+          storage: ' 1 To NVMe Crucial E100',
+          cooling: 'DeepCool AG200',
+          pu: 'MSI MAG A500N-H',
+          case: 'Cooler Master TD300 Mini',
         }"
-        :sub-description="`Windows 11 (version d’essai) préinstallé /n/n Rainbow Six Siege préinstallé`"
-        :performance="{
-          rainbowSixSiege: '600+ FPS',
-          valorant: '500-800 FPS',
-          cs2: '500-800 FPS',
-          fortnite: '500-800 FPS',
-        }"
-        link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-pro/"
+        :sub-description="`Windows 11 (version d’essai) préinstallé, Windows optimisé, Rainbow Six Siege préinstallé`"
+        :performance="[
+          'Jouez fluide en 1080p avec des réglages compétitifs.',
+          'Optimisé pour la stabilité & la réactivité.',
+          'Une expérience nette, propre, sans surchauffe ni latence parasite.',
+        ]"
+        link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-core/"
       />
 
       <PcCard
         name="Clutch X Pro"
-        description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
-        price="1899,99 €"
-        imageUrl="/images/materials/clutch-x-pro.webp"
+        description="L’équilibre parfait pour monter en niveau."
+        price="1189,99 €"
+        imageUrl="/images/materials/clutch-x.webp"
         :config="{
-          cpu: 'AMD Ryzen 7 9800X3D ',
-          gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
-          ram: '32 Go DDR5 6000 MHz',
-          storage: '1 To NVMe Crucial E100 ',
-          cooling: 'MSI MAG AIO 360mm',
+          cpu: 'AMD Ryzen 5 9600X',
+          mb: 'MSI PRO B650M-P',
+          gpu: 'MSI RTX 5060 Ti 8 Go VENTUS 2X OC',
+          ram: '16 Go DDR5 5200 MHz CL40',
+          storage: ' 1 To NVMe Crucial E100',
+          cooling: 'Zephyr Dark Pro',
+          pu: 'M-RED 550W',
+          case: 'Cooler Master TD300 Mini',
         }"
-        :sub-description="`Windows 11 (version d’essai) préinstallé /n/n Rainbow Six Siege préinstallé`"
-        :performance="{
-          rainbowSixSiege: '600+ FPS',
-          valorant: '500-800 FPS',
-          cs2: '500-800 FPS',
-          fortnite: '500-800 FPS',
-        }"
+        :sub-description="`Windows 11 (version d’essai) préinstallé, Windows optimisé, Rainbow Six Siege préinstallé`"
+        :performance="[
+          'Réactivité accrue, multitâche fluide, stabilité sur le long terme.',
+          'Idéal pour le grind ranked et les longues sessions.',
+          'Aucun ralentissement, même en pic de charge.',
+        ]"
         link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-pro/"
       />
 
       <PcCard
-        name="Clutch X Pro"
-        description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
-        price="1899,99 €"
-        imageUrl="/images/materials/clutch-x-pro.webp"
+        name="Clutch X Ultra"
+        description="Le PC des joueurs compétitifs exigeants."
+        price="1569,99 €"
+        imageUrl="/images/materials/clutch-x-ultra.webp"
         :config="{
-          cpu: 'AMD Ryzen 7 9800X3D ',
-          gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
-          ram: '32 Go DDR5 6000 MHz',
-          storage: '1 To NVMe Crucial E100 ',
-          cooling: 'MSI MAG AIO 360mm',
+          cpu: 'AMD Ryzen 7 7800X3D',
+          mb: 'MSI PRO B650-S WIFI',
+          gpu: 'MSI RTX 5060 Ti 16 Go VENTUS 2X OC',
+          ram: '32 Go DDR5 6000 MHz CL30',
+          storage: ' 1 To NVMe Crucial E100',
+          cooling: 'Zephyr Dark Pro (TDP 240W)',
+          pu: 'MSI MAG A750GL PCIe 5 – 750W',
+          case: 'MSI MPG GUNGNIR 110R',
         }"
         :sub-description="`Windows 11 (version d’essai) préinstallé /n/n Rainbow Six Siege préinstallé`"
-        :performance="{
-          rainbowSixSiege: '600+ FPS',
-          valorant: '500-800 FPS',
-          cs2: '500-800 FPS',
-          fortnite: '500-800 FPS',
-        }"
-        link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-pro/"
+        :performance="[
+          'Fluidité constante sur Siege X et sur les jeux les plus exigeantes.',
+          'Temps de réponse système réduit à l’extrême.',
+          'Config validée pour la compétition.',
+        ]"
+        link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-ultra/"
       />
 
       <PcCard
-        name="Clutch X Pro"
-        description="Prêt à l’emploi, optimisé Esport, FPS extrêmes en 1080p/1440p."
+        name="Clutch X Ultra Pro"
+        description="Le monstre ultime."
         price="1899,99 €"
-        imageUrl="/images/materials/clutch-x-pro.webp"
+        imageUrl="/images/materials/clutch-x-ultra.webp"
         :config="{
-          cpu: 'AMD Ryzen 7 9800X3D ',
-          gpu: 'MSI RTX 5070 12 Go VENTUS 2X ',
-          ram: '32 Go DDR5 6000 MHz',
-          storage: '1 To NVMe Crucial E100 ',
+          cpu: 'AMD Ryzen 7 9800X3D',
+          mb: 'MSI PRO B650-S WIFI',
+          gpu: 'MSI RTX 5070 12 Go VENTUS 2X',
+          ram: '32 Go DDR5 6000 MHz CL30',
+          storage: '1 To NVMe Crucial E100',
           cooling: 'MSI MAG AIO 360mm',
+          pu: 'MSI MAG A750GL 750W 80+ Gold',
+          case: 'MSI MPG GUNGNIR 110R',
         }"
         :sub-description="`Windows 11 (version d’essai) préinstallé /n/n Rainbow Six Siege préinstallé`"
-        :performance="{
-          rainbowSixSiege: '600+ FPS',
-          valorant: '500-800 FPS',
-          cs2: '500-800 FPS',
-          fortnite: '500-800 FPS',
-        }"
-        link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-pro/"
+        :performance="[
+          'Machine taillée pour la performance extrême.\n',
+          'Parfait pour le multitâche lourd : jeu + stream + enregistrement + overlay.',
+          'Latence minimale, silence maîtrisé, aucune concession.',
+        ]"
+        link="https://www.hardwaremodding.fr/product/pc-gamer-clutch-x-ultra-pro/"
       />
     </div>
   </UContainer>
