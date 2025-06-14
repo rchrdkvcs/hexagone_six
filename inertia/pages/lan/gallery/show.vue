@@ -34,6 +34,7 @@ const prev = () => {
           :src="imagesUrl[selectedIndex]"
           :alt="`Image ${selectedIndex + 1}`"
           class="object-contain max-h-full max-w-full"
+          loading="eager"
         />
       </div>
 
@@ -68,7 +69,12 @@ const prev = () => {
         :class="{ 'ring-2 ring-primary': selectedIndex === index }"
         @click="onThumbnailClick(index)"
       >
-        <img :src="image" :alt="`Thumbnail ${index + 1}`" class="object-cover w-full h-full" />
+        <img
+          :src="image"
+          :alt="`Thumbnail ${index + 1}`"
+          class="object-cover w-full h-full"
+          loading="lazy"
+        />
       </div>
     </div>
   </UContainer>

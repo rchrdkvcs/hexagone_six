@@ -38,7 +38,7 @@
             </div>
 
             <p class="text-sm md:text-base text-muted">
-              Notre système innovant de vote permet à la communauté de faire émerger les meilleurs
+              Notre système de vote innovant permet à la communauté de faire émerger les meilleurs
               callouts.
               <br class="hidden md:block" />
               <br class="hidden md:block" />

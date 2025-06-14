@@ -21,9 +21,9 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/hexacall',
     },
     {
-      label: 'Partenaires',
-      icon: 'lucide:handshake',
-      to: '/partenaires',
+      label: 'PC Clutch',
+      icon: 'lucide:computer',
+      to: '/pc-clutch',
     },
     {
       label: 'Matériel',
@@ -38,12 +38,12 @@ const navItems = ref<NavigationMenuItem[]>([
     {
       label: 'HexaBoost',
       icon: 'lucide:biceps-flexed',
-      to: '/hexaopti',
-      disabled: true,
-      badge: {
-        label: 'Bientôt disponible',
-        color: 'warning',
-      },
+      to: '/hexaboost',
+    },
+    {
+      label: 'Partenaires',
+      icon: 'lucide:handshake',
+      to: '/partenaires',
     },
   ],
 ])
@@ -63,7 +63,7 @@ const profileItems = ref<DropdownMenuItem[][]>([
     {
       label: 'Profile',
       icon: 'i-lucide-user',
-      to: '/membres/' + user.value?.userName,
+      to: '/membres/' + user.value?.userSlug,
     },
     {
       label: 'Administration',
@@ -118,7 +118,9 @@ function toggleMobileMenu() {
               <p class="text-sm text-muted">
                 N'hésitez pas à nous faire part de vos suggestions ou à signaler tout problème
                 rencontré en rejoignant notre
-                <ULink to="https://discord.com" class="underline text-default">discord</ULink>.
+                <ULink to="https://discord.gg/ABFsPxuYZr" class="underline text-default"
+                  >discord</ULink
+                >.
               </p>
             </div>
           </template>

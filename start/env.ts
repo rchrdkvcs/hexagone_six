@@ -65,4 +65,20 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   DRIVE_DISK: Env.schema.enum(['fs'] as const),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for stripe package
+  |----------------------------------------------------------
+  */
+  STRIPE_SECRET_KEY: Env.schema.string(),
+  STRIPE_PUBLISHABLE_KEY: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for discord webhook
+  |----------------------------------------------------------
+  */
+  DISCORD_WEBHOOK_URL: Env.schema.string(),
+  DISCORD_HEXABOOST_WEBHOOK_URL: Env.schema.string(),
 })

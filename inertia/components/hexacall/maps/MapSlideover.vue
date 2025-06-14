@@ -2,11 +2,11 @@
 import { computed, ref } from 'vue'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
+import SuggestionsList from '~/components/hexacall/maps/SuggestionsList.vue'
 
 import type { TabsItem } from '@nuxt/ui'
 import type Marker from '#markers/models/marker'
 import type Suggestion from '#suggestions/models/suggestion'
-import SuggestionsList from '~/components/hexacall/maps/SuggestionsList.vue'
 
 const props = defineProps<{
   marker: Marker

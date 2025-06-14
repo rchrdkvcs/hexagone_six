@@ -18,10 +18,19 @@ export default class Post extends BaseModel {
   declare category: string
 
   @column()
-  declare content: string
+  declare label: string
 
   @column()
-  declare imageUrls: string[]
+  declare markerName: string
+
+  @column()
+  declare mapName: string
+
+  @column()
+  declare mapSlug: string
+
+  @column()
+  declare voteAction: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

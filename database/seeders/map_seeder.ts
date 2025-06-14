@@ -127,7 +127,7 @@ export default class extends BaseSeeder {
         levels: [
           { level: -2, name: 'Sous-sol -2', isDefault: false },
           { level: -1, name: 'Sous-sol -1', isDefault: false },
-          { level: 1, name: '1er étage', isDefault: false },
+          { level: 1, name: '1er étage', isDefault: true },
           { level: 2, name: '2ème étage', isDefault: false },
           { level: 3, name: 'Toit', isDefault: false },
         ],
@@ -184,7 +184,7 @@ export default class extends BaseSeeder {
         slug: 'fortress',
         name: 'Forteresse',
         levels: [
-          { level: 1, name: '1er étage', isDefault: false },
+          { level: 1, name: '1er étage', isDefault: true },
           { level: 2, name: '2ème étage', isDefault: false },
           { level: 3, name: 'Toit', isDefault: false },
         ],

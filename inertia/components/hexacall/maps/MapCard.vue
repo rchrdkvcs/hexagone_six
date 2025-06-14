@@ -11,13 +11,14 @@ defineProps<{
 <template>
   <Link
     :href="href"
-    class="group relative rounded-lg overflow-hidden border border-default transition-all duration-300 shadow-md"
+    class="group relative rounded-lg overflow-hidden ring ring-default transition-all duration-300 shadow-md"
   >
     <div class="overflow-hidden relative">
       <img
         :alt="name"
         :src="imageSrc"
         class="w-full object-cover aspect-video transform group-hover:scale-105 transition-transform duration-500"
+        loading="lazy"
       />
 
       <div

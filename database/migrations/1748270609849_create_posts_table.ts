@@ -5,11 +5,14 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid('id')
-      table.uuid('user_id').notNullable()
-      table.string('content', 500).notNullable()
+      table.uuid('id').primary()
+      table.uuid('user_id')
       table.string('category').notNullable()
-      table.json('image_urls').notNullable().defaultTo('[]')
+      table.string('label').notNullable()
+      table.string('marker_name').notNullable()
+      table.string('map_name').notNullable()
+      table.string('map_slug').notNullable()
+      table.string('vote_action').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

@@ -2,10 +2,10 @@
 import { computed, ref } from 'vue'
 import UserPost from '~/components/users/UserPost.vue'
 import UserCard from '~/components/users/UserCard.vue'
+import EmptyFeed from '~/components/users/EmptyFeed.vue'
 
 import type { TabsItem } from '@nuxt/ui'
 import type User from '#users/models/user'
-import EmptyFeed from '~/components/users/EmptyFeed.vue'
 
 const props = defineProps<{
   userProfile: User
@@ -44,12 +44,10 @@ const tabsItems = ref<TabsItem[]>([
 </script>
 
 <template>
-  <UContainer
-    class="grid grid-cols-1 md:grid-cols-[320px_680px] gap-4 md:gap-8 py-4 md:py-8 w-full"
-  >
+  <UContainer class="grid grid-cols-1 md:grid-cols-[320px_680px] gap-4 md:gap-8 py-4 md:py-8 w-fit">
     <UserCard :userProfile="userProfile" class="w-full md:w-auto" />
 
-    <div class="flex flex-col bg-default ring ring-default rounded-md w-full h-fit">
+    <div class="flex flex-col bg-default ring ring-default rounded-md size-full">
       <UTabs
         color="neutral"
         variant="link"

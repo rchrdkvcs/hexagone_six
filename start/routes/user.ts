@@ -7,7 +7,7 @@ const UpdateUserController = () => import('#users/controllers/update_user_contro
 export default function userRoutes() {
   router
     .group(() => {
-      router.get('/membres/:userName', [ShowUserController, 'render'])
+      router.get('/membres/:userSlug', [ShowUserController, 'render'])
       router.post('/membres/:id', [UpdateUserController, 'execute'])
     })
     .use(middleware.silentAuth())

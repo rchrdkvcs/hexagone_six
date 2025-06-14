@@ -19,9 +19,16 @@ export default class RegistersController {
   public async execute({ request, response, auth }: HttpContext) {
     const data = await request.validateUsing(RegistersController.validator)
 
+    const slugifiedUserName = () => {
+      return data.userName.toLowerCase().replace(/\s+/g, '-')
+    }
+
     const { passwordConfirmation, ...userData } = data
 
-    const user = await User.create(userData)
+    const user = await User.create({
+      ...userData,
+      userSlug: slugifiedUserName(),
+    })
 
     await auth.use('web').login(user)
 

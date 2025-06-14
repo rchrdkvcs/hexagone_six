@@ -7,24 +7,26 @@ const actualYear = new Date().getFullYear()
 const socialLinks = ref<NavigationMenuItem[]>([
   [
     {
-      icon: 'mdi:discord',
-      to: 'https://discord.gg/hexagonesix',
+      icon: 'simple-icons:discord',
+      label: 'Discord',
+      to: 'https://discord.gg/ABFsPxuYZr',
     },
     {
-      icon: 'mdi:twitter',
-      to: 'https://twitter.com/hexagonesix',
+      icon: 'simple-icons:x',
+      label: 'Twitter',
+      to: 'https://x.com/hexagonesix',
     },
   ],
 ])
 
-const links = ref<NavigationMenuItem[]>([
-  [
-    {
-      label: 'Mentions légales',
-      to: '/mentions-legales',
-    },
-  ],
-])
+// const links = ref<NavigationMenuItem[]>([
+//   [
+//     {
+//       label: 'Mentions légales',
+//       to: '/mentions-legales',
+//     },
+//   ],
+// ])
 </script>
 
 <template>
@@ -42,7 +44,7 @@ const links = ref<NavigationMenuItem[]>([
 
       <div class="flex flex-col md:flex-row items-center md:space-y-0 md:space-x-8">
         <UNavigationMenu :items="socialLinks" variant="link" />
-        <UNavigationMenu :items="links" variant="link" />
+        <!--        <UNavigationMenu :items="links" variant="link" />-->
       </div>
     </UContainer>
   </footer>

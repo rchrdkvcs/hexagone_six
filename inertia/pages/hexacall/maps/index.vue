@@ -2,8 +2,9 @@
 import { Head } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import { InferPageProps } from '@adonisjs/inertia/types'
-import MapsController from '#maps/controllers/maps_controller'
 import MapCard from '~/components/hexacall/maps/MapCard.vue'
+
+import type MapsController from '#maps/controllers/maps_controller'
 
 interface Playlist {
   id: string

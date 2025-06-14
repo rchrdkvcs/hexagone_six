@@ -1,27 +1,4 @@
-<script setup lang="ts">
-const partners = [
-  {
-    name: 'MSI France',
-    logo: '/public/images/sponsors/msi.png',
-    description: `MSI est un leader mondial dans la conception et la fabrication de matériel gaming haute performance. Leurs produits innovants offrent une expérience de jeu incomparable avec des solutions de pointe pour les joueurs et créateurs de contenu.`,
-    website: 'https://www.msi.com/',
-  },
-  {
-    name: 'HOLY Energy',
-    logo: '/public/images/sponsors/holy.avif',
-    description: `HOLY combine enfin un bon goût et une bonne conscience. La promesse que nous te faisons est simple : des produits de première qualité, un service de pointe et une communauté de passionnés. Fais maintenant partie de la révolution des soft drinks et juge par toi-même !`,
-    website: 'https://fr.weareholy.com/',
-    promoCode: 'HEXAGONE10',
-    promoValue: '-10%',
-  },
-  {
-    name: 'Hardware Modding',
-    logo: '/public/images/sponsors/hardwaremodding.png',
-    description: `HardwareModding est la référence pour tous les passionnés de personnalisation et d'optimisation PC. Leur expertise et leurs produits exclusifs permettent de créer des configurations uniques.`,
-    website: '#',
-  },
-]
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UContainer class="w-full space-y-8 md:space-y-16 flex flex-col py-16 lg:py-24">
@@ -39,8 +16,6 @@ const partners = [
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       <UCard
-        v-for="partner in partners"
-        :key="partner.name"
         class="transition-all duration-300 hover:shadow-xl"
         :ui="{
           root: 'flex flex-col',
@@ -50,47 +25,115 @@ const partners = [
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              :src="partner.logo"
-              :alt="`${partner.name} logo`"
+              src="/public/images/sponsors/msi.png"
+              alt="MSI logo"
               class="max-h-full max-w-[80%] object-contain"
             />
           </div>
 
-          <h3 class="text-2xl font-bold mb-3">{{ partner.name }}</h3>
+          <h3 class="text-2xl font-bold mb-3">MSI</h3>
 
-          <p class="text-left text-muted mb-6">{{ partner.description }}</p>
+          <p class="text-left text-muted mb-6">
+            MSI est un leader mondial dans la conception et la fabrication de matériel gaming haute
+            performance. Leurs produits innovants offrent une expérience de jeu incomparable avec
+            des solutions de pointe pour les joueurs et créateurs de contenu.
+          </p>
+        </div>
+
+        <template #footer>
+          <UButton
+            label="Visiter le site"
+            icon="lucide:external-link"
+            to="https://msi.com/"
+            target="_blank"
+            color="neutral"
+            variant="subtle"
+            block
+          />
+        </template>
+      </UCard>
+
+      <UCard
+        class="transition-all duration-300 hover:shadow-xl"
+        :ui="{
+          root: 'flex flex-col',
+          body: 'flex-grow',
+        }"
+      >
+        <div class="flex flex-col items-center">
+          <div class="h-32 flex items-center justify-center mb-6">
+            <img
+              src="/public/images/sponsors/holy.png"
+              alt="Holy Energy logo"
+              class="max-h-full max-w-[80%] object-contain"
+            />
+          </div>
+
+          <h3 class="text-2xl font-bold mb-3">Holy Energy</h3>
+
+          <p class="text-left text-muted mb-6">
+            HOLY combine enfin un bon goût et une bonne conscience. La promesse que nous te faisons
+            est simple : des produits de première qualité, un service de pointe et une communauté de
+            passionnés. Fais maintenant partie de la révolution des soft drinks et juge par toi-même
+            !
+          </p>
 
           <div
-            v-if="partner.promoCode"
             class="px-3 py-2 rounded-lg mb-6 w-full text-center bg-elevated flex items-center justify-center gap-2"
           >
-            <p>
-              Code promo : <span class="font-bold">{{ partner.promoCode }}</span>
-            </p>
-            <UBadge
-              v-if="partner.promoValue"
-              :label="partner.promoValue"
-              variant="soft"
-              color="success"
-              size="lg"
-            />
+            <p>Code promo : <span class="font-bold">HEXAGONE10</span></p>
+            <UBadge label="-10%" variant="soft" color="success" size="lg" />
           </div>
         </div>
 
         <template #footer>
           <UButton
-            :to="partner.website"
+            label="Visiter le site"
+            icon="lucide:external-link"
+            to="https://fr.weareholy.com/"
             target="_blank"
-            rel="noopener noreferrer"
-            color="primary"
-            class="mt-auto"
+            color="neutral"
+            variant="subtle"
             block
-          >
-            Visiter le site
-            <template #trailing>
-              <UIcon name="i-heroicons-arrow-right" />
-            </template>
-          </UButton>
+          />
+        </template>
+      </UCard>
+
+      <UCard
+        class="transition-all duration-300 hover:shadow-xl"
+        :ui="{
+          root: 'flex flex-col',
+          body: 'flex-grow',
+        }"
+      >
+        <div class="flex flex-col items-center">
+          <div class="h-32 flex items-center justify-center mb-6">
+            <img
+              src="/public/images/sponsors/hm.png"
+              alt="Hardware Modding logo"
+              class="max-h-full max-w-[80%] object-contain"
+            />
+          </div>
+
+          <h3 class="text-2xl font-bold mb-3">Hardware Modding</h3>
+
+          <p class="text-left text-muted mb-6">
+            HardwareModding est la référence pour tous les passionnés de personnalisation et
+            d'optimisation PC. Leur expertise et leurs produits exclusifs permettent de créer des
+            configurations uniques.
+          </p>
+        </div>
+
+        <template #footer>
+          <UButton
+            label="Visiter le site"
+            icon="lucide:external-link"
+            to="https://www.hardwaremodding.fr/"
+            target="_blank"
+            color="neutral"
+            variant="subtle"
+            block
+          />
         </template>
       </UCard>
     </div>

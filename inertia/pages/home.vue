@@ -97,9 +97,8 @@
         <UCard>
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="lucide:mouse" class="text-primary size-6" />
+              <UIcon name="lucide:computer" class="text-primary size-6" />
               <h3 class="text-xl font-semibold">Matériel</h3>
-              <UBadge label="Bientôt Disponible" variant="subtle" color="warning" />
             </div>
           </template>
           <p>
@@ -111,14 +110,14 @@
         <UCard class="md:col-span-2">
           <template #header>
             <div class="flex items-center gap-2">
-              <UIcon name="lucide:computer" class="text-primary size-6" />
-              <h3 class="text-xl font-semibold">HexaPC</h3>
+              <UIcon name="lucide:book" class="text-primary size-6" />
+              <h3 class="text-xl font-semibold">Guides</h3>
               <UBadge label="Bientôt Disponible" variant="subtle" color="warning" />
             </div>
           </template>
           <p>
-            Une gamme de PC testés et configurés pour offrir les meilleures performances sur Rainbow
-            Six, sans compromis.
+            Des guides et tutoriels complets pour maîtriser Rainbow Six Siege, de la configuration
+            optimale de votre PC aux stratégies avancées pour dominer vos adversaires.
           </p>
         </UCard>
       </div>
@@ -147,7 +146,7 @@
           to="https://fr.weareholy.com/"
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
         >
-          <img src="/public/images/sponsors/holy.avif" alt="Holy Logo" class="size-24" />
+          <img src="/public/images/sponsors/holy.png" alt="Holy Logo" />
           <span class="font-medium text-lg">Holy Energy</span>
         </ULink>
 
@@ -156,17 +155,17 @@
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
         >
           <div class="flex flex-col items-center gap-2">
-            <img src="/public/images/sponsors/msi.png" alt="Holy Logo" class="size-14" />
+            <img src="/public/images/sponsors/msi.png" alt="Msi Logo" />
             <span class="font-medium text-lg">MSI</span>
           </div>
         </ULink>
 
         <ULink
-          to="#"
+          to="https://hardwaremodding.fr/"
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
         >
           <div class="flex flex-col items-center gap-2">
-            <UIcon name="lucide:cpu" class="size-14 text-primary" />
+            <img src="/public/images/sponsors/hm.png" alt="Hardware Modding Logo" />
             <span class="font-medium text-lg">Hardware Modding</span>
           </div>
         </ULink>

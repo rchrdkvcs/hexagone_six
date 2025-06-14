@@ -58,7 +58,7 @@ function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
             Proposée par :
             <ULink
               :class="index === 0 ? 'text-elevated' : 'text-muted'"
-              :to="`/membres/${suggestion.user.userName.toLowerCase()}`"
+              :to="`/membres/${suggestion.user.userSlug}`"
               class="underline"
               >{{ suggestion.user.userName }}</ULink
             >
@@ -66,18 +66,6 @@ function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
         </h3>
 
         <div class="w-32 flex items-center justify-center p-1.5">
-          <UButton
-            @click="voteOnSuggestion(suggestion, 'down')"
-            :active="hasVoted(suggestion, 'down')"
-            :disabled="hasVoted(suggestion, 'down')"
-            icon="lucide:arrow-down"
-            variant="ghost"
-            color="neutral"
-            activeVariant="subtle"
-            activeColor="error"
-            class="cursor-pointer"
-          />
-          <span class="text-lg font-medium w-full text-center">{{ suggestion.voteRatio }}</span>
           <UButton
             @click="voteOnSuggestion(suggestion, 'up')"
             :active="hasVoted(suggestion, 'up')"
@@ -87,7 +75,17 @@ function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
             color="neutral"
             activeVariant="subtle"
             activeColor="success"
-            class="cursor-pointer"
+          />
+          <span class="text-lg font-medium w-full text-center">{{ suggestion.voteRatio }}</span>
+          <UButton
+            @click="voteOnSuggestion(suggestion, 'down')"
+            :active="hasVoted(suggestion, 'down')"
+            :disabled="hasVoted(suggestion, 'down')"
+            icon="lucide:arrow-down"
+            variant="ghost"
+            color="neutral"
+            activeVariant="subtle"
+            activeColor="error"
           />
         </div>
       </div>

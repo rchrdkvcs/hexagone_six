@@ -1,19 +1,20 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#users/models/user'
 import vine from '@vinejs/vine'
+import { computed } from 'vue'
 
 export default class ShowUserController {
   static validator = vine.compile(
     vine.object({
-      userName: vine.string().toLowerCase(),
+      userSlug: vine.string(),
     })
   )
 
   async render({ inertia, params }: HttpContext) {
-    const { userName } = await ShowUserController.validator.validate(params)
+    const { userSlug } = await ShowUserController.validator.validate(params)
 
     const userProfile = await User.query()
-      .where('userName', userName)
+      .where('userSlug', userSlug)
       .preload('posts', (query) => {
         query.orderBy('createdAt', 'desc')
       })
