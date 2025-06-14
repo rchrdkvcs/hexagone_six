@@ -17,6 +17,8 @@ import userRoutes from '#start/routes/user'
 import lanRoutes from '#start/routes/lan'
 import hexaboostRoutes from '#start/routes/hexaboost'
 
+const PaymentsController = () => import('../app/payments/controllers/payments_controller.js')
+
 const HomeController = () => import('../app/pages/controllers/home_controller.js')
 const SponsorsController = () => import('../app/pages/controllers/sponsors_controller.js')
 const PcClutchController = () => import('../app/pages/controllers/pc_clutch_controller.js')
@@ -34,5 +36,9 @@ router
 
     router.get('/partenaires', [SponsorsController, 'render'])
     router.get('/pc-clutch', [PcClutchController, 'render'])
+
+    router.post('/payments/create-checkout', [PaymentsController, 'checkout'])
+    router.get('/payment/success', [PaymentsController, 'success'])
+    router.get('/payment/cancel', [PaymentsController, 'cancel'])
   })
   .use(middleware.silentAuth())
