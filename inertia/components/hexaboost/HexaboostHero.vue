@@ -20,18 +20,21 @@
     />
 
     <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold">HexaBoost</h1>
+
     <p class="text-base md:text-lg text-muted max-w-2xl md:text-center mt-4">
       HexaBoost, c’est une optimisation complète de ton système, pensée par des experts techniques,
       et ajustée pour les exigences des joueurs compétitifs, avec une attention particulière portée
       à Rainbow Six Siege X
     </p>
+
     <p class="text-base md:text-lg text-muted max-w-2xl md:text-center mt-4">
       Pas de logiciel miracle, pas de promesses douteuses :
       <b>juste une intervention sérieuse, calibrée, et stable</b>, réalisée par des techniciens
       reconnus.
     </p>
+
     <UAlert
-      class="mt-4 bg-default w-fit"
+      class="mt-4 bg-muted w-fit"
       color="success"
       variant="subtle"
       icon="lucide:check-circle"
