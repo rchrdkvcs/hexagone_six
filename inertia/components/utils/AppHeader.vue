@@ -38,12 +38,7 @@ const navItems = ref<NavigationMenuItem[]>([
     {
       label: 'HexaBoost',
       icon: 'lucide:biceps-flexed',
-      to: '/hexaopti',
-      disabled: true,
-      badge: {
-        label: 'Bientôt disponible',
-        color: 'warning',
-      },
+      to: '/hexaboost',
     },
     {
       label: 'Partenaires',

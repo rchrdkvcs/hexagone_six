@@ -15,6 +15,7 @@ import adminRoutes from '#start/routes/admin'
 import hexacallRoutes from '#start/routes/hexacall'
 import userRoutes from '#start/routes/user'
 import lanRoutes from '#start/routes/lan'
+import hexaboostRoutes from '#start/routes/hexaboost'
 
 const HomeController = () => import('../app/pages/controllers/home_controller.js')
 const SponsorsController = () => import('../app/pages/controllers/sponsors_controller.js')
@@ -25,6 +26,7 @@ adminRoutes()
 userRoutes()
 hexacallRoutes()
 lanRoutes()
+hexaboostRoutes()
 
 router
   .group(() => {
