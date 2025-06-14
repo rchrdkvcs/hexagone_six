@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import { useUser } from '~/composables/use_user'
+import DiscordAuthPopup from '~/components/hexaboost/DiscordAuthPopup.vue'
 
-const form = useForm({
-  email: '',
-})
-
+const user = useUser().value
 const isLoading = ref(false)
 const error = ref('')
+const overlay = useOverlay()
+const authPopup = overlay.create(DiscordAuthPopup)
 
 async function checkout() {
-  if (!form.email) {
-    error.value = 'Veuillez entrer votre email'
+  if (!user || user.provider !== 'discord') {
+    authPopup.open()
     return
   }
 
@@ -27,17 +27,15 @@ async function checkout() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: form.email,
+        email: user.email,
       }),
     })
 
     const data = await response.json()
 
     if (data.url) {
-      // Redirect to Stripe Checkout
       window.location.href = data.url
     } else {
-      // Initialize Stripe Elements for custom checkout
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
 
       if (stripe) {
@@ -101,18 +99,7 @@ async function checkout() {
             </li>
           </ul>
 
-          <!-- Add email input for payment -->
-          <div class="w-full mt-4">
-            <UFormField :error="form.errors.email" label="Email" required>
-              <UInput
-                v-model="form.email"
-                class="w-full"
-                color="neutral"
-                placeholder="Adresse e-mail"
-                type="text"
-              />
-            </UFormField>
-
+          <div class="w-full">
             <p v-if="error" class="text-sm text-red-500 mt-2">{{ error }}</p>
           </div>
         </div>
@@ -133,11 +120,10 @@ async function checkout() {
             <p class="text-xs text-muted text-center">
               Paiement sécurisé par Stripe · Satisfaction garantie
             </p>
+            <p class="text-xs text-muted">Une connection avec Discord est requis</p>
           </div>
         </template>
       </UCard>
     </UContainer>
   </section>
 </template>
-
-<style scoped></style>

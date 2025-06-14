@@ -12,7 +12,8 @@
         <ol class="list-decimal pl-5 space-y-2">
           <li>
             Rejoignez notre
-            <ULink to="https://discord.gg/ABFsPxuYZr" class="underline">Discord</ULink>
+            <ULink to="https://discord.gg/ABFsPxuYZr" class="underline">Discord</ULink> en cliquant
+            sur le lien ci-dessous
           </li>
           <li>
             Ouvrez un ticket en soumettant vos informations :
@@ -23,8 +24,8 @@
             </ul>
           </li>
           <li>
-            Attendez que notre équipe revienne vers vous pour commencer votre optimisation
-            HexaBoost.
+            L'équipe <b>HardwareModding</b> de Snite prend le relai via le ticket créé sur leur
+            serveur discord
           </li>
         </ol>
       </div>
@@ -32,7 +33,7 @@
       <div class="flex flex-col gap-4 w-full max-w-lg">
         <UButton
           icon="simple-icons:discord"
-          label="Rejoindre le discord"
+          label="Rejoindre Optimisation by Snite"
           to="https://discord.gg/ABFsPxuYZr"
           size="xl"
           block
