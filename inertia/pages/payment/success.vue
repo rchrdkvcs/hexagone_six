@@ -11,8 +11,8 @@
         <h2 class="font-semibold text-lg mb-2">Prochaines étapes :</h2>
         <ol class="list-decimal pl-5 space-y-2">
           <li>
-            Rejoignez notre
-            <ULink to="https://discord.gg/ABFsPxuYZr" class="underline">Discord</ULink> en cliquant
+            Rejoignez le
+            <ULink to="https://discord.gg/cRf5kV4Ajz" class="underline">Discord</ULink> en cliquant
             sur le lien ci-dessous
           </li>
           <li>
@@ -24,8 +24,8 @@
             </ul>
           </li>
           <li>
-            L'équipe <b>HardwareModding</b> de Snite prend le relai via le ticket créé sur leur
-            serveur discord
+            L'équipe <b>Optimisation by Snite</b> prend le relai via le ticket créé sur leur serveur
+            discord
           </li>
         </ol>
       </div>
@@ -34,7 +34,7 @@
         <UButton
           icon="simple-icons:discord"
           label="Rejoindre Optimisation by Snite"
-          to="https://discord.gg/ABFsPxuYZr"
+          to="https://discord.gg/cRf5kV4Ajz"
           size="xl"
           block
         />
