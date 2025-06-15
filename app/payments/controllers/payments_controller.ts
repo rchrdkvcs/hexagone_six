@@ -45,8 +45,6 @@ export default class PaymentsController {
     try {
       const customerData = await this.stripeService.getCustomerFromSession(sessionId)
 
-      console.log('Customer data:', customerData)
-
       const salesEmbed = this.discordService
         .createEmbed()
         .setTitle('🎉 Nouvelle commande HexaBoost')
