@@ -8,7 +8,7 @@ import PcCard from '~/components/materials/PcCard.vue'
       <h2
         class="text-3xl sm:text-4xl lg:text-5xl text-pretty tracking-tight font-bold text-highlighted text-center"
       >
-        Des PC haut de gamme pour Rainbow Six Siege
+        Des PC conçus pour Rainbow Six : Siege X
       </h2>
 
       <p class="text-base sm:text-lg text-muted text-center text-balance mt-6">

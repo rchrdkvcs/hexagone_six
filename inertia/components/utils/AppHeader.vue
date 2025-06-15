@@ -4,16 +4,44 @@ import { useUser } from '~/composables/use_user'
 import { useAccess } from '~/composables/use_access'
 import AppLogo from '~/components/utils/AppLogo.vue'
 
-import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui'
+import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 
 const user = useUser()
 
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
-      label: 'Lan',
-      icon: 'lucide:gamepad-2',
-      to: '/lan',
+      label: 'Compétition',
+      icon: 'lucide:trophy',
+      children: [
+        {
+          label: 'Lan',
+          icon: 'lucide:gamepad-2',
+          to: '/lan',
+        },
+        {
+          label: 'Ranking (bientôt)',
+          icon: 'lucide:bar-chart-2',
+          to: '/ranking',
+          disabled: true,
+        },
+      ],
+    },
+    {
+      label: 'Matériel',
+      icon: 'lucide:mouse',
+      children: [
+        {
+          label: 'HexaBoost',
+          icon: 'lucide:biceps-flexed',
+          to: '/hexaboost',
+        },
+        {
+          label: 'PC Clutch',
+          icon: 'lucide:computer',
+          to: '/pc-clutch',
+        },
+      ],
     },
     {
       label: 'HexaCall',
@@ -21,24 +49,14 @@ const navItems = ref<NavigationMenuItem[]>([
       to: '/hexacall',
     },
     {
-      label: 'PC Clutch',
-      icon: 'lucide:computer',
-      to: '/pc-clutch',
-    },
-    {
-      label: 'Matériel',
-      icon: 'lucide:mouse',
-      to: '/materiel',
+      label: 'Guides',
+      icon: 'lucide:book-open',
+      to: '/guides',
       disabled: true,
       badge: {
-        label: 'Bientôt disponible',
+        label: 'Bientôt',
         color: 'warning',
       },
-    },
-    {
-      label: 'HexaBoost',
-      icon: 'lucide:biceps-flexed',
-      to: '/hexaboost',
     },
     {
       label: 'Partenaires',
