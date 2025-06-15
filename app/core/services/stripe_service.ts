@@ -58,7 +58,7 @@ export class StripeService {
     }
 
     return this.stripe.checkout.sessions.create({
-      payment_method_types: ['card', 'paypal', 'link'],
+      payment_method_types: ['card', 'link'],
       line_items: [
         {
           price_data: {
@@ -74,12 +74,10 @@ export class StripeService {
       mode: 'payment',
       success_url: successUrl,
       cancel_url: cancelUrl,
-      customer: customerId, // Utiliser l'ID du customer au lieu de customer_email
-      customer_email: customerId ? undefined : customerEmail, // Fallback si pas de customer
-      phone_number_collection: { enabled: true }, // Collecter le numéro de téléphone
-      shipping_address_collection: {
-        allowed_countries: ['FR', 'BE', 'CH', 'LU', 'MC'], // Limiter aux pays francophones
-      },
+      customer: customerId,
+      customer_email: customerId ? undefined : customerEmail,
+      phone_number_collection: { enabled: true },
+      billing_address_collection: 'required',
     })
   }
 
@@ -93,7 +91,7 @@ export class StripeService {
     try {
       // Retrieve checkout session with expanded details
       const session = await this.stripe.checkout.sessions.retrieve(sessionId, {
-        expand: ['customer', 'payment_intent', 'customer.shipping', 'customer.invoice_settings'],
+        expand: ['customer', 'payment_intent', 'customer_details'],
       })
 
       // Prepare basic session data
@@ -119,13 +117,15 @@ export class StripeService {
         // Get billing address from payment method if available
         let billingAddress = customer.address
 
+        const name = customer.name || session.customer_details?.name || null
+
         // Get phone number either from customer or session details
         const phone = customer.phone || session.customer_details?.phone
 
         return {
           id: customer.id,
           email: customer.email,
-          name: customer.name,
+          name: name,
           phone: phone,
           address: billingAddress,
           billing_address: billingAddress, // Explicit billing address field
