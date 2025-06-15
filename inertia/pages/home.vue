@@ -1,4 +1,68 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { Link } from '@inertiajs/vue3'
+
+interface FonctionItem {
+  title: string
+  description: string
+  icon: string
+  link?: string
+  badge?: {
+    label: string
+    variant: 'subtle' | 'solid' | 'outline' | 'soft'
+    color: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info'
+  }
+}
+
+const fonctionItems: FonctionItem[] = [
+  {
+    title: 'La LAN Hexagone 6',
+    description:
+      "L'événement compétitif incontournable à Paris, rassemblant le meilleur de la scène francophone.",
+    icon: 'lucide:gamepad-2',
+    link: '/lan',
+  },
+  {
+    title: 'HexaCall',
+    description:
+      'Notre outil participatif de naming de maps, où les joueurs proposent, votent et apprennent les meilleurs calls sur toutes les cartes.',
+    icon: 'lucide:map',
+  },
+  {
+    title: 'HexaBoost',
+    description:
+      "Service d'optimisation PC sur-mesure pour gagner en fluidité et en stabilité sur Siege X, en collaboration avec des experts techniques.",
+    icon: 'lucide:settings',
+  },
+  {
+    title: 'Matériel',
+    description:
+      'Une sélection de périphériques et accessoires optimisés pour Rainbow Six Siege, testés et validés par les meilleurs joueurs de la communauté.',
+    icon: 'lucide:computer',
+  },
+  {
+    title: 'Guides',
+    description:
+      'Des guides et tutoriels complets pour maîtriser Siege X, de la configuration optimale de votre PC aux stratégies avancées.',
+    icon: 'lucide:book',
+    badge: {
+      label: 'Bientôt Disponible',
+      variant: 'subtle',
+      color: 'warning',
+    },
+  },
+  {
+    title: 'Ranking',
+    description:
+      'Un système de classement transparent et équitable pour suivre votre progression et celle de vos amis.',
+    icon: 'lucide:book',
+    badge: {
+      label: 'Bientôt Disponible',
+      variant: 'subtle',
+      color: 'warning',
+    },
+  },
+]
+</script>
 
 <template>
   <UContainer
@@ -54,71 +118,27 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 z-0">
-        <UCard>
-          <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="lucide:gamepad-2" class="text-primary size-6" />
-              <h3 class="text-xl font-semibold">La LAN Hexagone 6</h3>
-            </div>
-          </template>
-          <p>
-            L'événement compétitif incontournable à Paris, rassemblant le meilleur de la scène
-            francophone.
-          </p>
-        </UCard>
-
-        <UCard>
-          <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="lucide:map" class="text-primary size-6" />
-              <h3 class="text-xl font-semibold">HexaCall</h3>
-            </div>
-          </template>
-          <p>
-            Notre outil participatif de naming de maps, où les joueurs proposent, votent et
-            apprennent les meilleurs calls sur toutes les cartes.
-          </p>
-        </UCard>
-
-        <UCard>
-          <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="lucide:settings" class="text-primary size-6" />
-              <h3 class="text-xl font-semibold">HexaBoost</h3>
-            </div>
-          </template>
-          <p>
-            Service d'optimisation PC sur-mesure pour gagner en fluidité et en stabilité sur Siege
-            X, en collaboration avec des experts techniques.
-          </p>
-        </UCard>
-
-        <UCard>
-          <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="lucide:computer" class="text-primary size-6" />
-              <h3 class="text-xl font-semibold">Matériel</h3>
-            </div>
-          </template>
-          <p>
-            Une sélection de périphériques et accessoires optimisés pour Rainbow Six Siege, testés
-            et validés par les meilleurs joueurs de la communauté.
-          </p>
-        </UCard>
-
-        <UCard class="md:col-span-2">
-          <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="lucide:book" class="text-primary size-6" />
-              <h3 class="text-xl font-semibold">Guides</h3>
-              <UBadge label="Bientôt Disponible" variant="subtle" color="warning" />
-            </div>
-          </template>
-          <p>
-            Des guides et tutoriels complets pour maîtriser Rainbow Six Siege, de la configuration
-            optimale de votre PC aux stratégies avancées pour dominer vos adversaires.
-          </p>
-        </UCard>
+        <Link v-for="fonction in fonctionItems" :href="fonction.link as string">
+          <UCard
+            class="hover:bg-muted hover:scale-102 cursor-pointer transition duration-200 ease-in-out"
+          >
+            <template #header>
+              <div class="flex items-center gap-2">
+                <UIcon name="lucide:gamepad-2" class="text-primary size-6" />
+                <h3 class="text-xl font-semibold">{{ fonction.title }}</h3>
+                <UBadge
+                  v-if="fonction.badge?.label"
+                  :label="fonction.badge.label"
+                  :variant="fonction.badge.variant"
+                  :color="fonction.badge.color"
+                />
+              </div>
+            </template>
+            <p>
+              {{ fonction.description }}
+            </p>
+          </UCard>
+        </Link>
       </div>
     </UContainer>
   </section>
