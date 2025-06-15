@@ -1,16 +1,21 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Suggestion from '#suggestions/models/suggestion'
 import Post from '#users/models/post'
+import DiscordService, { DiscordColors } from '#core/services/discord_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class StoreSuggestionController {
+  constructor(private discordService: DiscordService) {}
+
   async execute({ response, request, auth }: HttpContext) {
     try {
+      const user = await auth.authenticate()
       const data = request.only(['markerId', 'label'])
-      const user = auth.user
 
       const suggestion = await Suggestion.create({
         ...data,
-        userId: user?.id || null,
+        userId: user.id || null,
         isApproved: false,
         upVote: 0,
         downVote: 0,
@@ -21,13 +26,26 @@ export default class StoreSuggestionController {
       const map = await marker.related('map').query().firstOrFail()
 
       await Post.create({
-        userId: user?.id,
+        userId: user.id,
         category: 'suggestion',
         label: data.label,
         markerName: marker.label,
         mapName: map.name,
         mapSlug: map.slug,
       })
+
+      await this.discordService
+        .createEmbed()
+        .setTitle('Nouvelle suggestion')
+        .setDescription(`Une nouvelle suggestion a été créée par **${user.userName}**.`)
+        .addField('Suggestion', data.label)
+        .addField('Call', marker.label)
+        .addField('Map - Niveau', map.name + ' - ' + marker.stage)
+        .addField('User ID', user.id)
+        .setFooter(`Suggestion ID: ${suggestion.id}`)
+        .setColor(DiscordColors.SUCCESS)
+        .setTimestamp()
+        .send()
 
       await suggestion.load('user')
 

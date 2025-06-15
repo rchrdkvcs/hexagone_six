@@ -2,8 +2,13 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Suggestion from '#suggestions/models/suggestion'
 import Vote from '#votes/models/vote'
 import Post from '#users/models/post'
+import DiscordService, { DiscordColors } from '#core/services/discord_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class UpdateSuggestionController {
+  constructor(private discordService: DiscordService) {}
+
   async execute({ response, request, params, auth }: HttpContext) {
     try {
       const data = request.only(['upVote', 'downVote', 'isApproved'])
@@ -97,6 +102,21 @@ export default class UpdateSuggestionController {
           voteAction,
         })
       }
+
+      await this.discordService
+        .createEmbed()
+        .setTitle('Mise à jour de suggestion')
+        .setDescription(`La suggestion **${suggestion.label}** a été mise à jour.`)
+        .addField('User', auth.user ? auth.user.userName : 'Anonyme')
+        .addField('Suggestion', suggestion.label)
+        .addField('Action', voteAction)
+        .addField('Map - Niveau', `${map.name} - ${marker.stage}`)
+        .addField('Call actuelle', marker.label)
+        .addField('User ID', userId ? userId : userIp)
+        .setFooter(`Suggestion ID: ${suggestion.id}`)
+        .setColor(DiscordColors.SUCCESS)
+        .setTimestamp()
+        .send()
 
       return response.status(200).json(suggestion)
     } catch (error) {

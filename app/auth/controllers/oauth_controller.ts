@@ -1,7 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#users/models/user'
+import DiscordService, { DiscordColors } from '#core/services/discord_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class OauthController {
+  constructor(private discordService: DiscordService) {}
+
   public async render({ params, ally, session, request }: HttpContext) {
     const { provider } = params
 
@@ -47,6 +52,20 @@ export default class OauthController {
     )
 
     await auth.use('web').login(user)
+
+    await this.discordService
+      .createEmbed()
+      .setThumbnail(user.avatarUrl)
+      .setTitle('Nouvelle connexion')
+      .setDescription(`Un utilisateur s'est connecté à son compte.`)
+      .addField('Provider', user.provider)
+      .addField('Username', user.userName)
+      .addField('Email', user.email)
+      .addField('ID', user.id)
+      .setFooter('User Login Notification')
+      .setColor(DiscordColors.SUCCESS)
+      .setTimestamp()
+      .send(undefined)
 
     const returnUrl = session.get('returnUrl', '/')
     session.forget('returnUrl')

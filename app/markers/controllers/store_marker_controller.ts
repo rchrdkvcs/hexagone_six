@@ -3,8 +3,13 @@ import Marker from '#markers/models/marker'
 import vine from '@vinejs/vine'
 import Post from '#users/models/post'
 import Map from '#maps/models/map'
+import DiscordService, { DiscordColors } from '#core/services/discord_service'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class StoreMarkerController {
+  constructor(private discordService: DiscordService) {}
+
   static validator = vine.compile(
     vine.object({
       mapId: vine.string().uuid(),
@@ -50,6 +55,19 @@ export default class StoreMarkerController {
         mapName: map.name,
         mapSlug: map.slug,
       })
+
+      await this.discordService
+        .createEmbed()
+        .setTitle('Nouveau marqueur ajouté')
+        .setDescription(`Un nouveau marqueur a été ajouté par **${user.userName}**`)
+        .addField('Label', data.label)
+        .addField('Map - Niveau', map.name + ' - ' + data.stage.toString())
+        .addField('Type', data.type)
+        .addField('User ID', user.id)
+        .setFooter(`ID: ${marker.id}`)
+        .setColor(DiscordColors.SUCCESS)
+        .setTimestamp()
+        .send()
 
       return response.status(201).json({
         success: true,
