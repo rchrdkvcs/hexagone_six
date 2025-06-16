@@ -4,9 +4,11 @@ import AdminSidebar from '~/components/admin/AdminSidebar.vue'
 
 <template>
   <UApp>
-    <div class="grid grid-cols-[256px_1fr] h-screen">
+    <div class="grid grid-cols-[256px_1fr] h-screen bg-default">
       <AdminSidebar />
-      <slot />
+      <main class="size-full overflow-x-scroll">
+        <slot />
+      </main>
     </div>
   </UApp>
 </template>
