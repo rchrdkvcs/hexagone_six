@@ -5,6 +5,14 @@ defineProps<{
   levels: Map['levels']
   currentLevel: number
 }>()
+
+const emit = defineEmits<{
+  stageChange: [level: number]
+}>()
+
+const handleStageChange = (level: number) => {
+  emit('stageChange', level)
+}
 </script>
 
 <template>
@@ -21,7 +29,7 @@ defineProps<{
       class="rounded-full hidden md:block"
       color="neutral"
       variant="ghost"
-      @click="$emit('stageChange', level.level)"
+      @click="handleStageChange(level.level)"
     />
 
     <UDropdownMenu
@@ -29,7 +37,7 @@ defineProps<{
       :items="
         levels.map((level) => ({
           label: level.name,
-          click: () => $emit('stageChange', level.level),
+          onSelect: () => handleStageChange(level.level),
         }))
       "
       :ui="{

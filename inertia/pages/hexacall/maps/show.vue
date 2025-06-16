@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Head } from '@inertiajs/vue3'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useUser } from '~/composables/use_user'
 import Maps from '~/layouts/maps.vue'
 import MarkerModal from '~/components/hexacall/maps/MarkerModal.vue'
@@ -151,6 +151,7 @@ const handleLabelView = () => {
 }
 
 const handleStageChange = (stage: number) => {
+  console.log('handleStageChange', stage)
   currentLevel.value = stage
   newPolygone.value = null
 }
