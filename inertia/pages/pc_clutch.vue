@@ -81,7 +81,7 @@ import PcCard from '~/components/materials/PcCard.vue'
           pu: 'MSI MAG A750GL PCIe 5 – 750W',
           case: 'MSI MPG GUNGNIR 110R',
         }"
-        :sub-description="`Windows 11 (version d’essai) préinstallé /n/n Rainbow Six Siege préinstallé`"
+        :sub-description="`Windows 11 (version d’essai) préinstallé, Rainbow Six Siege préinstallé`"
         :performance="[
           'Fluidité constante sur Siege X et sur les jeux les plus exigeantes.',
           'Temps de réponse système réduit à l’extrême.',
@@ -105,9 +105,9 @@ import PcCard from '~/components/materials/PcCard.vue'
           pu: 'MSI MAG A750GL 750W 80+ Gold',
           case: 'MSI MPG GUNGNIR 110R',
         }"
-        :sub-description="`Windows 11 (version d’essai) préinstallé /n/n Rainbow Six Siege préinstallé`"
+        :sub-description="`Windows 11 (version d’essai) préinstallé, Rainbow Six Siege préinstallé`"
         :performance="[
-          'Machine taillée pour la performance extrême.\n',
+          'Machine taillée pour la performance extrême.',
           'Parfait pour le multitâche lourd : jeu + stream + enregistrement + overlay.',
           'Latence minimale, silence maîtrisé, aucune concession.',
         ]"
