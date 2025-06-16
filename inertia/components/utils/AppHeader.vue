@@ -2,12 +2,13 @@
 import { computed, ref } from 'vue'
 import { useUser } from '~/composables/use_user'
 import { useAccess } from '~/composables/use_access'
+import { onClickOutside } from '@vueuse/core'
+import { router } from '@inertiajs/vue3'
 import AppLogo from '~/components/utils/AppLogo.vue'
 
 import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui'
 
 const user = useUser()
-
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
@@ -65,7 +66,6 @@ const navItems = ref<NavigationMenuItem[]>([
     },
   ],
 ])
-
 const profileItems = ref<DropdownMenuItem[][]>([
   [
     {
@@ -101,12 +101,22 @@ const profileItems = ref<DropdownMenuItem[][]>([
     },
   ],
 ])
-
 const isMobileMenuOpen = ref(false)
+const mobileMenuRef = ref<HTMLElement | null>(null)
 
-function toggleMobileMenu() {
+const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
+
+router.on('start', () => {
+  isMobileMenuOpen.value = false
+})
+
+onClickOutside(mobileMenuRef, () => {
+  if (isMobileMenuOpen.value) {
+    isMobileMenuOpen.value = false
+  }
+})
 </script>
 
 <template>
@@ -187,6 +197,7 @@ function toggleMobileMenu() {
     </UContainer>
 
     <div
+      ref="mobileMenuRef"
       v-if="isMobileMenuOpen"
       class="md:hidden bg-default/90 backdrop-blur px-4 border-b border-default"
     >
