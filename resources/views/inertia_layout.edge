@@ -9,6 +9,15 @@
 
   <title inertia>Hexagone Six</title>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBMLXMLCHL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NBMLXMLCHL');
+  </script>
+
   @vite(['inertia/app/app.ts', `inertia/pages/${page.component}.vue`])
   @inertiaHead()
   @stack('dumper')
