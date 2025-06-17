@@ -159,7 +159,7 @@ onClickOutside(mobileMenuRef, () => {
         :items="navItems"
         content-orientation="vertical"
         variant="link"
-        class="hidden md:flex"
+        class="hidden lg:flex"
       />
 
       <div class="flex items-center justify-end md:flex-1 gap-1.5">
@@ -199,7 +199,7 @@ onClickOutside(mobileMenuRef, () => {
     <div
       ref="mobileMenuRef"
       v-if="isMobileMenuOpen"
-      class="md:hidden bg-default/90 backdrop-blur px-4 border-b border-default"
+      class="lg:hidden bg-default/90 backdrop-blur px-4 border-b border-default"
     >
       <UNavigationMenu :items="navItems" class="mb-4" orientation="vertical" variant="link" />
     </div>

@@ -26,24 +26,28 @@ const fonctionItems: FonctionItem[] = [
     description:
       'Notre outil participatif de naming de maps, où les joueurs proposent, votent et apprennent les meilleurs calls sur toutes les cartes.',
     icon: 'lucide:map',
+    link: '/hexacall',
   },
   {
     title: 'HexaBoost',
     description:
       "Service d'optimisation PC sur-mesure pour gagner en fluidité et en stabilité sur Siege X, en collaboration avec des experts techniques.",
     icon: 'lucide:settings',
+    link: '/hexaboost',
   },
   {
-    title: 'Matériel',
+    title: 'PC Clutch',
     description:
-      'Une sélection de périphériques et accessoires optimisés pour Rainbow Six Siege, testés et validés par les meilleurs joueurs de la communauté.',
+      'Une sélection de PC optimisés pour Rainbow Six Siege, testés et validés par les meilleurs joueurs de la communauté.',
     icon: 'lucide:computer',
+    link: '/pc-clutch',
   },
   {
     title: 'Guides',
     description:
       'Des guides et tutoriels complets pour maîtriser Siege X, de la configuration optimale de votre PC aux stratégies avancées.',
     icon: 'lucide:book',
+    link: '/',
     badge: {
       label: 'Bientôt Disponible',
       variant: 'subtle',
@@ -55,6 +59,7 @@ const fonctionItems: FonctionItem[] = [
     description:
       'Un système de classement transparent et équitable pour suivre votre progression et celle de vos amis.',
     icon: 'lucide:book',
+    link: '/',
     badge: {
       label: 'Bientôt Disponible',
       variant: 'subtle',
