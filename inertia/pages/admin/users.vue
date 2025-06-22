@@ -1,12 +1,18 @@
 <script lang="ts" setup>
-import { h, resolveComponent } from 'vue'
+import { h, ref, resolveComponent, useTemplateRef } from 'vue'
+import { upperFirst } from 'scule'
 
+import { Column } from '@tanstack/vue-table'
 import type { TableColumn } from '@nuxt/ui'
 import type User from '#users/models/user'
 
 defineProps<{
   users: User[]
 }>()
+
+const table = useTemplateRef('table')
+const globalFilter = ref('')
+
 const UAvatar = resolveComponent('UAvatar')
 const ULink = resolveComponent('ULink')
 const UButton = resolveComponent('UButton')
@@ -16,7 +22,7 @@ const UDropdownMenu = resolveComponent('UDropdownMenu')
 const columns: TableColumn<User>[] = [
   {
     accessorKey: 'userName',
-    header: 'Utilisateur',
+    header: ({ column }) => getHeader(column, 'Utilisateur'),
     cell: ({ row }) => {
       const user = row.original as User
       return h('div', { class: 'flex items-center gap-2' }, [
@@ -32,14 +38,14 @@ const columns: TableColumn<User>[] = [
   },
   {
     accessorKey: 'email',
-    header: 'Email',
+    header: ({ column }) => getHeader(column, 'Email'),
   },
   {
     accessorKey: 'provider',
-    header: 'Fournisseur',
+    header: ({ column }) => getHeader(column, 'Fournisseur'),
   },
   {
-    accessorKey: 'roles',
+    id: 'roles',
     header: 'Rôles',
     cell: ({ row }) => {
       const user = row.original as User
@@ -76,7 +82,7 @@ const columns: TableColumn<User>[] = [
             'content': {
               align: 'end',
             },
-            'items': getRowItems(row),
+            'items': getRowActions(row),
             'aria-label': 'Actions dropdown',
           },
           () =>
@@ -93,40 +99,114 @@ const columns: TableColumn<User>[] = [
   },
 ]
 
-function getRowItems(row: any) {
+function getRowActions(row: any) {
   const user = row.original as User
   return [
-    {
-      label: 'Voir ses calls',
-      icon: 'lucide:map-pin',
-      onClick: () => {
-        window.location.href = `/admin/calls?userId=${user.id}`
+    [
+      {
+        label: 'Voir ses calls',
+        icon: 'lucide:map-pin',
+        onClick: () => {
+          window.location.href = `/admin/calls?userId=${user.id}`
+        },
       },
-    },
-    {
-      label: 'Voir ses suggestions',
-      icon: 'lucide:message-square',
-      onClick: () => {
-        window.location.href = `/admin/suggestions?userId=${user.id}`
+      {
+        label: 'Voir ses suggestions',
+        icon: 'lucide:message-square',
+        onClick: () => {
+          window.location.href = `/admin/suggestions?userId=${user.id}`
+        },
       },
-    },
-    {
-      label: 'Voir ses votes',
-      icon: 'lucide:thumbs-up',
-      onClick: () => {
-        window.location.href = `/admin/votes?userId=${user.id}`
+      {
+        label: 'Voir ses votes',
+        icon: 'lucide:thumbs-up',
+        onClick: () => {
+          window.location.href = `/admin/votes?userId=${user.id}`
+        },
       },
-    },
+    ],
+    [
+      {
+        label: 'Supprimer l’utilisateur',
+        icon: 'lucide:trash-2',
+        color: 'error',
+        onClick: () => {
+          window.location.href = `/admin/votes?userId=${user.id}`
+        },
+      },
+    ],
   ]
+}
+
+function getHeader(column: Column<User>, label: string) {
+  return h(UButton, {
+    color: 'neutral',
+    variant: 'ghost',
+    label: `${label}`,
+    icon:
+      column.getIsSorted() === 'asc'
+        ? 'lucide:arrow-up-narrow-wide'
+        : column.getIsSorted() === 'desc'
+          ? 'lucide:arrow-down-wide-narrow'
+          : 'lucide:arrow-down-up',
+    onClick: () => column.toggleSorting(),
+  })
 }
 </script>
 
 <template>
-  <div class="size-full p-6 flex flex-col gap-4">
-    <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Utilisateurs</h1>
-      <span class="text-lg font-semibold">{{ users.length }}</span>
+  <div class="divide-y divide-accented flex flex-col h-screen">
+    <div class="flex items-center justify-between gap-2 px-4 py-3.5">
+      <h1 class="text-2xl font-bold">Calls</h1>
+
+      <UInput
+        type="search"
+        icon="i-lucide-search"
+        class="max-w-md min-w-xs w-full"
+        placeholder="Rechercher quelques chose..."
+        v-model="globalFilter"
+      />
+
+      <UDropdownMenu
+        :items="
+          table?.tableApi
+            ?.getAllColumns()
+            .filter((column) => column.getCanHide())
+            .map((column) => ({
+              label: upperFirst(column.id),
+              type: 'checkbox' as const,
+              checked: column.getIsVisible(),
+              onUpdateChecked(checked: boolean) {
+                table?.tableApi?.getColumn(column.id)?.toggleVisibility(checked)
+              },
+              onSelect(e?: Event) {
+                e?.preventDefault()
+              },
+            }))
+        "
+        :content="{ align: 'end' }"
+        :ui="{ content: 'z-50' }"
+      >
+        <UButton
+          label="Colonnes"
+          color="neutral"
+          variant="outline"
+          trailing-icon="i-lucide-chevron-down"
+        />
+      </UDropdownMenu>
     </div>
-    <UTable :data="users" :columns="columns" class="bg-muted rounded-lg w-full" />
+
+    <UTable
+      ref="table"
+      :data="users"
+      :columns="columns"
+      sticky
+      class="flex-grow overflow-auto"
+      v-model:global-filter="globalFilter"
+    />
+
+    <div class="px-4 py-3.5 text-sm text-muted">
+      {{ table?.tableApi?.getFilteredRowModel().rows.length || 0 }} résultats trouvés
+    </div>
   </div>
 </template>

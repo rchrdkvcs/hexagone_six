@@ -6,7 +6,7 @@ import AdminSidebar from '~/components/admin/AdminSidebar.vue'
   <UApp>
     <div class="grid grid-cols-[256px_1fr] h-screen bg-default">
       <AdminSidebar />
-      <main class="size-full overflow-x-scroll">
+      <main class="w-full max-h-screen h-screen">
         <slot />
       </main>
     </div>
