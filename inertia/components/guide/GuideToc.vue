@@ -18,7 +18,7 @@ onMounted(() => {
       }
     },
     {
-      rootMargin: '0px 0px -70% 0px', // déclenche quand le haut de l'élément entre dans le viewport
+      rootMargin: '0px 0px -70% 0px',
       threshold: 0,
     }
   )
@@ -31,9 +31,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <aside class="hidden md:block sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto">
-    <h2 class="text-xs uppercase font-bold mb-2">Sommaire</h2>
-    <nav v-html="toc" class="toc text-sm text-muted" />
+  <aside
+    class="hidden md:block sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pr-2"
+  >
+    <h2 class="text-xs uppercase font-bold mb-4 tracking-wider">Sommaire</h2>
+    <nav v-html="toc" class="toc text-sm" />
   </aside>
 </template>
 
@@ -42,22 +44,28 @@ onMounted(() => {
 @reference '@nuxt/ui';
 
 :deep(.toc ul) {
-  @apply space-y-1 pl-2;
+  @apply space-y-2 pl-1;
 }
 
 :deep(.toc li) {
-  @apply pl-2;
+  @apply relative;
 }
 
 :deep(.toc a) {
-  @apply block hover:text-primary transition-colors;
+  @apply block py-1 px-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 text-gray-600 dark:text-gray-400;
 }
 
 :deep(.toc a[href='#{{ activeId }}']) {
-  @apply text-primary font-medium;
+  @apply text-primary font-medium bg-primary/5 dark:bg-primary/10;
+  position: relative;
+}
+
+:deep(.toc a[href='#{{ activeId }}'])::before {
+  content: '';
+  @apply absolute left-0 top-0 h-full w-0.5 bg-primary rounded-full;
 }
 
 :deep(.toc li > ul) {
-  @apply ml-2 border-l border-gray-200 dark:border-gray-700 pl-2;
+  @apply mt-1 mb-2 ml-3 pl-2 border-l border-gray-100 dark:border-gray-800;
 }
 </style>

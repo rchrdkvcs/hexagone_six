@@ -10,12 +10,12 @@ defineProps<{
 </script>
 
 <template>
-  <div class="size-full bg-default">
-    <UContainer class="grid grid-cols-1 md:grid-cols-[256px_1fr]">
-      <GuideToc :toc="contents.toc" />
-      <div v-html="contents.html" class="markdown-content prose dark:prose-invert" />
+  <section class="relative bg-default py-8 md:py-16 xl:py-24">
+    <UContainer class="grid grid-cols-1 md:grid-cols-[320px_768px] gap-8 w-fit mx-auto">
+      <GuideToc :toc="contents.toc" class="hidden md:block z-0" />
+      <div v-html="contents.html" class="markdown-content z-0" />
     </UContainer>
-  </div>
+  </section>
 </template>
 
 <style>

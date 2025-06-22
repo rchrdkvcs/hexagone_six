@@ -85,6 +85,12 @@ echo "Hello World"
 
 ---
 
+:::alert
+Ce fichier sert de benchmark pour tester les fonctionnalités Markdown.
+:::
+
+---
+
 ## Images
 
 ![Markdown Logo](https://markdown-here.com/img/icon256.png)

@@ -126,9 +126,8 @@
 
 /* Blockquotes avec design moderne */
 .markdown-content blockquote {
-  @apply border-l-4 border-primary-500 pl-6 py-2 mb-6;
-  @apply bg-gray-50 dark:bg-gray-900/50 rounded-r-lg;
-  @apply italic text-gray-600 dark:text-gray-400;
+  @apply border-l-4 border-default pl-4 mb-6;
+  @apply italic text-muted;
 }
 
 .markdown-content blockquote p {
@@ -190,7 +189,7 @@
 
 /* Images avec style responsive */
 .markdown-content img {
-  @apply max-w-full h-auto rounded-lg mb-6;
+  @apply max-w-full h-auto rounded-lg mb-8 w-full;
   @apply shadow-md border border-gray-200 dark:border-gray-800;
 }
 
@@ -339,4 +338,28 @@
 /* Equations mathématiques (KaTeX style override, facultatif si tu utilises une lib CSS à part) */
 .markdown-content .katex {
   @apply text-base;
+}
+
+.alert {
+  @apply overflow-hidden w-full rounded-lg p-4 flex gap-2.5 my-4 font-medium;
+}
+
+.alert-tip {
+  @apply text-highlighted bg-elevated/50;
+}
+
+.alert-info {
+  @apply text-info bg-info/10;
+}
+
+.alert-warning {
+  @apply text-warning bg-warning/10;
+}
+
+.alert-error {
+  @apply text-error bg-error/10;
+}
+
+.alert-success {
+  @apply text-success bg-success/10;
 }
