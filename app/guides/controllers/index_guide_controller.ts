@@ -9,7 +9,7 @@ export default class IndexGuideController {
   constructor(private markdownCompiler: MarkdownCompiler) {}
 
   async render({ inertia }: HttpContext) {
-    const filePath = app.makePath('app/guides/content/comment-attaquer.md')
+    const filePath = app.makePath('public/content/comment-attaquer.md')
     const markdownContent = fs.readFileSync(filePath, 'utf-8')
 
     const htmlContent = await this.markdownCompiler.toHtml(markdownContent)
