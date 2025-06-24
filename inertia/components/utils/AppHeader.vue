@@ -53,11 +53,6 @@ const navItems = ref<NavigationMenuItem[]>([
       label: 'Guides',
       icon: 'lucide:book-open',
       to: '/guides',
-      disabled: true,
-      badge: {
-        label: 'Bientôt',
-        color: 'warning',
-      },
     },
     {
       label: 'Partenaires',
