@@ -1,56 +1,10 @@
 <script setup lang="ts">
 import GuideCard from '~/components/guide/GuideCard.vue'
+import type Guide from '#guides/models/guide'
 
-const guides = [
-  {
-    title: 'Guide de démarrage rapide',
-    description: 'Tout ce que vous devez savoir pour commencer sur Siege X.',
-    slug: 'guide-demarrage-rapide',
-    imageUrl: '/images/guide/1.jpg',
-    isNew: true,
-    price: 0,
-  },
-  {
-    title: 'Stratégies avancées pour les cartes populaires',
-    description: 'Découvrez les meilleures stratégies pour dominer vos adversaires.',
-    slug: 'strategies-avancees-cartes-populaires',
-    imageUrl: '/images/guide/2.png',
-    isNew: false,
-    price: 0,
-  },
-  {
-    title: 'Stratégies avancées pour les cartes populaires',
-    description: 'Découvrez les meilleures stratégies pour dominer vos adversaires.',
-    slug: 'strategies-avancees-cartes-populaires',
-    imageUrl: '/images/guide/2.png',
-    isNew: false,
-    price: 14.99,
-  },
-  {
-    title: 'Guide de démarrage rapide',
-    description: 'Tout ce que vous devez savoir pour commencer sur Siege X.',
-    slug: 'guide-demarrage-rapide',
-    imageUrl: '/images/guide/1.jpg',
-    isNew: true,
-    price: 0,
-  },
-  {
-    title: 'Stratégies avancées pour les cartes populaires',
-    description: 'Découvrez les meilleures stratégies pour dominer vos adversaires.',
-    slug: 'strategies-avancees-cartes-populaires',
-    imageUrl: '/images/guide/2.png',
-    isNew: false,
-    price: 0,
-  },
-  {
-    title: 'Stratégies avancées pour les cartes populaires',
-    description: 'Découvrez les meilleures stratégies pour dominer vos adversaires.',
-    slug: 'strategies-avancees-cartes-populaires',
-    imageUrl: '/images/guide/2.png',
-    isNew: false,
-    price: 14.99,
-  },
-]
+defineProps<{
+  guides: Guide[]
+}>()
 </script>
 
 <template>

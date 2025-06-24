@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import GuideToc from '~/components/guide/GuideToc.vue'
+import type Guide from '#guides/models/guide'
 
 defineProps<{
-  contents: {
-    html: string
-    toc: string
-  }
+  guide: Guide
 }>()
 </script>
 
 <template>
-  <section class="relative bg-default py-8 md:py-16 xl:py-24">
-    <UContainer class="grid grid-cols-1 md:grid-cols-[320px_768px] gap-8 w-fit mx-auto">
-      <GuideToc :toc="contents.toc" class="hidden md:block z-0" />
-      <div v-html="contents.html" class="markdown-content z-0" />
-    </UContainer>
+  <section class="relative bg-default py-8">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-[1fr_768px_1fr] 2xl:grid-cols-[1fr_896px_1fr] gap-8 p-4 lg:p-0"
+    >
+      <div />
+      <article v-html="guide.htmlContent" class="markdown-content z-0" />
+      <GuideToc :toc="guide.toc" class="z-0" />
+    </div>
   </section>
 </template>
 

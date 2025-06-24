@@ -75,15 +75,23 @@ const profileItems = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Profile',
-      icon: 'i-lucide-user',
+      icon: 'lucide:user',
       to: '/membres/' + user.value?.userSlug,
     },
     {
+      label: 'Publication',
+      icon: 'lucide:pen',
+      to: '/guides/publications',
+      class: computed(() => {
+        return useAccess('writer') ? '' : 'hidden'
+      }),
+    },
+    {
       label: 'Administration',
-      icon: 'i-lucide-shield-check',
+      icon: 'lucide:shield-check',
       to: '/admin',
       class: computed(() => {
-        return useAccess() > 2 ? '' : 'hidden'
+        return useAccess('admin') ? '' : 'hidden'
       }),
     },
   ],
