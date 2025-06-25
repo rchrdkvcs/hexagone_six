@@ -53,11 +53,6 @@ const navItems = ref<NavigationMenuItem[]>([
       label: 'Guides',
       icon: 'lucide:book-open',
       to: '/guides',
-      disabled: true,
-      badge: {
-        label: 'Bientôt',
-        color: 'warning',
-      },
     },
     {
       label: 'Partenaires',
@@ -80,15 +75,23 @@ const profileItems = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Profile',
-      icon: 'i-lucide-user',
+      icon: 'lucide:user',
       to: '/membres/' + user.value?.userSlug,
     },
     {
+      label: 'Publication',
+      icon: 'lucide:pen',
+      to: '/p/guides',
+      class: computed(() => {
+        return useAccess('writer') ? '' : 'hidden'
+      }),
+    },
+    {
       label: 'Administration',
-      icon: 'i-lucide-shield-check',
+      icon: 'lucide:shield-check',
       to: '/admin',
       class: computed(() => {
-        return useAccess() > 2 ? '' : 'hidden'
+        return useAccess('admin') ? '' : 'hidden'
       }),
     },
   ],

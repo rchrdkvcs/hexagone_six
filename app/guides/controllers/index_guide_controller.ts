@@ -1,14 +1,15 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import * as fs from 'node:fs'
-import { inject } from '@adonisjs/core'
-import app from '@adonisjs/core/services/app'
-import { MarkdownCompiler } from '#guides/services/markdown_compiler'
+import Guide from '#guides/models/guide'
 
-@inject()
 export default class IndexGuideController {
-  constructor(private markdownCompiler: MarkdownCompiler) {}
-
   async render({ inertia }: HttpContext) {
+<<<<<<< feat/guide -- Incoming Change
+    const guides = await Guide.query()
+      .whereNotNull('published_at')
+      .andWhere('published_at', '<=', new Date())
+      .orderBy('published_at', 'desc')
+      .limit(4)
+=======
     const filePath = app.makePath('public/content/comment-attaquer.md')
     const markdownContent = fs.readFileSync(filePath, 'utf-8')
 
@@ -18,7 +19,8 @@ export default class IndexGuideController {
       html: htmlContent.html,
       toc: htmlContent.toc,
     }
+>>>>>>> alpha -- Current Change
 
-    return inertia.render('guide/index', { contents })
+    return inertia.render('guide/index', { guides })
   }
 }

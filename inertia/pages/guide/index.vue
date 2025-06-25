@@ -1,23 +1,38 @@
 <script setup lang="ts">
-import GuideToc from '~/components/guide/GuideToc.vue'
+import GuideCard from '~/components/guide/GuideCard.vue'
+import type Guide from '#guides/models/guide'
 
 defineProps<{
-  contents: {
-    html: string
-    toc: string
-  }
+  guides: Guide[]
 }>()
 </script>
 
 <template>
-  <section class="relative bg-default py-8 md:py-16 xl:py-24">
-    <UContainer class="grid grid-cols-1 md:grid-cols-[320px_768px] gap-8 w-fit mx-auto">
-      <GuideToc :toc="contents.toc" class="hidden md:block z-0" />
-      <div v-html="contents.html" class="markdown-content z-0" />
-    </UContainer>
-  </section>
-</template>
+  <UContainer class="w-full space-y-8 md:space-y-16 flex flex-col py-16 lg:py-24">
+    <div class="space-y-2 px-4 md:px-0 z-0">
+      <h2
+        class="text-3xl sm:text-4xl lg:text-5xl text-pretty tracking-tight font-bold text-highlighted text-center"
+      >
+        Des guides pour vous aider à progresser, fait par des experts.
+      </h2>
 
-<style>
-@import '../../assets/styles/markdown.css';
-</style>
+      <p class="text-base sm:text-lg text-muted text-center text-balance mt-6">
+        Découvrez nos articles et guides pour améliorer vos compétences, comprendre les mécaniques
+        du jeu et rester à jour avec les dernières stratégies.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <div class="flex flex-col gap-8 lg:w-1/2">
+        <template v-for="(guide, index) in guides" :key="`${guide.slug}-${index}`">
+          <GuideCard v-if="index % 2 === 0" :guide="guide" />
+        </template>
+      </div>
+      <div class="flex flex-col gap-8 lg:w-1/2">
+        <template v-for="(guide, index) in guides" :key="`${guide.slug}-${index}`">
+          <GuideCard v-if="index % 2 === 1" :guide="guide" />
+        </template>
+      </div>
+    </div>
+  </UContainer>
+</template>

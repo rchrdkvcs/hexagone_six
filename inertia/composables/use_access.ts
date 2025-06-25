@@ -1,16 +1,11 @@
 import { useUser } from '~/composables/use_user'
 
-export function useAccess() {
+export function useAccess(role: string) {
   const user = useUser()
 
-  if (!user.value) return 0
+  if (!user.value) return false
 
   const roles = user.value.roles || []
 
-  if (roles.includes('developer')) return 4
-  if (roles.includes('admin')) return 3
-  if (roles.includes('editor')) return 2
-  if (roles.includes('user')) return 1
-
-  return 0
+  return roles.includes(role)
 }
