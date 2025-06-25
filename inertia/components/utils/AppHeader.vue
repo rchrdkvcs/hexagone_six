@@ -81,7 +81,7 @@ const profileItems = ref<DropdownMenuItem[][]>([
     {
       label: 'Publication',
       icon: 'lucide:pen',
-      to: '/guides/publications',
+      to: '/p/guides',
       class: computed(() => {
         return useAccess('writer') ? '' : 'hidden'
       }),

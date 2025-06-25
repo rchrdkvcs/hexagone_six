@@ -4,14 +4,19 @@ import Publication from '~/layouts/publication.vue'
 import EasyMDE from 'easymde'
 import { marked } from 'marked'
 import GuideDetailsModal from '~/components/guide/GuideDetailsModal.vue'
+import type Guide from '#guides/models/guide'
 
 defineOptions({
   layout: Publication,
 })
 
+const props = defineProps<{
+  guide: Guide
+}>()
+
 const overlay = useOverlay()
 const modal = overlay.create(GuideDetailsModal)
-const markdownContent = ref('')
+const markdownContent = ref(props.guide.markdownContent)
 const easyMDE = ref<EasyMDE | null>(null)
 
 const customContainerExtension = {
@@ -67,6 +72,7 @@ onMounted(() => {
       syncSideBySidePreviewScroll: false,
       spellChecker: false,
       previewClass: 'markdown-content',
+      initialValue: markdownContent.value,
       previewRender: (plainText: string) => {
         return marked.parse(plainText)
       },
@@ -87,7 +93,7 @@ onMounted(() => {
       label="Sauvegarder le guide"
       icon="lucide:save"
       class="top-2 right-2 fixed z-20"
-      @click="modal.open({ markdownContent })"
+      @click="modal.open({ markdownContent, guide: props.guide })"
     />
 
     <div class="flex-1 overflow-hidden">

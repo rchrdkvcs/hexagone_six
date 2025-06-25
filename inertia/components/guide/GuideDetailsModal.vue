@@ -1,21 +1,39 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3'
 import { reactive } from 'vue'
+import type Guide from '#guides/models/guide'
 
 const props = defineProps<{
   markdownContent: string
+  guide?: Guide
 }>()
 
+const emit = defineEmits(['close'])
+
 const form = reactive({
-  title: '',
-  summary: '',
-  price: 0,
-  publishedAt: '',
-  markdownContent: props.markdownContent,
+  title: props.guide?.title || '',
+  summary: props.guide?.summary || '',
+  price: props.guide?.price || 0,
+  markdownContent: props.markdownContent || '',
+  publishedAt: props.guide?.publishedAt || null,
 })
 
 const handleSubmit = () => {
-  router.post('/guides', form)
+  if (props.guide) {
+    router.patch(`/p/guides/${props.guide.id}`, form, {
+      preserveState: true,
+      onSuccess: () => {
+        emit('close')
+      },
+    })
+  } else {
+    router.post('/p/guides', form, {
+      preserveState: true,
+      onSuccess: () => {
+        emit('close')
+      },
+    })
+  }
 }
 </script>
 

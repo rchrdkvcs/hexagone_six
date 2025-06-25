@@ -33,6 +33,6 @@ export default class StoreGuideController {
       publishedAt: data.publishedAt ? DateTime.fromJSDate(data.publishedAt) : undefined,
     })
 
-    return response.redirect('/guides/publications')
+    return response.redirect('/p/guides')
   }
 }

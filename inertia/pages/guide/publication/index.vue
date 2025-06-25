@@ -4,6 +4,7 @@ import { h, ref, resolveComponent, useTemplateRef } from 'vue'
 import type { TableColumn } from '@nuxt/ui'
 import { Column } from '@tanstack/vue-table'
 import Publication from '~/layouts/publication.vue'
+import { router } from '@inertiajs/vue3'
 
 defineProps<{
   guides: Guide[]
@@ -53,7 +54,7 @@ const columns: TableColumn<Guide>[] = [
           color: isPublished ? 'success' : 'neutral',
           variant: 'subtle',
         },
-        () => h('span', isPublished ? 'Publié' : 'Brouillon')
+        () => h('span', isPublished ? 'Publié' : 'Non publié')
       )
     },
   },
@@ -67,10 +68,18 @@ const columns: TableColumn<Guide>[] = [
   },
   {
     accessorKey: 'publishedAt',
-    header: ({ column }) => getHeader(column, 'Publié le'),
+    header: ({ column }) => getHeader(column, 'Publication'),
     cell: ({ row }) => {
       const guide = row.original as Guide
-      return h('span', new Date(guide.publishedAt as unknown as string).toLocaleDateString('fr-FR'))
+      const isPublished =
+        guide.publishedAt && new Date(guide.publishedAt as unknown as string) <= new Date()
+      return h(
+        'span',
+        isPublished
+          ? new Date(guide.publishedAt as unknown as string).toLocaleDateString('fr-FR')
+          : 'Prévue pour le ' +
+              new Date(guide.publishedAt as unknown as string).toLocaleDateString('fr-FR')
+      )
     },
   },
   {
@@ -104,7 +113,32 @@ const columns: TableColumn<Guide>[] = [
 
 function getRowActions(row: any) {
   const guide = row.original as Guide
-  return [[], []]
+  return [
+    [
+      {
+        label: 'Voir la publication',
+        icon: 'lucide:eye',
+        to: `/guides/${guide.slug}`,
+      },
+      {
+        label: 'Modifier la publication',
+        icon: 'lucide:pencil',
+        to: `/p/guides/${guide.id}`,
+      },
+    ],
+    [
+      {
+        label: 'Supprimer la publication',
+        icon: 'lucide:trash',
+        onClick: () => {
+          if (confirm('Êtes-vous sûr de vouloir supprimer cette publication ?')) {
+            router.delete(`/p/guides/${guide.id}`)
+          }
+        },
+        color: 'error',
+      },
+    ],
+  ]
 }
 
 function getHeader(column: Column<Guide>, label: string) {
@@ -124,10 +158,13 @@ function getHeader(column: Column<Guide>, label: string) {
 </script>
 
 <template>
-  <section class="bg-default w-full h-[calc(100vh-64px)]">
+  <section class="bg-default w-full h-screen">
     <div class="divide-y divide-accented flex flex-col h-screen">
       <div class="flex items-center justify-between gap-2 px-4 py-3.5">
-        <h1 class="text-2xl font-bold">Publications</h1>
+        <div class="flex items-center gap-2">
+          <UButton icon="lucide:arrow-left" to="/guides" color="neutral" variant="ghost" />
+          <h1 class="text-2xl font-bold">Publications</h1>
+        </div>
 
         <UInput
           type="search"
@@ -138,11 +175,7 @@ function getHeader(column: Column<Guide>, label: string) {
           size="lg"
         />
 
-        <UButton
-          label="Crée une publication"
-          icon="lucide:plus"
-          to="/guides/publications/ajouter"
-        />
+        <UButton label="Crée une publication" icon="lucide:plus" to="/p/guides/ajouter" />
       </div>
 
       <UTable

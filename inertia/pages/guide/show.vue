@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <section class="relative bg-default py-8">
+  <section class="relative bg-default py-8 min-h-screen">
     <div
       class="grid grid-cols-1 lg:grid-cols-[1fr_768px_1fr] 2xl:grid-cols-[1fr_896px_1fr] gap-8 p-4 lg:p-0"
     >
