@@ -1,7 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import Guide from '#guides/models/guide'
 
 export default class IndexPublicationController {
   async render({ inertia }: HttpContext) {
-    return inertia.render('guide/publication/index')
+    const guides = await Guide.all()
+
+    return inertia.render('guide/publication/index', { guides })
   }
 }

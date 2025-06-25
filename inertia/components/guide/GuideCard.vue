@@ -14,7 +14,11 @@ defineProps<{
   >
     <div class="relative">
       <UBadge
-        v-if="guide.isNew"
+        v-if="
+          guide.publishedAt &&
+          new Date(guide.publishedAt as unknown as string) >=
+            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        "
         label="Nouveau"
         variant="subtle"
         color="neutral"
@@ -32,10 +36,16 @@ defineProps<{
         <p class="text-muted line-clamp-3">{{ guide.summary }}</p>
       </div>
       <div class="flex items-center justify-between mt-auto border-t border-default pt-4">
-        <span class="text-xs text-muted">Publié le 01/01/2024</span>
+        <span class="text-xs text-muted"
+          >Publié le
+          {{
+            guide.publishedAt &&
+            new Date(guide.publishedAt as unknown as string).toLocaleDateString('fr-FR')
+          }}</span
+        >
         <UBadge
-          :label="guide.price === 0 ? 'Gratuit' : `${guide.price} €`"
-          :color="guide.price === 0 ? 'success' : 'neutral'"
+          :label="guide.price != 0 ? `${guide.price} €` : 'Gratuit'"
+          :color="guide.price != 0 ? 'neutral' : 'success'"
           variant="subtle"
           class="size-fit"
         />

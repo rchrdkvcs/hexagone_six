@@ -13,8 +13,9 @@ export default class extends BaseSchema {
       table.text('html_content').notNullable()
       table.text('toc').notNullable()
       table.string('slug').notNullable().unique()
-      table.decimal('price', 10, 2).notNullable().defaultTo(0)
+      table.decimal('price').notNullable().defaultTo(0)
       table.boolean('is_published').notNullable().defaultTo(false)
+      table.timestamp('published_at').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

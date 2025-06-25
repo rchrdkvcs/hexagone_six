@@ -31,7 +31,7 @@ export default class Guide extends BaseModel {
   declare price: number
 
   @column()
-  declare isPublished: boolean
+  declare publishedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
