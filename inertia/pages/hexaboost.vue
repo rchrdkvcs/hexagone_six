@@ -5,6 +5,7 @@ import HexaboostWhyus from '~/components/hexaboost/HexaboostWhyus.vue'
 import HexaboostHowItWorks from '~/components/hexaboost/HexaboostHowItWorks.vue'
 import HexaboostBonus from '~/components/hexaboost/HexaboostBonus.vue'
 import HexaboostCheckout from '~/components/hexaboost/HexaboostCheckout.vue'
+import HexaboostHelp from '~/components/hexaboost/HexaboostHelp.vue'
 </script>
 
 <template>
@@ -14,4 +15,5 @@ import HexaboostCheckout from '~/components/hexaboost/HexaboostCheckout.vue'
   <HexaboostCheckout />
   <HexaboostBonus />
   <HexaboostHowItWorks />
+  <HexaboostHelp />
 </template>

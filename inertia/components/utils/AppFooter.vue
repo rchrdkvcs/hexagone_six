@@ -7,6 +7,11 @@ const actualYear = new Date().getFullYear()
 const socialLinks = ref<NavigationMenuItem[]>([
   [
     {
+      icon: 'lucide:circle-help',
+      label: 'Aide',
+      to: '/aide',
+    },
+    {
       icon: 'simple-icons:discord',
       label: 'Discord',
       to: 'https://discord.gg/ABFsPxuYZr',
