@@ -62,7 +62,7 @@ onMounted(() => {
       imageUploadEndpoint: '/p/guides/files',
       imageMaxSize: 10 * 1024 * 1024,
       imageAccept: 'image/*',
-      imagePathAbsolute: true,
+      imagePathAbsolute: false,
       sideBySideFullscreen: false,
       syncSideBySidePreviewScroll: false,
       spellChecker: false,

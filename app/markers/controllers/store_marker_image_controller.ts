@@ -14,7 +14,7 @@ export default class StoreMarkerImageController {
     vine.object({
       markerId: vine.string().uuid(),
       photo: vine.file({
-        size: '15mb',
+        size: '10mb',
         extnames: ['jpg', 'jpeg', 'png'],
       }),
     })

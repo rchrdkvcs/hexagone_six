@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id')
       table.string('thumbnail_url').nullable()
+      table.string('author').notNullable()
       table.string('title').notNullable()
       table.string('summary').notNullable()
       table.text('markdown_content').notNullable()

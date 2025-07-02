@@ -22,11 +22,12 @@ export default class StoreGuideImageController {
     await data.image.moveToDisk(key)
 
     const imageUrl = await drive.use().getUrl(key)
+    const cleanImageUrl = imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl
 
     return response.ok({
       message: 'Image uploaded successfully',
       data: {
-        filePath: imageUrl,
+        filePath: cleanImageUrl,
       },
     })
   }

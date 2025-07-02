@@ -7,6 +7,9 @@ export default class Guide extends BaseModel {
   declare id: string
 
   @column()
+  declare author: string
+
+  @column()
   declare thumbnailUrl: string
 
   @column()

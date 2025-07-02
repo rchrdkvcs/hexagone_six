@@ -10,27 +10,26 @@ defineProps<{
 <template>
   <Link
     :href="`/guides/${guide.slug}`"
-    class="w-full h-fit bg-muted ring ring-default rounded-lg flex overflow-hidden group transition duration-200 ease-in-out hover:bg-accented hover:shadow-lg"
+    class="w-full h-fit bg-muted ring ring-default rounded-lg flex overflow-hidden group transition duration-200 ease-in-out hover:bg-accented/50 hover:shadow-lg relative backdrop-blur-lg"
   >
-    <div class="relative">
-      <UBadge
-        v-if="
-          guide.publishedAt &&
-          new Date(guide.publishedAt as unknown as string) >=
-            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-        "
-        label="Nouveau"
-        variant="subtle"
-        color="neutral"
-        class="size-fit rounded-full absolute top-2 left-2 z-10"
-      />
-      <img
-        :src="guide.thumbnailUrl || '/public/images/guide/1.jpg'"
-        :alt="guide.title"
-        class="object-cover h-full w-auto [mask-image:linear-gradient(to_right,black_40%,transparent_95%)] group-hover:scale-105 transition duration-400 ease-in-out"
-      />
-    </div>
-    <div class="flex flex-col gap-2 w-full p-4 pl-0">
+    <UBadge
+      v-if="
+        guide.publishedAt &&
+        new Date(guide.publishedAt as unknown as string) >=
+          new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      "
+      label="Nouveau"
+      variant="subtle"
+      color="neutral"
+      class="size-fit rounded-full absolute top-2 left-2 z-10"
+    />
+    <img
+      v-if="guide.thumbnailUrl"
+      :src="guide.thumbnailUrl"
+      :alt="guide.title"
+      class="object-cover h-full w-full max-w-1/3 [mask-image:linear-gradient(to_right,black_40%,transparent_95%)] group-hover:scale-105 transition duration-400 ease-in-out"
+    />
+    <div class="flex flex-col gap-2 w-full p-4 pl-0 w-full">
       <div class="flex flex-col gap-1">
         <h3 class="text-lg font-semibold line-clamp-1">{{ guide.title }}</h3>
         <p class="text-muted line-clamp-3">{{ guide.summary }}</p>
