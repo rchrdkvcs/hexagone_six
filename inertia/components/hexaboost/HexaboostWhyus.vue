@@ -23,8 +23,8 @@ import ImageComparison from '../utils/ImageComparison.vue'
       <!-- Composant de comparaison avant/après -->
       <div class="px-4 w-full">
         <ImageComparison
-          before-image="/images/hexaboost/before.jpg"
-          after-image="/images/hexaboost/after.jpg"
+          before-image="/images/hexaboost/before.png"
+          after-image="/images/hexaboost/after.png"
           before-label="Avant HexaBoost"
           after-label="Après HexaBoost"
           before-alt="Performance avant HexaBoost"

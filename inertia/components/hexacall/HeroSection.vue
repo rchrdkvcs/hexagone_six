@@ -21,6 +21,7 @@
         Débutant ou PRO, ici, chaque joueur parle le même langage. Améliorez votre communication
         grâce à HexaCall.
       </p>
+      <UButton to="/hexacall/cartes" size="xl" icon="lucide:map" label="Voir les cartes" />
     </div>
 
     <div class="relative w-full h-fit flex items-center justify-center mt-8 xl:mt-0">

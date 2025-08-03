@@ -56,28 +56,32 @@ const props = defineProps<Props>()
 
           <!-- Indicateur de statut d'accès avec UBadge -->
           <div class="mt-4">
-            <UBadge v-if="access.isFree" variant="soft" size="lg" color="success">
-              <UIcon name="lucide:unlock" class="w-4 h-4 mr-2" />
-              Guide gratuit
-            </UBadge>
+            <UBadge
+              v-if="access.isFree"
+              icon="lucide:unlock"
+              label="Guide gratuit"
+              variant="soft"
+              size="lg"
+              color="success"
+            />
 
-            <UBadge v-else-if="access.hasAccess" color="secondary" variant="soft" size="lg">
-              <UIcon name="lucide:check-circle" class="w-4 h-4 mr-2" />
-              Acheté
-            </UBadge>
+            <UBadge
+              v-else-if="access.hasAccess"
+              icon="lucide:check-circle"
+              label="Acheté"
+              color="secondary"
+              variant="soft"
+              size="lg"
+            />
 
-            <UBadge v-else color="warning" variant="soft" size="lg">
-              <UIcon name="lucide:lock" class="w-4 h-4 mr-2" />
-              Premium - {{ access.priceFormatted }}€
-            </UBadge>
-          </div>
-
-          <!-- Statistiques (si disponibles) -->
-          <div v-if="stats && (access.hasAccess || access.isFree)" class="mt-4 text-sm text-muted">
-            <div class="stats-item">
-              <UIcon name="lucide:users" class="w-4 h-4" />
-              <span>{{ stats.totalPurchases }} achat{{ stats.totalPurchases > 1 ? 's' : '' }}</span>
-            </div>
+            <UBadge
+              v-else
+              icon="lucide:lock"
+              :label="`Premium - ${access.priceFormatted}€`"
+              color="warning"
+              variant="soft"
+              size="lg"
+            />
           </div>
         </div>
       </div>
@@ -112,22 +116,22 @@ const props = defineProps<Props>()
 
         <!-- Actions rapides -->
         <div v-if="!access.truncated" class="mt-6 space-y-2">
-          <UButton variant="ghost" size="sm" to="/guide" class="w-full">
-            <UIcon name="lucide:arrow-left" class="w-4 h-4" />
-            Retour aux guides
-          </UButton>
-
           <UButton
-            v-if="access.hasAccess && !access.isFree"
+            icon="lucide:arrow-left"
+            label="Retour aux guides"
             variant="ghost"
             size="sm"
-            color="gray"
+            to="/guides"
             class="w-full"
-            disabled
+          />
+
+          <p
+            v-if="access.hasAccess && !access.isFree"
+            class="text-muted text-sm flex items-center gap-2"
           >
             <UIcon name="lucide:heart" class="w-4 h-4" />
             Merci pour votre achat !
-          </UButton>
+          </p>
         </div>
       </div>
     </div>

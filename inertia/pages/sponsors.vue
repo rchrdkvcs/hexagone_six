@@ -44,7 +44,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://msi.com/"
+            to="https://msi.gm/S04F5BA3"
             target="_blank"
             color="neutral"
             variant="subtle"
@@ -90,7 +90,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://fr.weareholy.com/"
+            to="https://fr.weareholy.com/?ref=sixquatre&utm_medium=creator&utm_source=creator"
             target="_blank"
             color="neutral"
             variant="subtle"

@@ -20,12 +20,6 @@ const navItems = ref<NavigationMenuItem[]>([
           icon: 'lucide:gamepad-2',
           to: '/lan',
         },
-        {
-          label: 'Ranking (bientôt)',
-          icon: 'lucide:bar-chart-2',
-          to: '/ranking',
-          disabled: true,
-        },
       ],
     },
     {
@@ -97,7 +91,7 @@ const profileItems = ref<DropdownMenuItem[][]>([
   ],
   [
     {
-      label: 'Logout',
+      label: 'Se déconnecter',
       icon: 'i-lucide-log-out',
       to: '/logout',
       color: 'error',

@@ -92,7 +92,7 @@ export default class GuideAccessService {
     const truncatedContent = this.truncateHtmlContent(guide.htmlContent, 0.05)
 
     // Tronquer la table des matières (garder seulement les premiers éléments)
-    const truncatedToc = this.truncateToc(guide.toc, 3)
+    const truncatedToc = this.truncateToc(guide.toc, 2)
 
     return {
       hasAccess: false,
@@ -168,43 +168,30 @@ export default class GuideAccessService {
     if (!toc) return ''
 
     try {
-      const tocData = JSON.parse(toc)
+      // Extraire les éléments <li> avec regex
+      const liRegex = /<li[^>]*>.*?<\/li>/gs
+      const listItems = toc.match(liRegex) || []
 
-      if (Array.isArray(tocData) && tocData.length > maxItems) {
-        const truncatedToc = tocData.slice(0, maxItems)
+      if (listItems.length > maxItems) {
+        // Prendre seulement les premiers éléments
+        const truncatedItems = listItems.slice(0, maxItems)
 
         // Ajouter un indicateur qu'il y a plus de contenu
-        truncatedToc.push({
-          level: 2,
-          title: '🔒 Et bien plus encore...',
-          anchor: 'premium-content',
-          disabled: true,
-        })
+        truncatedItems.push(
+          '<li><a href="#premium-content" class="text-gray-500">🔒 Et bien plus encore...</a></li>'
+        )
 
-        return JSON.stringify(truncatedToc)
+        // Reconstruire la liste
+        const ulMatch = toc.match(/<ul[^>]*>/i)
+        const ulStart = ulMatch ? ulMatch[0] : '<ul>'
+
+        return `${ulStart}${truncatedItems.join('')}</ul>`
       }
 
       return toc
     } catch {
       // Si le parsing échoue, retourner la TOC originale
       return toc
-    }
-  }
-
-  /**
-   * Obtenir les statistiques d'un guide pour l'affichage
-   */
-  async getGuideStats(guide: Guide): Promise<{
-    totalPurchases: number
-    revenue: number
-  }> {
-    const purchases = await Purchase.query()
-      .where('product_id', guide.id)
-      .where('product_type', 'guide')
-
-    return {
-      totalPurchases: purchases.length,
-      revenue: purchases.reduce((sum, purchase) => sum + purchase.totalAmount, 0),
     }
   }
 

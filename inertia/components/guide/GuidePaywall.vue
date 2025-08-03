@@ -80,13 +80,11 @@ async function handlePurchase() {
       <UCard class="max-w-lg w-full shadow-xl">
         <template #header>
           <div class="flex flex-col items-center text-center">
-            <div class="mb-4 p-3 bg-amber-100 rounded-full">
-              <UIcon name="lucide:lock" class="w-8 h-8 text-amber-600" />
+            <div class="mb-4 p-3 bg-warning/25 rounded-full">
+              <UIcon name="lucide:lock" class="w-8 h-8 text-warning" />
             </div>
-            <h3 class="text-xl font-bold text-gray-900">
-              🔓 Débloquez ce guide complet
-            </h3>
-            <p class="text-sm text-gray-500 mt-2">
+            <h3 class="text-xl font-bold">Débloquez ce guide complet</h3>
+            <p class="text-sm text-muted mt-2">
               Par <span class="font-medium">{{ guide.author }}</span>
             </p>
           </div>
@@ -94,44 +92,49 @@ async function handlePurchase() {
 
         <div class="space-y-6">
           <!-- Description -->
-          <p class="text-gray-600 text-center leading-relaxed">
-            Ce guide contient encore beaucoup de contenu exclusif avec des stratégies avancées, 
-            des astuces pro et des analyses détaillées.
+          <p class="text-center leading-relaxed">
+            Ce guide contient encore beaucoup de contenu exclusif avec des stratégies avancées, des
+            astuces pro et des analyses détaillées.
           </p>
 
           <!-- Features avec badges -->
-          <div class="space-y-3">
-            <UBadge color="green" variant="soft" class="w-full justify-start">
-              <UIcon name="lucide:check" class="w-4 h-4 mr-2" />
-              Accès à vie au guide complet
-            </UBadge>
-            <UBadge color="blue" variant="soft" class="w-full justify-start">
-              <UIcon name="lucide:star" class="w-4 h-4 mr-2" />
-              Contenu exclusif et détaillé
-            </UBadge>
-            <UBadge color="purple" variant="soft" class="w-full justify-start">
-              <UIcon name="lucide:trophy" class="w-4 h-4 mr-2" />
-              Stratégies éprouvées par des pros
-            </UBadge>
+          <div class="flex flex-col justify-start gap-2">
+            <UBadge
+              icon="lucide:check"
+              label="Accès à vie au guide complet"
+              color="neutral"
+              variant="soft"
+              class="w-fit bg-transparent"
+            />
+            <UBadge
+              icon="lucide:star"
+              label="Contenu exclusif et détaillé"
+              color="neutral"
+              variant="soft"
+              class="w-fit bg-transparent"
+            />
+            <UBadge
+              icon="lucide:trophy"
+              label="Stratégies éprouvées par des pros"
+              color="neutral"
+              variant="soft"
+              class="w-fit bg-transparent"
+            />
           </div>
 
           <!-- Alert d'erreur -->
           <UAlert
             v-if="error"
-            color="red"
+            color="error"
             variant="soft"
             :title="error"
             icon="lucide:alert-circle"
           />
 
           <!-- Prix en évidence -->
-          <div class="text-center p-4 bg-gray-50 rounded-lg">
-            <div class="text-3xl font-bold text-gray-900">
-              {{ access.priceFormatted }}€
-            </div>
-            <div class="text-sm text-gray-500">
-              Paiement unique
-            </div>
+          <div class="text-center p-4 bg-muted rounded-lg">
+            <div class="text-3xl font-bold text-elevated">{{ access.priceFormatted }}€</div>
+            <div class="text-sm text-muted">Paiement unique</div>
           </div>
         </div>
 
@@ -151,32 +154,24 @@ async function handlePurchase() {
               Acheter pour {{ access.priceFormatted }}€
             </UButton>
 
-            <UButton
-              v-else
-              size="lg"
-              color="primary"
-              variant="solid"
-              block
-              to="/connexion"
-            >
+            <UButton v-else size="lg" color="primary" variant="solid" block to="/login">
               <UIcon name="lucide:user" class="w-4 h-4 mr-2" />
               Se connecter pour acheter
             </UButton>
 
             <!-- Bouton secondaire -->
             <UButton
+              icon="lucide:arrow-left"
+              label="Retour aux guides"
+              color="neutral"
               size="sm"
-              color="gray"
               variant="ghost"
               block
               to="/guides"
-            >
-              <UIcon name="lucide:arrow-left" class="w-4 h-4 mr-2" />
-              Retour aux guides
-            </UButton>
+            />
 
             <!-- Trust indicators -->
-            <div class="flex justify-center gap-6 pt-3 text-xs text-gray-500">
+            <div class="flex justify-center gap-6 pt-3 text-xs text-muted">
               <div class="flex items-center gap-1">
                 <UIcon name="lucide:shield-check" class="w-3 h-3 text-green-500" />
                 <span>Paiement sécurisé</span>

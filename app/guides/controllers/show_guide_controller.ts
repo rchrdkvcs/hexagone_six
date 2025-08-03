@@ -13,16 +13,13 @@ export default class ShowGuideController {
     const guide = await Guide.findByOrFail('slug', slug)
 
     // Obtenir l'utilisateur connecté (peut être null)
-    const user = await auth.user
+    const user = auth.user
 
     // Vérifier si l'utilisateur vient d'acheter le guide
     const justPurchased = request.input('purchased') === 'true'
 
     // Vérifier l'accès au guide (forcer le refresh si justPurchased)
     const access = await this.guideAccessService.checkAccess(guide, user, justPurchased)
-
-    // Obtenir les statistiques du guide (optionnel, pour l'affichage)
-    const stats = await this.guideAccessService.getGuideStats(guide)
 
     return inertia.render('guide/show', {
       guide: {
@@ -42,7 +39,6 @@ export default class ShowGuideController {
           : null,
         contentToShow: access.contentToShow,
       },
-      stats,
       user: user ? user.serialize() : null,
       justPurchased,
     })

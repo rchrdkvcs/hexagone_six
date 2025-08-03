@@ -6,6 +6,7 @@ interface FonctionItem {
   description: string
   icon: string
   link?: string
+  col?: number
   badge?: {
     label: string
     variant: 'subtle' | 'solid' | 'outline' | 'soft'
@@ -47,24 +48,8 @@ const fonctionItems: FonctionItem[] = [
     description:
       'Des guides et tutoriels complets pour maîtriser Siege X, de la configuration optimale de votre PC aux stratégies avancées.',
     icon: 'lucide:book',
-    link: '/',
-    badge: {
-      label: 'Bientôt Disponible',
-      variant: 'subtle',
-      color: 'warning',
-    },
-  },
-  {
-    title: 'Ranking',
-    description:
-      'Un système de classement transparent et équitable pour suivre votre progression et celle de vos amis.',
-    icon: 'lucide:book',
-    link: '/',
-    badge: {
-      label: 'Bientôt Disponible',
-      variant: 'subtle',
-      color: 'warning',
-    },
+    link: '/guides',
+    col: 2,
   },
 ]
 </script>
@@ -123,7 +108,14 @@ const fonctionItems: FonctionItem[] = [
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 z-0">
-        <Link v-for="fonction in fonctionItems" :href="fonction.link as string">
+        <Link
+          v-for="fonction in fonctionItems"
+          :href="fonction.link as string"
+          :class="[
+            fonction.col === 2 ? 'md:col-span-2' : 'md:col-span-1'
+          ]"
+          :key="fonction.title"
+        >
           <UCard
             class="hover:bg-muted hover:scale-102 cursor-pointer transition duration-200 ease-in-out"
           >
@@ -168,7 +160,7 @@ const fonctionItems: FonctionItem[] = [
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 z-0">
         <ULink
           to="https://fr.weareholy.com/"
-          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
+          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <img src="/public/images/sponsors/holy.png" alt="Holy Logo" />
           <span class="font-medium text-lg">Holy Energy</span>
@@ -176,7 +168,7 @@ const fonctionItems: FonctionItem[] = [
 
         <ULink
           to="https://www.msi.com/"
-          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
+          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
             <img src="/public/images/sponsors/msi.png" alt="Msi Logo" />
@@ -186,7 +178,7 @@ const fonctionItems: FonctionItem[] = [
 
         <ULink
           to="https://hardwaremodding.fr/"
-          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
+          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
             <img src="/public/images/sponsors/hm.png" alt="Hardware Modding Logo" />
