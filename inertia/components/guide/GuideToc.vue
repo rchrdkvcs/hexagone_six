@@ -115,7 +115,7 @@ onUnmounted(() => {
   <aside
     class="hidden md:block sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pr-2"
   >
-    <h2 class="text-xs uppercase font-bold mb-4 tracking-wider">Sommaire</h2>
+    <h2 class="text-sm text-muted font-medium mb-4 tracking-wider">Sommaire</h2>
     <nav ref="tocContainer" v-html="toc" class="toc text-sm" />
   </aside>
 </template>

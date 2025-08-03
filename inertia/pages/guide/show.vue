@@ -49,18 +49,21 @@ const props = defineProps<Props>()
     >
       <!-- Sidebar gauche avec info du guide -->
       <div class="lg:p-4 space-y-4">
-        <img :src="guide.thumbnailUrl" :alt="guide.title" class="w-full h-auto rounded-lg" />
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <UButton
+            :href="`/guides`"
+            variant="ghost"
+            color="neutral"
+            icon="lucide:arrow-left"
+            label="Retour aux guides"
+          />
 
-        <div class="guide-meta">
-          <p class="text-muted">Guide réalisé par {{ guide.author }}</p>
-
-          <!-- Indicateur de statut d'accès avec UBadge -->
-          <div class="mt-4">
+          <div class="flex items-center gap-2">
             <UBadge
               v-if="access.isFree"
               icon="lucide:unlock"
               label="Guide gratuit"
-              variant="soft"
+              variant="subtle"
               size="lg"
               color="success"
             />
@@ -70,7 +73,7 @@ const props = defineProps<Props>()
               icon="lucide:check-circle"
               label="Acheté"
               color="secondary"
-              variant="soft"
+              variant="subtle"
               size="lg"
             />
 
@@ -79,10 +82,22 @@ const props = defineProps<Props>()
               icon="lucide:lock"
               :label="`Premium - ${access.priceFormatted}€`"
               color="warning"
-              variant="soft"
+              variant="subtle"
               size="lg"
             />
           </div>
+        </div>
+
+        <img :src="guide.thumbnailUrl" :alt="guide.title" class="w-full h-auto rounded-lg" />
+
+        <div class="flex flex-col gap-2">
+          <p class="text-lg">
+            {{ guide.summary }}
+          </p>
+
+          <p class="text-muted">
+            Guide réalisé par <span class="font-semibold">{{ guide.author }}</span>
+          </p>
         </div>
       </div>
 
@@ -113,26 +128,6 @@ const props = defineProps<Props>()
       <!-- Table des matières -->
       <div class="lg:p-4">
         <GuideToc :toc="guide.toc" class="z-0" />
-
-        <!-- Actions rapides -->
-        <div v-if="!access.truncated" class="mt-6 space-y-2">
-          <UButton
-            icon="lucide:arrow-left"
-            label="Retour aux guides"
-            variant="ghost"
-            size="sm"
-            to="/guides"
-            class="w-full"
-          />
-
-          <p
-            v-if="access.hasAccess && !access.isFree"
-            class="text-muted text-sm flex items-center gap-2"
-          >
-            <UIcon name="lucide:heart" class="w-4 h-4" />
-            Merci pour votre achat !
-          </p>
-        </div>
       </div>
     </div>
   </section>
