@@ -54,7 +54,7 @@ export class PaymentService {
         return { success: false, error: 'Invalid product price' }
       }
 
-      // Créer la session Stripe
+      // Créer la session Stripe (le prix est déjà en euros, StripeService convertit en centimes)
       const session = await this.stripeService.createCheckoutSession({
         amount: config.product.price,
         productName: config.product.name,
@@ -221,9 +221,13 @@ export class PaymentService {
    */
   static createGuideConfig(guide: {
     id: string | number
+    slug?: string
     title: string
     price: number
   }): PaymentConfig {
+    // Rediriger vers la route success qui enregistre l'achat
+    const successUrl = `${env.get('APP_URL')}/guide/payment/success?session_id={CHECKOUT_SESSION_ID}`
+
     return {
       product: {
         id: guide.id,
@@ -232,10 +236,11 @@ export class PaymentService {
         type: 'guide',
         metadata: {
           guideId: guide.id.toString(),
+          guideSlug: guide.slug || '',
         },
       },
-      successUrl: `${env.get('APP_URL')}/guide/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${env.get('APP_URL')}/guide/payment/cancel`,
+      successUrl,
+      cancelUrl: `${env.get('APP_URL')}/guides`,
       webhookUrl: env.get('DISCORD_GUIDES_WEBHOOK_URL') || env.get('DISCORD_HEXABOOST_WEBHOOK_URL'),
       discordNotification: {
         title: '📚 Nouveau guide acheté',

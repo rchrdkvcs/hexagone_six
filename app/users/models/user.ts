@@ -8,6 +8,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import Suggestion from '#suggestions/models/suggestion'
 import Post from '#users/models/post'
 import Vote from '#votes/models/vote'
+import Purchase from '#guides/models/purchase'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -53,6 +54,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Post)
   declare posts: HasMany<typeof Post>
+
+  @hasMany(() => Purchase)
+  declare purchases: HasMany<typeof Purchase>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

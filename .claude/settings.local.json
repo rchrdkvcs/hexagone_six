@@ -5,7 +5,12 @@
       "Bash(npm run typecheck:*)",
       "Bash(npm run lint)",
       "Bash(npm run format:*)",
-      "Bash(node ace migration:run:*)"
+      "Bash(node ace migration:run:*)",
+      "Bash(npm run:*)",
+      "Bash(node ace migration:rollback:*)",
+      "Bash(rm:*)",
+      "Bash(node ace migration:status:*)",
+      "Bash(node ace:*)"
     ],
     "deny": []
   }

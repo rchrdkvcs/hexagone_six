@@ -33,19 +33,41 @@ export default class Purchase extends BaseModel {
   declare stripeSessionId: string
 
   @column({
-    prepare: (value: any) => JSON.stringify(value),
-    consume: (value: string) => JSON.parse(value),
+    prepare: (value: any) => {
+      if (value === null || value === undefined) return null
+      return typeof value === 'string' ? value : JSON.stringify(value)
+    },
+    consume: (value: string | null) => {
+      if (value === null || value === undefined) return null
+      if (typeof value === 'object') return value
+      try {
+        return JSON.parse(value)
+      } catch {
+        return null
+      }
+    },
   })
   declare customerData: {
     email?: string
     name?: string
     phone?: string
     address?: any
-  }
+  } | null
 
   @column({
-    prepare: (value: any) => JSON.stringify(value),
-    consume: (value: string) => JSON.parse(value),
+    prepare: (value: any) => {
+      if (value === null || value === undefined) return null
+      return typeof value === 'string' ? value : JSON.stringify(value)
+    },
+    consume: (value: string | null) => {
+      if (value === null || value === undefined) return {}
+      if (typeof value === 'object') return value
+      try {
+        return JSON.parse(value)
+      } catch {
+        return {}
+      }
+    },
   })
   declare metadata: Record<string, any>
 

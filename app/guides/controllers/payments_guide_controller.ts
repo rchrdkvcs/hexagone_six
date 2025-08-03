@@ -14,7 +14,12 @@ export default class PaymentsGuideController extends BasePaymentController {
     // Pour le checkout, utiliser l'ID des paramètres
     if (params?.id) {
       const guide = await Guide.findOrFail(params.id)
-      return PaymentService.createGuideConfig(guide)
+      return PaymentService.createGuideConfig({
+        id: guide.id,
+        slug: guide.slug,
+        title: guide.title,
+        price: guide.price,
+      })
     }
 
     // Pour le success, récupérer l'ID depuis les métadonnées Stripe
@@ -28,14 +33,35 @@ export default class PaymentsGuideController extends BasePaymentController {
       }
 
       const guide = await Guide.findOrFail(guideId)
-      return PaymentService.createGuideConfig(guide)
+      return PaymentService.createGuideConfig({
+        id: guide.id,
+        slug: guide.slug,
+        title: guide.title,
+        price: guide.price,
+      })
     }
 
     throw new Error('Unable to determine guide for payment configuration')
   }
 
-  protected async renderSuccessPage({ inertia }: HttpContext) {
-    return inertia.render('guide/payment/success')
+  protected async renderSuccessPage({ response, request }: HttpContext) {
+    // Récupérer les métadonnées de la session pour rediriger vers le bon guide
+    try {
+      const sessionId = request.input('session_id')
+      if (sessionId) {
+        const customerData = await this.paymentService.stripeService.getCustomerFromSession(sessionId)
+        const guideSlug = customerData.session.metadata?.guideSlug
+        
+        if (guideSlug) {
+          return response.redirect(`/guide/${guideSlug}?purchased=true`)
+        }
+      }
+    } catch (error) {
+      console.error('Error getting guide slug from session:', error)
+    }
+    
+    // Fallback: rediriger vers la liste des guides
+    return response.redirect('/guides?purchased=true')
   }
 
   protected async renderCancelPage({ inertia }: HttpContext) {

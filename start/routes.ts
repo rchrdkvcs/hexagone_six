@@ -46,7 +46,5 @@ router
     router.get('/hexaboost/payment/cancel', [PaymentsController, 'cancel'])
 
     router.post('/guide/payments/create-checkout', [PaymentsGuideController, 'checkout'])
-    router.get('/guide/payment/success', [PaymentsGuideController, 'success'])
-    router.get('/guide/payment/cancel', [PaymentsGuideController, 'cancel'])
   })
   .use(middleware.silentAuth())

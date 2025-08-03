@@ -17,7 +17,7 @@ export default class ExamplePaymentController extends BasePaymentController {
   protected async getPaymentConfig({ params }: HttpContext): Promise<PaymentConfig> {
     // Exemple pour un produit custom (ex: coaching, formation, etc.)
     const productId = params.id
-    
+
     return {
       product: {
         id: productId,
@@ -35,7 +35,7 @@ export default class ExamplePaymentController extends BasePaymentController {
       webhookUrl: process.env.DISCORD_FORMATION_WEBHOOK_URL,
       discordNotification: {
         title: '🎓 Nouvelle inscription formation',
-        description: 'Un utilisateur s\'est inscrit à une formation Rainbow Six Siege.',
+        description: "Un utilisateur s'est inscrit à une formation Rainbow Six Siege.",
         color: DiscordColors.SUCCESS,
       },
     }
@@ -73,7 +73,7 @@ export class DirectPaymentExample {
 
     // Créer la session de paiement
     const result = await this.paymentService.createCheckoutSession(user, config)
-    
+
     if (result.success) {
       // Rediriger vers Stripe Checkout
       return { checkoutUrl: result.url }

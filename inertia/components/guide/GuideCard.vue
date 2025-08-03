@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <Link
-    :href="`/guides/${guide.slug}`"
+    :href="`/guide/${guide.slug}`"
     class="w-full h-fit bg-muted ring ring-default rounded-lg flex overflow-hidden group transition duration-200 ease-in-out hover:bg-accented/50 hover:shadow-lg relative backdrop-blur-lg"
   >
     <UBadge
