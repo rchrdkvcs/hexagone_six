@@ -111,9 +111,7 @@ const fonctionItems: FonctionItem[] = [
         <Link
           v-for="fonction in fonctionItems"
           :href="fonction.link as string"
-          :class="[
-            fonction.col === 2 ? 'md:col-span-2' : 'md:col-span-1'
-          ]"
+          :class="[fonction.col === 2 ? 'md:col-span-2' : 'md:col-span-1']"
           :key="fonction.title"
         >
           <UCard
@@ -159,7 +157,7 @@ const fonctionItems: FonctionItem[] = [
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 z-0">
         <ULink
-          to="https://fr.weareholy.com/"
+          to="https://fr.weareholy.com/?ref=sixquatre&utm_medium=creator&utm_source=creator"
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <img src="/public/images/sponsors/holy.png" alt="Holy Logo" />
@@ -167,7 +165,7 @@ const fonctionItems: FonctionItem[] = [
         </ULink>
 
         <ULink
-          to="https://www.msi.com/"
+          to="https://msi.gm/S04F5BA3"
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
