@@ -25,6 +25,7 @@
     "#suggestions/*": "./app/suggestions/*.js",
     "#users/*": "./app/users/*.js",
     "#votes/*": "./app/votes/*.js",
+    "#purchase/*": "./app/purchase/*.js",
     "#database/*": "./database/*.js",
     "#tests/*": "./tests/*.js",
     "#start/*": "./start/*.js",

@@ -1,4 +1,3 @@
-
 # Markdown Bench Test
 
 Ce fichier sert à tester **l'affichage complet** d'un fichier Markdown : TOC, rendu visuel, ancrages, blocs spéciaux, etc.
@@ -8,17 +7,22 @@ Ce fichier sert à tester **l'affichage complet** d'un fichier Markdown : TOC, r
 ## Titres
 
 # H1
+
 ## H2
+
 ### H3
+
 #### H4
+
 ##### H5
+
 ###### H6
 
 ---
 
 ## Texte
 
-Texte en **gras**, *italique*, ***gras italique***, ~~barré~~.
+Texte en **gras**, _italique_, **_gras italique_**, ~~barré~~.
 
 Texte `inline code`.
 
@@ -59,10 +63,10 @@ Texte `inline code`.
 
 ## Tableaux
 
-| Nom     | Âge | Métier       |
-|---------|-----|--------------|
-| Alice   | 24  | Développeuse |
-| Bob     | 30  | Designer     |
+| Nom   | Âge | Métier       |
+| ----- | --- | ------------ |
+| Alice | 24  | Développeuse |
+| Bob   | 30  | Designer     |
 
 ---
 
@@ -72,7 +76,7 @@ Texte `inline code`.
 
 ```javascript
 function hello(name) {
-  return `Bonjour, ${name}`;
+  return `Bonjour, ${name}`
 }
 ```
 

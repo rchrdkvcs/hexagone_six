@@ -23,6 +23,7 @@ const SponsorsController = () => import('../app/pages/controllers/sponsors_contr
 const PcClutchController = () => import('../app/pages/controllers/pc_clutch_controller.js')
 const PaymentsController = () => import('../app/payments/controllers/payments_controller.js')
 const HelpController = () => import('../app/pages/controllers/help_controller.js')
+const PaymentsGuideController = () => import('#guides/controllers/payments_guide_controller')
 
 authRoutes()
 adminRoutes()
@@ -40,8 +41,12 @@ router
     router.get('/pc-clutch', [PcClutchController, 'render'])
     router.get('/aide', [HelpController, 'render'])
 
-    router.post('/payments/create-checkout', [PaymentsController, 'checkout'])
-    router.get('/payment/success', [PaymentsController, 'success'])
-    router.get('/payment/cancel', [PaymentsController, 'cancel'])
+    router.post('/hexaboost/payments/create-checkout', [PaymentsController, 'checkout'])
+    router.get('/hexaboost/payment/success', [PaymentsController, 'success'])
+    router.get('/hexaboost/payment/cancel', [PaymentsController, 'cancel'])
+
+    router.post('/guide/payments/create-checkout', [PaymentsGuideController, 'checkout'])
+    router.get('/guide/payment/success', [PaymentsGuideController, 'success'])
+    router.get('/guide/payment/cancel', [PaymentsGuideController, 'cancel'])
   })
   .use(middleware.silentAuth())

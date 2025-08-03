@@ -29,19 +29,13 @@ defineProps<{
       :alt="guide.title"
       class="object-cover h-full w-full max-w-1/3 [mask-image:linear-gradient(to_right,black_40%,transparent_95%)] group-hover:scale-105 transition duration-400 ease-in-out"
     />
-    <div class="flex flex-col gap-2 w-full p-4 pl-0 w-full">
+    <div class="flex flex-col gap-2 w-full p-4 pl-0">
       <div class="flex flex-col gap-1">
         <h3 class="text-lg font-semibold line-clamp-1">{{ guide.title }}</h3>
         <p class="text-muted line-clamp-3">{{ guide.summary }}</p>
       </div>
       <div class="flex items-center justify-between mt-auto border-t border-default pt-4">
-        <span class="text-xs text-muted"
-          >Publié le
-          {{
-            guide.publishedAt &&
-            new Date(guide.publishedAt as unknown as string).toLocaleDateString('fr-FR')
-          }}</span
-        >
+        <span class="text-xs text-muted">Publié par {{ guide.author }}</span>
         <UBadge
           :label="guide.price != 0 ? `${guide.price} €` : 'Gratuit'"
           :color="guide.price != 0 ? 'neutral' : 'success'"

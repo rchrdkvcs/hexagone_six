@@ -1,12 +1,7 @@
 <template>
   <div class="relative w-full mx-auto overflow-hidden rounded-lg ring-2 ring-default">
     <!-- Image de base (après) -->
-    <img
-      :src="afterImage"
-      :alt="afterAlt"
-      class="w-full h-auto block"
-      ref="afterImg"
-    />
+    <img :src="afterImage" :alt="afterAlt" class="w-full h-auto block" ref="afterImg" />
 
     <!-- Container pour l'image avant avec masque -->
     <div
@@ -27,7 +22,9 @@
       :style="{ left: sliderPosition + '%' }"
     >
       <!-- Handle circulaire -->
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full shadow-lg ring ring-muted flex items-center justify-center">
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full shadow-lg ring ring-muted flex items-center justify-center"
+      >
         <div class="flex space-x-0.5">
           <div class="w-0.5 h-4 bg-muted"></div>
           <div class="w-0.5 h-4 bg-muted"></div>
@@ -45,8 +42,8 @@
     ></div>
 
     <!-- Labels -->
-    <UBadge :label="beforeLabel" color="primary" size="lg" class="absolute top-4 left-4"/>
-    <UBadge :label="afterLabel" color="primary" size="lg" class="absolute top-4 right-4"/>
+    <UBadge :label="beforeLabel" color="primary" size="lg" class="absolute top-4 left-4" />
+    <UBadge :label="afterLabel" color="primary" size="lg" class="absolute top-4 right-4" />
   </div>
 </template>
 
@@ -66,7 +63,7 @@ withDefaults(defineProps<Props>(), {
   beforeAlt: 'Avant',
   afterAlt: 'Après',
   beforeLabel: 'Avant',
-  afterLabel: 'Après'
+  afterLabel: 'Après',
 })
 
 const sliderPosition = ref(50) // Position en pourcentage

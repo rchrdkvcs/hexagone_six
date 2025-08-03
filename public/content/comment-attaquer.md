@@ -41,7 +41,7 @@ Parfois, il faudra faire un push splitté : diviser les 5 joueurs en 2 groupes (
 
 ![Illustration](/public/images/guide/2.png)
 
-Nous n'avons pas besoin de plus de 2 joueurs pour nettoyer le côté Tour Rouge, et nous n'avons pas besoin de plus de trois personnes pour pousser depuis le côté Chambre Américain / Master. 
+Nous n'avons pas besoin de plus de 2 joueurs pour nettoyer le côté Tour Rouge, et nous n'avons pas besoin de plus de trois personnes pour pousser depuis le côté Chambre Américain / Master.
 
 Gardez à l'esprit que dans certaines situations, cela peut changer. Par exemple, si les défenseurs jouent avec le mur “Gaming” ouvert, en tenant fermement le “trophée” avec un bouclier déployable et une ligne de vue depuis “Cochon” (grenier inférieur). Notez que ces deux groupes sont séparés, mais qu'ils s'entraident, car avec le mur de la tour ouvert, les défenseurs ont moins d'espace pour jouer dans le grenier.
 
@@ -72,9 +72,10 @@ Question : Quel est le problème sur l’image ?
 
 Jetons un œil à leur composition d'opérateurs. Il sera impossible d'ouvrir la trappe de la cuisine contre une équipe compétente. En général, il faut un HB (Hard Breacher) à longue portée pour cela, afin d'éviter de se faire exploser par un C4 en essayant de placer la charge. Il faut également tenir compte des “impacts tricks”.
 Le thermite peut facilement se faire impact trick, et lorsque cela se produit, vous pouvez dire adieu à l'un de vos deux exothermiques.
+
 </details>
 
-Ainsi, avant même que la phase d'action ne commence, il est possible que vous ne disposiez pas des moyens suffisants pour atteindre votre objectif. En ce qui concerne la composition, le top serait de disposer d'au moins 2 grenades frag, un set de grenades flash, un hard breach et quelqu'un pour vous aider à éliminer plus facilement les roamers de la carte. La cinquième option est une joker (n'importe quel opérateur). 
+Ainsi, avant même que la phase d'action ne commence, il est possible que vous ne disposiez pas des moyens suffisants pour atteindre votre objectif. En ce qui concerne la composition, le top serait de disposer d'au moins 2 grenades frag, un set de grenades flash, un hard breach et quelqu'un pour vous aider à éliminer plus facilement les roamers de la carte. La cinquième option est une joker (n'importe quel opérateur).
 
 Exemple de composition :
 
@@ -95,11 +96,11 @@ Il y a plus à dire sur la phase de préparation, car les drones y jouent un rô
 
 RÉSUMÉ : Ayez un plan de ce que vous voulez faire avant le début de la phase de préparation, utilisez des drones pour repérer si vous devez changer d'opérateur et vous aurez terminé la phase de préparation avec succès !
 
-> Si vous avez des difficultés contre les spawnpeeks ou les spawn-rushers, affectez un drone à la surveillance de votre spawn afin de pouvoir les préshot. Récupérez ce drone à la main situez entre votre spawn et l’endroit où vous allez entrer. 
+> Si vous avez des difficultés contre les spawnpeeks ou les spawn-rushers, affectez un drone à la surveillance de votre spawn afin de pouvoir les préshot. Récupérez ce drone à la main situez entre votre spawn et l’endroit où vous allez entrer.
 
 # Phase d’ouverture (Early Phase)
 
-C’est ici que vous entrez dans le bâtiment et commencez à créer de la pression. Vous devez déjà avoir ouvert certains angles / fenêtres / portes pour empêcher la défense de savoir d’où vient l’assaut principal. On évite d’être trop “lisible” en créant une “présence fantôme”. 
+C’est ici que vous entrez dans le bâtiment et commencez à créer de la pression. Vous devez déjà avoir ouvert certains angles / fenêtres / portes pour empêcher la défense de savoir d’où vient l’assaut principal. On évite d’être trop “lisible” en créant une “présence fantôme”.
 
 ## Par où commencer à entrer ?
 
@@ -122,7 +123,7 @@ Good Entry Point = Bon point d’entrée
 :::
 
 Comme vous pouvez le voir sur l'image ci-dessus, il est extrêmement important de choisir un emplacement où les “Entry” n'ont pas à se soucier d’aucun angle. Ils peuvent toujours avoir un drone qui surveille l'un des deux angles... et pourquoi ne pas avoir un drone supplémentaire que les “Entry” suivent ? (On appelle ça un “drone pied”)
-Idéalement, dans la phase de prep, vous devez disposer soit : 
+Idéalement, dans la phase de prep, vous devez disposer soit :
 
 1 - **Système de droning organisé** → vous pouvez entrer rapidement.
 2 - **Pas de drone** → vous devrez clear méthodiquement tous les recoins.
@@ -139,12 +140,12 @@ La phase intermédiaire est celle où vous aurez déjà des « véritables » gu
 
 Le travail des attaquants ici est d'établir le contrôle nécessaire de la carte qui vous permettra d'exécuter le site ou d'exécuter vers une autre zone. Parfois, il y aura des situations où vous n'aurez pas besoin d'obtenir le contrôle total de la carte pour pousser un objectif.
 
-Prenons l'exemple de la Villa : 
+Prenons l'exemple de la Villa :
 
 ![Illustration](/public/images/guide/5.png)
 
 :::success
-En vert, le “Control Map” nécessaire pour jouer par en dessous. 
+En vert, le “Control Map” nécessaire pour jouer par en dessous.
 :::
 
 :::warning
@@ -165,14 +166,14 @@ Question pour le lecteur : regardez l'image ci-dessous... devons-nous prendre le
 
 # Phase finale – Exécution (Late Phase)
 
-Maintenant que vous avez obtenu le Control Map requis (il peut parfois s'agir de «  power positions  », c'est-à-dire des positions où les défenseurs jouent beaucoup de points de défenses (utilitaires, gadget…) pour fortifier la zone où ils se trouvent), nous entrons dans la dernière partie d’un round. Parfois, les exécutions, ou la mise en place des exécutions, peuvent commencer à la dernière minute. C'est une idée fausse de penser que les exécutions commencent dans les 20 dernières secondes.
+Maintenant que vous avez obtenu le Control Map requis (il peut parfois s'agir de « power positions », c'est-à-dire des positions où les défenseurs jouent beaucoup de points de défenses (utilitaires, gadget…) pour fortifier la zone où ils se trouvent), nous entrons dans la dernière partie d’un round. Parfois, les exécutions, ou la mise en place des exécutions, peuvent commencer à la dernière minute. C'est une idée fausse de penser que les exécutions commencent dans les 20 dernières secondes.
 
 Il existe deux types d'exécutions : celles qui se terminent par la pose de la bombe et celles qui se terminent par la poussée des deux objectifs, également appelées « flooding » (= inonder l'objectif). Nous allons ici parler du moment où il faut poser la bombe, car inonder l'objectif nécessite une terminologie un peu plus complexe et il y’a déjà beaucoup de concepts à maîtriser dans cet article.
 
 Pour pouvoir poser la bombe en toute sécurité, vous devez définir une condition de victoire (ou plus simplement « win-con »). Les win-cons sont des conditions avec un minimum d'utilité et de main-d'œuvre où votre pose de bombe ne peut pas être interrompue.
 Question pour le lecteur : pourquoi est-il important de souligner « minimum » ?
 
-Regardons l'image ci-dessous : 
+Regardons l'image ci-dessous :
 
 ![Illustration](/public/images/guide/7.png)
 
@@ -204,7 +205,7 @@ Vous verrez pas mal de similitudes entre les rôles défensifs que nous abordero
 
 Dans ce guide, nous ne parlerons que du rôle du “first entry”. Il est censé obtenir le contrôle de la carte. Il s'agit d'un effort d'ÉQUIPE. Même si c'est le travail de l'entry d'obtenir le contrôle de la carte, les (hard) supports doivent lui permettre d'y parvenir. L'une des principales qualités d'un bon entry est de savoir quand il ne peut pas obtenir le contrôle de la carte / d’une zone avec les moyens (et les effectifs) dont il dispose.
 
-Examinons ci-dessous un problème courant qui se produit dans les compétitions T4/T3. 
+Examinons ci-dessous un problème courant qui se produit dans les compétitions T4/T3.
 
 Vous attaquez Tea et Karaoke :
 
@@ -240,7 +241,7 @@ Question pour le lecteur : pouvez-vous citer au moins trois façons différentes
 
 Ces joueurs sont censés savoir jouer les deux rôles précédent, car ils seront parfois chargés de l'Entry, et d'autres fois, ce seront eux qui feront le travail de support. Il est extrêmement important d'avoir cette connexion entre les Entry et les Supports, et c'est ce que font les joueurs Flex.
 
-Toutes les qualités mentionnées pour les Entry et les Supports doivent être possédées par un joueur Flex. 
+Toutes les qualités mentionnées pour les Entry et les Supports doivent être possédées par un joueur Flex.
 
 # Résumé & Exercice final
 

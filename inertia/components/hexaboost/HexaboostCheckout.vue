@@ -21,7 +21,7 @@ async function checkout() {
   try {
     const { loadStripe } = await import('@stripe/stripe-js')
 
-    const response = await fetch('/payments/create-checkout', {
+    const response = await fetch('/hexaboost/payments/create-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
