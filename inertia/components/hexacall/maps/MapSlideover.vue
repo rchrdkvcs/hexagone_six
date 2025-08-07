@@ -38,23 +38,27 @@ const toggleFilter = (filter: string) => {
   >
     <template #body>
       <div class="flex flex-wrap gap-2 py-3 justify-start items-center mb-6">
-        <UBadge
-          :color="selectedFilter === 'all' ? 'primary' : 'neutral'"
-          :variant="selectedFilter === 'all' ? 'solid' : 'outline'"
-          class="cursor-pointer rounded-full font-medium text-sm sm:text-base"
+        <UButton
+          :active="selectedFilter === 'all'"
           label="Voir tout"
-          value="all"
+          activeColor="primary"
+          activeVariant="solid"
+          class="rounded-full hidden md:block"
+          color="neutral"
+          variant="soft"
           @click="toggleFilter('all')"
         />
 
-        <UBadge
+        <UButton
           v-for="playlist in playlists"
           :key="playlist.id"
-          :color="selectedFilter === playlist.label ? 'primary' : 'neutral'"
+          :active="selectedFilter === playlist.label"
           :label="playlist.label"
-          :value="playlist.label"
-          :variant="selectedFilter === playlist.label ? 'solid' : 'outline'"
-          class="cursor-pointer rounded-full font-medium text-sm sm:text-base"
+          activeColor="primary"
+          activeVariant="solid"
+          class="rounded-full hidden md:block"
+          color="neutral"
+          variant="soft"
           @click="toggleFilter(playlist.label)"
         />
       </div>

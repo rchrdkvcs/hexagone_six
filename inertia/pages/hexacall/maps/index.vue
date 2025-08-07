@@ -38,29 +38,54 @@ const toggleFilter = (filter: string) => {
 <template>
   <Head title="Liste des cartes" />
 
-  <UContainer class="px-4 sm:px-6 md:px-8 py-6 md:py-8">
-    <div class="flex flex-wrap gap-2 py-3 justify-start items-center mb-6">
-      <UBadge
-        :color="selectedFilter === 'all' ? 'primary' : 'neutral'"
-        :variant="selectedFilter === 'all' ? 'solid' : 'outline'"
-        class="cursor-pointer rounded-full font-medium text-sm sm:text-base"
+  <UContainer class="px-4 sm:px-6 md:px-8 py-6 md:py-8 flex flex-col gap-8">
+    <div
+      class="flex gap-1.5 md:bg-default/75 md:backdrop-blur md:border border-default rounded-full md:p-1.5 shadow-lg w-fit ml-auto md:mx-auto sticky top-20 z-50"
+    >
+      <UButton
+        :active="selectedFilter === 'all'"
         label="Voir tout"
-        size="lg"
-        value="all"
+        activeColor="primary"
+        activeVariant="solid"
+        class="rounded-full hidden md:block"
+        color="neutral"
+        variant="ghost"
         @click="toggleFilter('all')"
       />
 
-      <UBadge
+      <UButton
         v-for="playlist in playlists"
         :key="playlist.id"
-        :color="selectedFilter === playlist.label ? 'primary' : 'neutral'"
+        :active="selectedFilter === playlist.label"
         :label="playlist.label"
-        :value="playlist.label"
-        :variant="selectedFilter === playlist.label ? 'solid' : 'outline'"
-        class="cursor-pointer rounded-full font-medium text-sm sm:text-base"
-        size="lg"
+        activeColor="primary"
+        activeVariant="solid"
+        class="rounded-full hidden md:block"
+        color="neutral"
+        variant="ghost"
         @click="toggleFilter(playlist.label)"
       />
+
+      <UDropdownMenu
+        class="md:hidden"
+        :items="
+          playlists.map((playlist: Playlist) => ({
+            label: playlist.label,
+            onSelect: () => toggleFilter(playlist.label),
+          }))
+        "
+        :ui="{
+          content: 'w-32',
+        }"
+      >
+        <UButton
+          label="Filtres"
+          icon="lucide:filter"
+          color="neutral"
+          variant="subtle"
+          class="rounded-full"
+        />
+      </UDropdownMenu>
     </div>
 
     <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
