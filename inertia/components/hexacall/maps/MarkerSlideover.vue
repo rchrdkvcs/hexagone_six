@@ -19,6 +19,9 @@ const user = useUser()
 const toast = useToast()
 const suggest = ref('')
 
+// État partagé des votes locaux entre les onglets
+const localVotes = ref<{ suggestionId: string; voteType: string }[]>([])
+
 const topSuggestions = computed(() =>
   [...suggestions.value].sort((a, b) => b.voteRatio - a.voteRatio).slice(0, 3)
 )
@@ -86,6 +89,13 @@ const handleSuggestionSubmit = async () => {
 
 const handleVote = async (suggestion: Suggestion, voteType: 'up' | 'down') => {
   const voteProperty = voteType === 'up' ? 'upVote' : 'downVote'
+
+  // Mettre à jour localVotes immédiatement
+  localVotes.value = localVotes.value.filter((vote) => vote.suggestionId !== suggestion.id)
+  localVotes.value.push({
+    suggestionId: suggestion.id,
+    voteType: voteType === 'up' ? 'upVote' : 'downVote',
+  })
 
   toast.add({
     id: suggestion.id,
@@ -293,11 +303,11 @@ const imageUrls = computed(() => {
         size="sm"
       >
         <template #top>
-          <SuggestionsList :suggestions="topSuggestions" @vote="handleVote" :user-id="user?.id" />
+          <SuggestionsList :suggestions="topSuggestions" @vote="handleVote" :user-id="user?.id" :local-votes="localVotes" />
         </template>
 
         <template #all>
-          <SuggestionsList :suggestions="allSuggestions" @vote="handleVote" :user-id="user?.id" />
+          <SuggestionsList :suggestions="allSuggestions" @vote="handleVote" :user-id="user?.id" :local-votes="localVotes" />
         </template>
       </UTabs>
     </template>
@@ -305,20 +315,13 @@ const imageUrls = computed(() => {
     <template #footer>
       <div class="flex flex-col w-full gap-2">
         <form class="size-full" @submit.prevent="handleSuggestionSubmit">
-          <UButtonGroup class="w-full" size="lg">
+          <UButtonGroup class="w-full" size="xl">
             <UInput
               v-model="suggest"
               class="w-full"
               color="neutral"
               placeholder="Faire une suggestion"
               variant="subtle"
-            />
-            <UButton
-              class="cursor-pointer"
-              color="neutral"
-              icon="lucide:camera"
-              variant="subtle"
-              @click="clickOnPhotoUpload"
             />
             <UButton
               :disabled="suggest === ''"

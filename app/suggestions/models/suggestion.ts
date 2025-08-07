@@ -43,6 +43,7 @@ export default class Suggestion extends BaseModel {
   @belongsTo(() => Marker)
   declare marker: BelongsTo<typeof Marker>
 
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

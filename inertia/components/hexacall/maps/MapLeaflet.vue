@@ -2,7 +2,7 @@
 import { onMounted, ref, shallowRef, watch } from 'vue'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import MapSlideover from '~/components/hexacall/maps/MapSlideover.vue'
+import MarkerSlideover from '~/components/hexacall/maps/MarkerSlideover.vue'
 
 import type Marker from '#markers/models/marker'
 
@@ -17,7 +17,7 @@ const props = defineProps<{
 const emits = defineEmits(['mapClick'])
 
 const overlay = useOverlay()
-const slideover = overlay.create(MapSlideover)
+const slideover = overlay.create(MarkerSlideover)
 const mapElement = shallowRef<HTMLElement | null>(null)
 const bounds = shallowRef([
   [0, 0],

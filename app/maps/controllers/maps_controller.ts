@@ -10,17 +10,43 @@ export default class MapsController {
     return inertia.render('hexacall/maps/index', { maps, playlists })
   }
 
-  async show({ inertia, params }: HttpContext) {
-    const map = await Map.findByOrFail('slug', params.slug)
-
-    await map.load('markers', (query) => {
-      query.preload('suggestions', (suggestionQuery) => {
-        suggestionQuery.preload('user', (userQuery) => {
-          userQuery.preload('votes')
+  async show({ inertia, params, auth }: HttpContext) {
+    const map = await Map.query()
+      .where('slug', params.slug)
+      .preload('markers', (markersQuery) => {
+        markersQuery.preload('user').preload('suggestions', (suggestionsQuery) => {
+          suggestionsQuery.preload('user')
         })
       })
-      query.preload('user')
-    })
+      .firstOrFail()
+
+    if (auth.user) {
+      const suggestionIds = map.markers.flatMap((marker) =>
+        marker.suggestions.map((suggestion) => suggestion.id)
+      )
+
+      if (suggestionIds.length > 0) {
+        await auth.user.load('votes', (votesQuery) => {
+          votesQuery.whereIn('suggestionId', suggestionIds)
+        })
+
+        // Sérialiser la map pour pouvoir ajouter userVotes
+        const serializedMap = map.serialize()
+
+        for (const marker of serializedMap.markers) {
+          for (const suggestion of marker.suggestions) {
+            const suggestionVotes = auth.user.votes.filter(
+              (vote) => vote.suggestionId === suggestion.id
+            )
+            suggestion.userVotes = suggestionVotes.map((vote) => ({
+              voteType: vote.voteType,
+            }))
+          }
+        }
+
+        return inertia.render('hexacall/maps/show', { map: serializedMap })
+      }
+    }
 
     return inertia.render('hexacall/maps/show', { map })
   }

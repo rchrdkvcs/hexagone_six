@@ -5,10 +5,10 @@ import { ref } from 'vue'
 const props = defineProps<{
   suggestions: Suggestion[]
   userId?: string
+  localVotes: { suggestionId: string; voteType: string }[]
 }>()
 
-const localVotes = ref<{ suggestionId: string; voteType: string }[]>([])
-const currentUserId = ref<string>(props.userId || '')
+// Utiliser les localVotes passés en prop au lieu d'un état local
 
 const emit = defineEmits<{
   (e: 'vote', suggestion: Suggestion, voteType: 'up' | 'down'): void
@@ -16,28 +16,18 @@ const emit = defineEmits<{
 
 function voteOnSuggestion(suggestion: Suggestion, voteType: 'up' | 'down') {
   emit('vote', suggestion, voteType)
-  localVotes.value = localVotes.value.filter((vote) => vote.suggestionId !== suggestion.id)
-  localVotes.value.push({
-    suggestionId: suggestion.id,
-    voteType: voteType === 'up' ? 'upVote' : 'downVote',
-  })
 }
 
 function hasVoted(suggestion: Suggestion, voteType: 'up' | 'down'): boolean {
   const voteTypeValue = voteType === 'up' ? 'upVote' : 'downVote'
 
-  return (
-    localVotes.value.some(
-      (vote) => vote.suggestionId === suggestion.id && vote.voteType === voteTypeValue
-    ) ||
-    suggestion.user.votes?.some(
-      (vote) =>
-        vote.suggestionId === suggestion.id &&
-        vote.voteType === voteTypeValue &&
-        vote.userId === currentUserId.value
-    ) ||
-    false
+  const localVote = props.localVotes.some(
+    (vote) => vote.suggestionId === suggestion.id && vote.voteType === voteTypeValue
   )
+  
+  const serverVote = (suggestion as any).userVotes?.some((vote: any) => vote.voteType === voteTypeValue)
+
+  return localVote || serverVote || false
 }
 </script>
 
