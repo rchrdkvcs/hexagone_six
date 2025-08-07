@@ -7,10 +7,12 @@ import MarkerModal from '~/components/hexacall/maps/MarkerModal.vue'
 import PolygoneModal from '~/components/hexacall/maps/PolygoneModal.vue'
 import MapLeaflet from '~/components/hexacall/maps/MapLeaflet.vue'
 import StageNav from '~/components/hexacall/maps/StageNav.vue'
+import MapSlideover from '~/components/hexacall/maps/MapSlideover.vue'
 
-import type Map from '#maps/models/map'
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { LeafletMouseEvent } from 'leaflet'
+import type Map from '#maps/models/map'
+import type Playlist from '#playlists/models/playlist'
 
 defineOptions({
   layout: Maps,
@@ -18,6 +20,8 @@ defineOptions({
 
 const props = defineProps<{
   map: Map
+  maps: Map[]
+  playlists: Playlist[]
 }>()
 
 const user = useUser()
@@ -30,6 +34,7 @@ const markers = computed(() => {
 })
 
 const overlay = useOverlay()
+const mapModal = overlay.create(MapSlideover)
 const markerModal = overlay.create(MarkerModal)
 const polygoneModal = overlay.create(PolygoneModal)
 const newPolygone = ref<{
@@ -155,6 +160,13 @@ const handleStageChange = (stage: number) => {
   currentLevel.value = stage
   newPolygone.value = null
 }
+
+const handleMapModal = () => {
+  mapModal.open({
+    maps: props.maps,
+    playlists: props.playlists,
+  })
+}
 </script>
 
 <template>
@@ -174,6 +186,17 @@ const handleStageChange = (stage: number) => {
     v-if="!editMode"
     class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2"
   >
+    <UTooltip arrow text="Afficher la liste des cartes" placement="top">
+      <UButton
+        icon="lucide:map"
+        class="rounded-full backdrop-blur-lg"
+        color="neutral"
+        variant="subtle"
+        size="xl"
+        @click="handleMapModal"
+      />
+    </UTooltip>
+
     <StageNav
       :currentLevel="currentLevel"
       :levels="props.map.levels"

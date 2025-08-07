@@ -11,6 +11,9 @@ export default class MapsController {
   }
 
   async show({ inertia, params, auth }: HttpContext) {
+    const playlists = await Playlist.all()
+    const maps = await Map.query().preload('playlists')
+
     const map = await Map.query()
       .where('slug', params.slug)
       .preload('markers', (markersQuery) => {
@@ -44,10 +47,10 @@ export default class MapsController {
           }
         }
 
-        return inertia.render('hexacall/maps/show', { map: serializedMap })
+        return inertia.render('hexacall/maps/show', { map: serializedMap, maps, playlists })
       }
     }
 
-    return inertia.render('hexacall/maps/show', { map })
+    return inertia.render('hexacall/maps/show', { map, maps, playlists })
   }
 }

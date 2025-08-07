@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import GuideCard from '~/components/guide/GuideCard.vue'
 import type Guide from '#guides/models/guide'
 
@@ -62,30 +62,6 @@ const filteredGuides = computed(() => {
     }
   })
 })
-
-// Nombre de guides par catégorie
-const getFilterCount = (filterValue: string) => {
-  if (filterValue === 'all') return props.guides.length
-
-  return props.guides.filter((guide) => {
-    switch (filterValue) {
-      case 'free':
-        return guide.price === 0 || guide.price === null || guide.price <= 0
-      case 'premium':
-        return guide.price > 0
-      case 'purchased':
-        return guide.isPurchased
-      case 'new':
-        return (
-          guide.publishedAt &&
-          new Date(guide.publishedAt as unknown as string) >=
-            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-        )
-      default:
-        return true
-    }
-  }).length
-}
 </script>
 
 <template>

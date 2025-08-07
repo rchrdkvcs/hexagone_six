@@ -5,6 +5,7 @@ import { InferPageProps } from '@adonisjs/inertia/types'
 import MapCard from '~/components/hexacall/maps/MapCard.vue'
 
 import type MapsController from '#maps/controllers/maps_controller'
+import type Map from '#maps/models/map'
 
 interface Playlist {
   id: string
@@ -22,7 +23,7 @@ const filteredMaps = computed(() => {
   const maps =
     selectedFilter.value === 'all'
       ? props.maps
-      : props.maps.filter((map) =>
+      : props.maps.filter((map: Map) =>
           map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
         )
 
@@ -50,7 +51,7 @@ const toggleFilter = (filter: string) => {
       />
 
       <UBadge
-        v-for="playlist in props.playlists"
+        v-for="playlist in playlists"
         :key="playlist.id"
         :color="selectedFilter === playlist.label ? 'primary' : 'neutral'"
         :label="playlist.label"
