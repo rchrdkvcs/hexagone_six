@@ -81,4 +81,13 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   DISCORD_WEBHOOK_URL: Env.schema.string(),
   DISCORD_HEXABOOST_WEBHOOK_URL: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for discord webhook
+  |----------------------------------------------------------
+  */
+  SENTRY_ENVIRONMENT: Env.schema.string(),
+  FRONT_SENTRY_DSN: Env.schema.string(),
+  BACK_SENTRY_DSN: Env.schema.string(),
 })

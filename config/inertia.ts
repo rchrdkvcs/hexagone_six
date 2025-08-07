@@ -1,6 +1,7 @@
 import { defineConfig } from '@adonisjs/inertia'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
 import User from '#users/models/user'
+import env from '#start/env'
 
 const inertiaConfig = defineConfig({
   /**
@@ -22,6 +23,10 @@ const inertiaConfig = defineConfig({
 
       return user
     },
+    env: () => ({
+      SENTRY_ENVIRONMENT: env.get('NODE_ENV'),
+      FRONT_SENTRY_DSN: env.get('FRONT_SENTRY_DSN'),
+    }),
   },
 
   /**
@@ -38,5 +43,9 @@ export default inertiaConfig
 declare module '@adonisjs/inertia/types' {
   export interface SharedProps extends InferSharedProps<typeof inertiaConfig> {
     user: User
+    env: {
+      SENTRY_ENVIRONMENT: string
+      FRONT_SENTRY_DSN: string
+    }
   }
 }
