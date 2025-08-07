@@ -10,6 +10,11 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - storage:/var/lib/app/storage
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
 
 volumes:
   db_data:

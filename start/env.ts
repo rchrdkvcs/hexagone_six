@@ -90,4 +90,12 @@ export default await Env.create(new URL('../', import.meta.url), {
   SENTRY_ENVIRONMENT: Env.schema.string(),
   FRONT_SENTRY_DSN: Env.schema.string(),
   BACK_SENTRY_DSN: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring the mail package
+  |----------------------------------------------------------
+  */
+  SMTP_HOST: Env.schema.string(),
+  SMTP_PORT: Env.schema.string(),
 })
