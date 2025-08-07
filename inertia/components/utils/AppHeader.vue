@@ -12,15 +12,9 @@ const user = useUser()
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
-      label: 'Compétition',
-      icon: 'lucide:trophy',
-      children: [
-        {
-          label: 'Lan',
-          icon: 'lucide:gamepad-2',
-          to: '/lan',
-        },
-      ],
+      label: 'Lan',
+      icon: 'lucide:server',
+      to: '/lan',
     },
     {
       label: 'Matériel',
