@@ -28,6 +28,8 @@
               src="/public/images/sponsors_msi.webp"
               alt="MSI logo"
               class="max-h-full max-w-[80%] object-contain"
+              width="54"
+              height="64"
             />
           </div>
 
@@ -66,6 +68,8 @@
               src="/public/images/sponsors_holy.webp"
               alt="Holy Energy logo"
               class="max-h-full max-w-[80%] object-contain"
+              width="111"
+              height="64"
             />
           </div>
 
@@ -112,6 +116,8 @@
               src="/public/images/sponsors_hm.webp"
               alt="Hardware Modding logo"
               class="max-h-full max-w-[80%] object-contain"
+              width="65"
+              height="60"
             />
           </div>
 

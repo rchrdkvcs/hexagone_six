@@ -44,6 +44,8 @@ const socialLinks = ref<NavigationMenuItem[]>([
           src="/public/images/app_logo.webp"
           alt="Logo Hexagone Six"
           class="size-8 md:size-16 mb-2"
+          width="184"
+          height="192"
         />
         <div>
           <p class="text-xl font-bold mb-1">Hexagone Six</p>

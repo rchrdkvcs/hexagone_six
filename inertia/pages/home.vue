@@ -62,6 +62,8 @@ const fonctionItems: FonctionItem[] = [
       src="/public/images/app_logo.webp"
       class="size-16 md:size-32 xl:size-48"
       alt="Logo of Hexagone Six"
+      width="184"
+      height="192"
     />
 
     <UBadge
