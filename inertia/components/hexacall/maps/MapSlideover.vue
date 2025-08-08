@@ -5,7 +5,7 @@ import MapCard from '~/components/hexacall/maps/MapCard.vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
-  maps: Map[]
+  maps: (Map & { thumbnail: string })[]
   playlists: Playlist[]
 }>()
 
@@ -14,11 +14,13 @@ defineEmits(['close'])
 const selectedFilter = ref<'all' | string>('all')
 
 const filteredMaps = computed(() => {
+  if (!Array.isArray(props.maps)) return []
+
   const maps =
     selectedFilter.value === 'all'
       ? props.maps
       : props.maps.filter((map) =>
-          map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
+          map.playlists?.some((playlist) => playlist.label === selectedFilter.value)
         )
 
   return maps.sort((a, b) => a.name.localeCompare(b.name))
@@ -68,7 +70,7 @@ const toggleFilter = (filter: string) => {
           v-for="map in filteredMaps"
           :key="map.id"
           :href="`/hexacall/cartes/${map.slug}`"
-          :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
+          :image-src="map.thumbnail"
           :name="map.name"
           @click="$emit('close')"
         />

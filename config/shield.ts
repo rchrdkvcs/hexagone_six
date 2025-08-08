@@ -6,8 +6,34 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csp: {
-    enabled: false,
-    directives: {},
+    enabled: true,
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        'https://www.googletagmanager.com',
+        'https://www.google-analytics.com',
+        'https://*.googletagmanager.com',
+      ],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+      connectSrc: [
+        "'self'",
+        'https://www.google-analytics.com',
+        'https://o4509801848307713.ingest.de.sentry.io',
+        'https://api.iconify.design',
+        'ws:',
+        'wss:',
+        'blob:',
+      ],
+      workerSrc: ["'self'", "blob:"],
+      frameAncestors: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+    },
     reportOnly: false,
   },
 
@@ -16,9 +42,9 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csrf: {
-    enabled: false,
-    exceptRoutes: [],
-    enableXsrfCookie: false,
+    enabled: true,
+    exceptRoutes: ['/webhooks/*'],
+    enableXsrfCookie: true,
     methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
   },
 

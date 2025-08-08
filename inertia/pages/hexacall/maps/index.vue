@@ -6,11 +6,7 @@ import MapCard from '~/components/hexacall/maps/MapCard.vue'
 
 import type MapsController from '#maps/controllers/maps_controller'
 import type Map from '#maps/models/map'
-
-interface Playlist {
-  id: string
-  label: string
-}
+import type Playlist from '#playlists/models/playlist'
 
 const props = defineProps<{
   maps: InferPageProps<MapsController, 'index'>['maps']
@@ -27,7 +23,7 @@ const filteredMaps = computed(() => {
           map.playlists.some((playlist: Playlist) => playlist.label === selectedFilter.value)
         )
 
-  return maps.sort((a, b) => a.name.localeCompare(b.name))
+  return maps.sort((a: Map, b: Map) => a.name.localeCompare(b.name))
 })
 
 const toggleFilter = (filter: string) => {
@@ -93,7 +89,7 @@ const toggleFilter = (filter: string) => {
         v-for="map in filteredMaps"
         :key="map.id"
         :href="`/hexacall/cartes/${map.slug}`"
-        :image-src="`/images/maps/${map.slug}/thumbnail.jpg`"
+        :image-src="map.thumbnail"
         :name="map.name"
       />
     </div>

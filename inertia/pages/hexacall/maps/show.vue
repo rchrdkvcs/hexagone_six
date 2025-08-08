@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { InferPageProps } from '@adonisjs/inertia/types'
 import { Head } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 import { useUser } from '~/composables/use_user'
@@ -11,23 +12,21 @@ import MapSlideover from '~/components/hexacall/maps/MapSlideover.vue'
 
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { LeafletMouseEvent } from 'leaflet'
-import type Map from '#maps/models/map'
 import type Playlist from '#playlists/models/playlist'
+import type MapsController from '#maps/controllers/maps_controller'
 
 defineOptions({
   layout: Maps,
 })
 
 const props = defineProps<{
-  map: Map
-  maps: Map[]
+  maps: InferPageProps<MapsController, 'index'>['maps']
+  map: InferPageProps<MapsController, 'show'>['map']
   playlists: Playlist[]
 }>()
 
 const user = useUser()
 const currentLevel = ref(props.map.levels.find((level) => level.isDefault)?.level as number)
-
-const imageUrl = computed(() => `/images/maps/${props.map.slug}/${currentLevel.value}.jpg`)
 
 const markers = computed(() => {
   return props.map.markers.filter((marker) => marker.stage === currentLevel.value)
@@ -156,7 +155,6 @@ const handleLabelView = () => {
 }
 
 const handleStageChange = (stage: number) => {
-  console.log('handleStageChange', stage)
   currentLevel.value = stage
   newPolygone.value = null
 }
@@ -177,7 +175,7 @@ const handleMapModal = () => {
     :markers="markers"
     :polygones-preview="newPolygone"
     :show-label="showLabel"
-    :image-url="imageUrl"
+    :image-url="map.images.find((url: string) => url.includes(`/${map.slug}_${currentLevel}.webp`))"
     :edit-mode="editMode"
     @mapClick="handelMapClick"
   />

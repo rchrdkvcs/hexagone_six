@@ -40,7 +40,11 @@ const socialLinks = ref<NavigationMenuItem[]>([
       class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
     >
       <div class="text-left flex items-center space-x-4">
-        <img src="/public/images/logo.png" alt="Logo Hexagone Six" class="size-8 md:size-16 mb-2" />
+        <img
+          src="/public/images/app_logo.webp"
+          alt="Logo Hexagone Six"
+          class="size-8 md:size-16 mb-2"
+        />
         <div>
           <p class="text-xl font-bold mb-1">Hexagone Six</p>
           <p class="text-muted text-sm">&copy; {{ actualYear }} Tous droits réservés</p>

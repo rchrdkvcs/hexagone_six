@@ -25,7 +25,7 @@
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              src="/public/images/sponsors/msi.png"
+              src="/public/images/sponsors_msi.webp"
               alt="MSI logo"
               class="max-h-full max-w-[80%] object-contain"
             />
@@ -63,7 +63,7 @@
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              src="/public/images/sponsors/holy.png"
+              src="/public/images/sponsors_holy.webp"
               alt="Holy Energy logo"
               class="max-h-full max-w-[80%] object-contain"
             />
@@ -109,7 +109,7 @@
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              src="/public/images/sponsors/hm.png"
+              src="/public/images/sponsors_hm.webp"
               alt="Hardware Modding logo"
               class="max-h-full max-w-[80%] object-contain"
             />

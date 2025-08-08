@@ -59,7 +59,7 @@ const fonctionItems: FonctionItem[] = [
     class="min-h-[calc(100vh-64px)] flex flex-col justify-center items-center gap-4 relative"
   >
     <img
-      src="/public/images/logo.png"
+      src="/public/images/app_logo.webp"
       class="size-16 md:size-32 xl:size-48"
       alt="Logo of Hexagone Six"
     />
@@ -160,7 +160,7 @@ const fonctionItems: FonctionItem[] = [
           to="https://fr.weareholy.com/?ref=sixquatre&utm_medium=creator&utm_source=creator"
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
-          <img src="/public/images/sponsors/holy.png" alt="Holy Logo" />
+          <img src="/public/images/sponsors_holy.webp" alt="Holy Logo" />
           <span class="font-medium text-lg">Holy Energy</span>
         </ULink>
 
@@ -169,7 +169,7 @@ const fonctionItems: FonctionItem[] = [
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
-            <img src="/public/images/sponsors/msi.png" alt="Msi Logo" />
+            <img src="/public/images/sponsors_msi.webp" alt="Msi Logo" />
             <span class="font-medium text-lg">MSI</span>
           </div>
         </ULink>
@@ -179,7 +179,7 @@ const fonctionItems: FonctionItem[] = [
           class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
-            <img src="/public/images/sponsors/hm.png" alt="Hardware Modding Logo" />
+            <img src="/public/images/sponsors_hm.webp" alt="Hardware Modding Logo" />
             <span class="font-medium text-lg">Hardware Modding</span>
           </div>
         </ULink>

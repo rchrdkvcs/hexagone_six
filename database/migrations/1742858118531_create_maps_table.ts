@@ -9,7 +9,6 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.string('slug').notNullable()
       table.json('levels').notNullable().defaultTo([])
-      table.json('images').nullable().defaultTo([])
     })
   }
 

@@ -1,0 +1,2 @@
+Sitemap: https://hexagone6.fr/sitemap.xml
+Sitemap: https://alpha.hexagone6.fr/sitemap.xml

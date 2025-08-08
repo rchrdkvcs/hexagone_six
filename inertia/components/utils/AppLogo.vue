@@ -2,7 +2,7 @@
 
 <template>
   <div class="flex items-center gap-2 relative group">
-    <img src="/public/images/logo.png" class="size-9" alt="Logo of Hexagone Six" />
+    <img src="/public/images/app_logo.webp" class="size-9" alt="Logo of Hexagone Six" />
 
     <span
       class="opacity-0 size-0 group-hover:opacity-50 group-hover:size-full bg-primary absolute inset-0 rounded-full blur-3xl -z-1 transition-all duration-500 ease-in-out"
