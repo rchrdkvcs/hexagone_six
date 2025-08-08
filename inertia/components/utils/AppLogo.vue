@@ -8,6 +8,7 @@
       alt="Logo of Hexagone Six"
       width="184"
       height="192"
+      loading="eager"
     />
 
     <span

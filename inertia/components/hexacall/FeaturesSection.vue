@@ -52,6 +52,9 @@
               alt="Image d'illustration du système de vote"
               class="rounded-lg object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
               src="/public/images/landing_feat1.webp"
+              loading="lazy"
+              width="1897"
+              height="1030"
             />
           </div>
         </UCard>
@@ -84,6 +87,9 @@
                 alt="Image d'illustration du système de vote"
                 class="rounded-md object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
                 src="/public/images/landing_feat2.webp"
+                loading="lazy"
+                width="1904"
+                height="1031"
               />
             </div>
           </UCard>
@@ -115,6 +121,9 @@
                 alt="Image d'illustration du système de vote"
                 class="rounded-md object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out border border-muted/25"
                 src="/public/images/landing_feat3.webp"
+                loading="lazy"
+                width="1889"
+                height="985"
               />
             </div>
           </UCard>
