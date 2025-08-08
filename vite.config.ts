@@ -8,7 +8,7 @@ import ui from '@nuxt/ui/vite'
 
 export default defineConfig({
   plugins: [
-    inertia({ ssr: { enabled: false } }),
+    inertia({ ssr: { enabled: true, entrypoint: 'inertia/app/ssr.ts' } }),
     vue(),
 
     tailwindcss(),
