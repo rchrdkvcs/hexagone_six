@@ -19,7 +19,7 @@ const fonctionItems: FonctionItem[] = [
     title: 'La LAN Hexagone 6',
     description:
       "L'événement compétitif incontournable à Paris, rassemblant le meilleur de la scène francophone.",
-    icon: 'lucide:gamepad-2',
+    icon: 'lucide:server',
     link: '/lan',
   },
   {
@@ -122,7 +122,7 @@ const fonctionItems: FonctionItem[] = [
           >
             <template #header>
               <div class="flex items-center gap-2">
-                <UIcon name="lucide:gamepad-2" class="text-primary size-6" />
+                <UIcon :name="fonction.icon" class="text-primary size-6" />
                 <h3 class="text-xl font-semibold">{{ fonction.title }}</h3>
                 <UBadge
                   v-if="fonction.badge?.label"
