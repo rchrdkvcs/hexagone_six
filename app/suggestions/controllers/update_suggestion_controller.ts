@@ -91,32 +91,42 @@ export default class UpdateSuggestionController {
 
       await suggestion.load('user')
 
+      const backgroundTasks = []
+
       if (userId) {
-        await Post.create({
-          userId: auth.user?.id,
-          category: 'votes',
-          label: suggestion.label,
-          markerName: marker.label,
-          mapName: map.name,
-          mapSlug: map.slug,
-          voteAction,
-        })
+        backgroundTasks.push(
+          await Post.create({
+            userId: auth.user?.id,
+            category: 'votes',
+            label: suggestion.label,
+            markerName: marker.label,
+            mapName: map.name,
+            mapSlug: map.slug,
+            voteAction,
+          })
+        )
       }
 
-      await this.discordService
-        .createEmbed()
-        .setTitle('Mise à jour de suggestion')
-        .setDescription(`La suggestion **${suggestion.label}** a été mise à jour.`)
-        .addField('User', auth.user ? auth.user.userName : 'Anonyme')
-        .addField('Suggestion', suggestion.label)
-        .addField('Action', voteAction)
-        .addField('Map - Niveau', `${map.name} - ${marker.stage}`)
-        .addField('Call actuelle', marker.label)
-        .addField('User ID', userId ? userId : userIp)
-        .setFooter(`Suggestion ID: ${suggestion.id}`)
-        .setColor(DiscordColors.SUCCESS)
-        .setTimestamp()
-        .send()
+      backgroundTasks.push(
+        await this.discordService
+          .createEmbed()
+          .setTitle('Mise à jour de suggestion')
+          .setDescription(`La suggestion **${suggestion.label}** a été mise à jour.`)
+          .addField('User', auth.user ? auth.user.userName : 'Anonyme')
+          .addField('Suggestion', suggestion.label)
+          .addField('Action', voteAction)
+          .addField('Map - Niveau', `${map.name} - ${marker.stage}`)
+          .addField('Call actuelle', marker.label)
+          .addField('User ID', userId ? userId : userIp)
+          .setFooter(`Suggestion ID: ${suggestion.id}`)
+          .setColor(DiscordColors.SUCCESS)
+          .setTimestamp()
+          .send()
+      )
+
+      Promise.allSettled(backgroundTasks).catch((error) => {
+        console.error('Background tasks failed:', error)
+      })
 
       return response.status(200).json(suggestion)
     } catch (error) {

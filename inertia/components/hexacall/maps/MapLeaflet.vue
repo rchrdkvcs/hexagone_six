@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, shallowRef, watch } from 'vue'
 import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
 import MarkerSlideover from '~/components/hexacall/maps/MarkerSlideover.vue'
-
 import type Marker from '#markers/models/marker'
 
 const props = defineProps<{
@@ -13,6 +11,8 @@ const props = defineProps<{
   polygonesPreview: { coordinates: { x: number; y: number }[] } | null
   editMode: 'marker' | 'polygon' | null
 }>()
+
+let L: any
 
 const emits = defineEmits(['mapClick'])
 
@@ -28,8 +28,12 @@ const previewPolygonLayer = shallowRef<L.Polygon | null>(null)
 const markerLayers = shallowRef<L.Layer[]>([])
 const selectedMarker = ref<Marker | null>(null)
 
-onMounted(() => {
-  if (!mapElement.value) return
+onMounted(async () => {
+  if (typeof window !== 'undefined') {
+    L = (await import('leaflet')).default
+  }
+
+  if (!mapElement.value || !L) return
 
   const map = L.map(mapElement.value, {
     crs: L.CRS.Simple,
@@ -53,7 +57,7 @@ onMounted(() => {
 
   map
     .fitBounds(bounds.value as L.LatLngBoundsExpression)
-    .on('click', (event) => emits('mapClick', event))
+    .on('click', (event: L.LeafletMouseEvent) => emits('mapClick', event))
 })
 
 const handleSlideover = (marker: Marker) => {
@@ -66,7 +70,7 @@ const handleSlideover = (marker: Marker) => {
 }
 
 const addMarkers = () => {
-  if (!mapInstance.value) return
+  if (!mapInstance.value || !L) return
 
   markerLayers.value.forEach((layer) => {
     mapInstance.value?.removeLayer(layer)
@@ -131,7 +135,7 @@ const addMarkers = () => {
 }
 
 const addPreviewPolygon = () => {
-  if (!mapInstance.value) return
+  if (!mapInstance.value || !L) return
 
   if (previewPolygonLayer.value) {
     mapInstance.value.removeLayer(previewPolygonLayer.value)

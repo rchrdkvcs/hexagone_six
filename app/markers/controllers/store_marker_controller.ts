@@ -47,27 +47,32 @@ export default class StoreMarkerController {
 
       const map = await Map.findOrFail(data.mapId)
 
-      await Post.create({
-        userId: user.id,
-        category: 'proposition',
-        label: data.label,
-        markerName: marker.label,
-        mapName: map.name,
-        mapSlug: map.slug,
-      })
+      const backgroundTasks = [
+        await Post.create({
+          userId: user.id,
+          category: 'proposition',
+          label: data.label,
+          markerName: marker.label,
+          mapName: map.name,
+          mapSlug: map.slug,
+        }),
+        await this.discordService
+          .createEmbed()
+          .setTitle('Nouveau marqueur ajouté')
+          .setDescription(`Un nouveau marqueur a été ajouté par **${user.userName}**`)
+          .addField('Label', data.label)
+          .addField('Map - Niveau', map.name + ' - ' + data.stage.toString())
+          .addField('Type', data.type)
+          .addField('User ID', user.id)
+          .setFooter(`ID: ${marker.id}`)
+          .setColor(DiscordColors.SUCCESS)
+          .setTimestamp()
+          .send(),
+      ]
 
-      await this.discordService
-        .createEmbed()
-        .setTitle('Nouveau marqueur ajouté')
-        .setDescription(`Un nouveau marqueur a été ajouté par **${user.userName}**`)
-        .addField('Label', data.label)
-        .addField('Map - Niveau', map.name + ' - ' + data.stage.toString())
-        .addField('Type', data.type)
-        .addField('User ID', user.id)
-        .setFooter(`ID: ${marker.id}`)
-        .setColor(DiscordColors.SUCCESS)
-        .setTimestamp()
-        .send()
+      Promise.allSettled(backgroundTasks).catch((error) => {
+        console.error('Background tasks failed:', error)
+      })
 
       return response.status(201).json({
         success: true,
