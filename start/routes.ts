@@ -8,6 +8,7 @@
 */
 
 import router from '@adonisjs/core/services/router'
+import transmit from '@adonisjs/transmit/services/main'
 import { middleware } from '#start/kernel'
 
 import authRoutes from '#start/routes/auth'
@@ -32,6 +33,8 @@ hexacallRoutes()
 lanRoutes()
 hexaboostRoutes()
 guideRoutes()
+
+transmit.registerRoutes()
 
 router
   .group(() => {

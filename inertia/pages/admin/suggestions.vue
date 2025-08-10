@@ -8,7 +8,6 @@ const props = defineProps<{
   suggestions: Suggestion[]
 }>()
 
-console.log('suggestions', props.suggestions)
 
 const UButton = resolveComponent('UButton')
 const ULink = resolveComponent('ULink')

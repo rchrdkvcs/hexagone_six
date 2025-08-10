@@ -43,11 +43,11 @@ async function checkout() {
           sessionId: data.sessionId,
         })
       } else {
-        console.log('Stripe not initialized')
+        error.value = 'Stripe initialization failed'
       }
     }
   } catch (err) {
-    console.error('Payment error:', err)
+    // Payment error occurred
     error.value = 'Une erreur est survenue lors du traitement du paiement'
   } finally {
     isLoading.value = false

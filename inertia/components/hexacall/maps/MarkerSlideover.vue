@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import { useUser } from '~/composables/use_user'
+import { useTransmit } from '~/composables/use_transmit'
 import SuggestionsList from '~/components/hexacall/maps/SuggestionsList.vue'
 
 import type { TabsItem } from '@nuxt/ui'
@@ -211,6 +212,57 @@ const imageUrls = computed(() => {
   }
 
   return urls
+})
+
+// SSE pour les mises à jour temps réel des suggestions
+const { subscribe } = useTransmit()
+let unsubscribeSuggestions: (() => void) | null = null
+
+onMounted(() => {
+  // Souscrire aux nouvelles suggestions pour ce marker
+  const unsubscribeCreate = subscribe(`markers:${props.marker.id}:suggestions:create`, (data) => {
+    // Ne pas ajouter la suggestion si c'est l'utilisateur courant qui l'a créée
+    // (elle sera déjà ajoutée via la réponse HTTP)
+    if (data.suggestion.user?.id !== user.value?.id) {
+      // Vérifier que la suggestion n'existe pas déjà
+      const existingSuggestion = props.marker.suggestions.find(s => s.id === data.suggestion.id)
+      if (!existingSuggestion) {
+        props.marker.suggestions.push(data.suggestion)
+      }
+      
+      // Notification toast seulement pour les autres utilisateurs
+      toast.add({
+        title: 'Nouvelle suggestion',
+        description: `${data.suggestion.label} proposée par ${data.suggestion.user?.userName}`,
+        icon: 'lucide:lightbulb',
+        color: 'info',
+      })
+    }
+  })
+
+  // Souscrire aux mises à jour des suggestions (votes)
+  const unsubscribeUpdate = subscribe(`markers:${props.marker.id}:suggestions:update`, (data) => {
+    // Mettre à jour la suggestion dans la liste
+    const index = props.marker.suggestions.findIndex(s => s.id === data.suggestion.id)
+    if (index !== -1) {
+      props.marker.suggestions[index] = data.suggestion
+    }
+    
+    // Pas de notifications toast pour les votes - ce sont juste des mises à jour silencieuses
+    // Les votes sont visibles en temps réel via la mise à jour des données
+  })
+
+  // Combiner les deux unsubscribe functions
+  unsubscribeSuggestions = () => {
+    unsubscribeCreate()
+    unsubscribeUpdate()
+  }
+})
+
+onUnmounted(() => {
+  if (unsubscribeSuggestions) {
+    unsubscribeSuggestions()
+  }
 })
 </script>
 

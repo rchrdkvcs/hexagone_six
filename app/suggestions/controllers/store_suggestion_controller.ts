@@ -3,6 +3,7 @@ import Suggestion from '#suggestions/models/suggestion'
 import Post from '#users/models/post'
 import DiscordService, { DiscordColors } from '#core/services/discord_service'
 import { inject } from '@adonisjs/core'
+import transmit from '@adonisjs/transmit/services/main'
 
 @inject()
 export default class StoreSuggestionController {
@@ -48,11 +49,18 @@ export default class StoreSuggestionController {
           .send()
       ]
 
-      Promise.allSettled(backgroundTasks).catch((error) => {
-        console.error('Background tasks failed:', error)
+      Promise.allSettled(backgroundTasks).catch(() => {
+        // Background tasks failed silently
       })
 
       await suggestion.load('user')
+
+      transmit.broadcast(`markers:${data.markerId}:suggestions:create`, {
+        suggestion: {
+          ...suggestion.serialize(),
+          user: suggestion.user?.serialize()
+        }
+      })
 
       return response.status(201).json(suggestion)
     } catch (error) {

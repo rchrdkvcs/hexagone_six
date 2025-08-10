@@ -4,6 +4,7 @@ import Vote from '#votes/models/vote'
 import Post from '#users/models/post'
 import DiscordService, { DiscordColors } from '#core/services/discord_service'
 import { inject } from '@adonisjs/core'
+import transmit from '@adonisjs/transmit/services/main'
 
 @inject()
 export default class UpdateSuggestionController {
@@ -29,7 +30,7 @@ export default class UpdateSuggestionController {
           .where('suggestionId', suggestionId)
           .first()
       } catch (voteError) {
-        console.error('Error checking for existing vote:', voteError.message)
+        // Error checking for existing vote - continue with null
       }
 
       const userId = auth.user ? auth.user.id : null
@@ -124,8 +125,15 @@ export default class UpdateSuggestionController {
           .send()
       )
 
-      Promise.allSettled(backgroundTasks).catch((error) => {
-        console.error('Background tasks failed:', error)
+      Promise.allSettled(backgroundTasks).catch(() => {
+        // Background tasks failed silently
+      })
+
+      transmit.broadcast(`markers:${marker.id}:suggestions:update`, {
+        suggestion: {
+          ...suggestion.serialize(),
+          user: suggestion.user?.serialize()
+        }
       })
 
       return response.status(200).json(suggestion)

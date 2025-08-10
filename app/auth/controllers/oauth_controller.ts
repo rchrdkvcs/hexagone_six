@@ -69,8 +69,8 @@ export default class OauthController {
         .send(undefined)
     ]
 
-    Promise.allSettled(backgroundTasks).catch((error) => {
-      console.error('Background tasks failed:', error)
+    Promise.allSettled(backgroundTasks).catch(() => {
+      // Background tasks failed silently
     })
 
     const returnUrl = session.get('returnUrl', '/')

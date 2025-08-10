@@ -53,8 +53,8 @@ export default class RegistersController {
         .send(undefined)
     ]
 
-    Promise.allSettled(backgroundTasks).catch((error) => {
-      console.error('Background tasks failed:', error)
+    Promise.allSettled(backgroundTasks).catch(() => {
+      // Background tasks failed silently
     })
 
     return response.redirect().toPath('/')

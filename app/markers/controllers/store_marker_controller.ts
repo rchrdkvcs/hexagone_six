@@ -5,6 +5,7 @@ import Post from '#users/models/post'
 import Map from '#maps/models/map'
 import DiscordService, { DiscordColors } from '#core/services/discord_service'
 import { inject } from '@adonisjs/core'
+import transmit from '@adonisjs/transmit/services/main'
 
 @inject()
 export default class StoreMarkerController {
@@ -70,10 +71,20 @@ export default class StoreMarkerController {
           .send(),
       ]
 
-      Promise.allSettled(backgroundTasks).catch((error) => {
-        console.error('Background tasks failed:', error)
+      Promise.allSettled(backgroundTasks).catch(() => {
+        // Background tasks failed silently
       })
 
+      transmit.broadcast('markers:create', {
+        marker: {
+          ...marker.serialize(),
+          user: marker.user.serialize(),
+          suggestions: marker.suggestions.map((suggestion) => ({
+            ...suggestion.serialize(),
+            user: suggestion.user.serialize(),
+          })),
+        },
+      })
       return response.status(201).json({
         success: true,
         marker,

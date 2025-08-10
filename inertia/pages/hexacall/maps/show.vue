@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { InferPageProps } from '@adonisjs/inertia/types'
 import { Head } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useUser } from '~/composables/use_user'
+import { useTransmit } from '~/composables/use_transmit'
 import Maps from '~/layouts/maps.vue'
 import MarkerModal from '~/components/hexacall/maps/MarkerModal.vue'
 import PolygoneModal from '~/components/hexacall/maps/PolygoneModal.vue'
@@ -28,9 +29,15 @@ const props = defineProps<{
 const user = useUser()
 const currentLevel = ref(props.map.levels.find((level) => level.isDefault)?.level as number)
 
+// Reactive markers array that will be updated via SSE
+const allMarkers = ref([...props.map.markers])
 const markers = computed(() => {
-  return props.map.markers.filter((marker) => marker.stage === currentLevel.value)
+  return allMarkers.value.filter((marker) => marker.stage === currentLevel.value)
 })
+
+// Real-time updates
+const { subscribe } = useTransmit()
+let unsubscribeMarkers: (() => void) | null = null
 
 const overlay = useOverlay()
 const mapModal = overlay.create(MapSlideover)
@@ -165,6 +172,30 @@ const handleMapModal = () => {
     playlists: props.playlists,
   })
 }
+
+// Subscribe to real-time marker updates
+onMounted(() => {
+  unsubscribeMarkers = subscribe('markers:create', (data) => {
+    if (data.marker.mapId === props.map.id) {
+      allMarkers.value.push(data.marker)
+      
+      // Show toast notification
+      const toast = useToast()
+      toast.add({
+        title: 'Nouveau marqueur',
+        description: `${data.marker.label} a été ajouté par ${data.marker.user?.userName}`,
+        icon: 'lucide:map-pin',
+        color: 'success',
+      })
+    }
+  })
+})
+
+onUnmounted(() => {
+  if (unsubscribeMarkers) {
+    unsubscribeMarkers()
+  }
+})
 </script>
 
 <template>

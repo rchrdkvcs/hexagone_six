@@ -64,7 +64,6 @@ async function handlePurchase() {
       throw new Error('URL de paiement invalide')
     }
   } catch (err) {
-    console.error("Erreur lors de l'achat:", err)
     error.value = 'Une erreur est survenue. Veuillez réessayer.'
   } finally {
     isLoading.value = false
