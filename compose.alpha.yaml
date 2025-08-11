@@ -7,7 +7,7 @@ services:
     ports:
       - '5000:3000'
     volumes:
-      - /mnt/volumes:/app/storage
+      - /mnt/volumes/hexagone6_alpha:/app/storage
 
 volumes:
   storage:
