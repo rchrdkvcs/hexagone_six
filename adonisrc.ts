@@ -48,7 +48,7 @@ export default defineConfig({
       file: () => import('adonisjs-scheduler/scheduler_provider'),
       environment: ['console'],
     },
-    () => import('@adonisjs/transmit/transmit_provider')
+    () => import('@adonisjs/transmit/transmit_provider'),
   ],
 
   /*
@@ -59,10 +59,14 @@ export default defineConfig({
   | List of modules to import before starting the application.
   |
   */
-  preloads: [() => import('#start/routes'), () => import('#start/kernel'), {
-    file: () => import('#start/scheduler'),
-    environment: ['console'],
-  }],
+  preloads: [
+    () => import('#start/routes'),
+    () => import('#start/kernel'),
+    {
+      file: () => import('#start/scheduler'),
+      environment: ['console'],
+    },
+  ],
 
   /*
   |--------------------------------------------------------------------------
