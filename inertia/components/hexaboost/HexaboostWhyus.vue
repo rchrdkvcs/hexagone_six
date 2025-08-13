@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ImageComparison from '../utils/ImageComparison.vue'
+import hexaboostBefore from '/public/images/hexaboost_before.webp'
+import hexaboostAfter from '/public/images/hexaboost_after.webp'
 </script>
 
 <template>
@@ -23,8 +25,8 @@ import ImageComparison from '../utils/ImageComparison.vue'
       <!-- Composant de comparaison avant/après -->
       <div class="px-4 w-full">
         <ImageComparison
-          before-image="/public/images/hexaboost_before.webp"
-          after-image="/public/images/hexaboost_after.webp"
+          :before-image="hexaboostBefore"
+          :after-image="hexaboostAfter"
           before-label="Avant HexaBoost"
           after-label="Après HexaBoost"
           before-alt="Performance avant HexaBoost"
