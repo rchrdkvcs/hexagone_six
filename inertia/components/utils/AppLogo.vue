@@ -3,7 +3,7 @@
 <template>
   <div class="flex items-center gap-2 relative group">
     <img
-      src="/imagesimages/app_logo.webp"
+      src="/images/app_logo.webp"
       class="size-9"
       alt="Logo of Hexagone Six"
       width="184"
