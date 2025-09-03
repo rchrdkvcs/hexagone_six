@@ -21,7 +21,7 @@ async function checkout() {
   try {
     const { loadStripe } = await import('@stripe/stripe-js')
 
-    const response = await fetch('/payments/create-checkout', {
+    const response = await fetch('/hexaboost/payments/create-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,11 +43,11 @@ async function checkout() {
           sessionId: data.sessionId,
         })
       } else {
-        console.log('Stripe not initialized')
+        error.value = 'Stripe initialization failed'
       }
     }
   } catch (err) {
-    console.error('Payment error:', err)
+    // Payment error occurred
     error.value = 'Une erreur est survenue lors du traitement du paiement'
   } finally {
     isLoading.value = false

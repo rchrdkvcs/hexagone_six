@@ -22,7 +22,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Core"
         description="Le point d’entrée sérieux dans la performance."
         price="989.99 €"
-        imageUrl="/images/materials/clutch-x.webp"
+        imageUrl="/public/images/materials_clutch-x.webp"
         :config="{
           cpu: 'AMD Ryzen 5 7600',
           mb: 'MSI PRO B650M-P',
@@ -46,7 +46,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Pro"
         description="L’équilibre parfait pour monter en niveau."
         price="1189,99 €"
-        imageUrl="/images/materials/clutch-x.webp"
+        imageUrl="/public/images/materials_clutch-x.webp"
         :config="{
           cpu: 'AMD Ryzen 5 9600X',
           mb: 'MSI PRO B650M-P',
@@ -70,7 +70,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Ultra"
         description="Le PC des joueurs compétitifs exigeants."
         price="1569,99 €"
-        imageUrl="/images/materials/clutch-x-ultra.webp"
+        imageUrl="/public/images/materials_clutch-x-ultra.webp"
         :config="{
           cpu: 'AMD Ryzen 7 7800X3D',
           mb: 'MSI PRO B650-S WIFI',
@@ -94,7 +94,7 @@ import PcCard from '~/components/materials/PcCard.vue'
         name="Clutch X Ultra Pro"
         description="Le monstre ultime."
         price="1899,99 €"
-        imageUrl="/images/materials/clutch-x-ultra.webp"
+        imageUrl="/public/images/materials_clutch-x-ultra.webp"
         :config="{
           cpu: 'AMD Ryzen 7 9800X3D',
           mb: 'MSI PRO B650-S WIFI',

@@ -28,8 +28,17 @@ export class StripeService {
     cancelUrl: string
     customerEmail?: string
     productName: string
+    metadata?: Record<string, string>
   }) {
-    const { amount, currency = 'eur', successUrl, cancelUrl, customerEmail, productName } = params
+    const {
+      amount,
+      currency = 'eur',
+      successUrl,
+      cancelUrl,
+      customerEmail,
+      productName,
+      metadata,
+    } = params
 
     let customerId: string | undefined
 
@@ -65,6 +74,7 @@ export class StripeService {
             currency,
             product_data: {
               name: productName,
+              metadata: metadata || {},
             },
             unit_amount: Math.round(amount * 100), // Convert to cents
           },
@@ -78,6 +88,7 @@ export class StripeService {
       customer_email: customerId ? undefined : customerEmail,
       phone_number_collection: { enabled: true },
       billing_address_collection: 'required',
+      metadata: metadata || {},
     })
   }
 
@@ -101,6 +112,7 @@ export class StripeService {
         currency: session.currency,
         payment_status: session.payment_status,
         created: session.created,
+        metadata: session.metadata || {},
       }
 
       // If customer exists, retrieve their details

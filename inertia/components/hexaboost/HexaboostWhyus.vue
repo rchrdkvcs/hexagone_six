@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ImageComparison from '../utils/ImageComparison.vue'
+import hexaboostBefore from '/public/images/hexaboost_before.webp'
+import hexaboostAfter from '/public/images/hexaboost_after.webp'
+</script>
 
 <template>
   <section class="relative bg-default border-t border-default">
@@ -13,6 +17,21 @@
         >
           Pourquoi HexaBoost est différent ?
         </h2>
+        <p class="text-base sm:text-lg text-muted text-center text-balance mt-6">
+          On ne vend pas du rêve, on vend du vrai !
+        </p>
+      </div>
+
+      <!-- Composant de comparaison avant/après -->
+      <div class="px-4 w-full">
+        <ImageComparison
+          :before-image="hexaboostBefore"
+          :after-image="hexaboostAfter"
+          before-label="Avant HexaBoost"
+          after-label="Après HexaBoost"
+          before-alt="Performance avant HexaBoost"
+          after-alt="Performance après HexaBoost"
+        />
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 z-0">

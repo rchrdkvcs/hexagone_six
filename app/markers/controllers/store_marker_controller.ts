@@ -5,6 +5,7 @@ import Post from '#users/models/post'
 import Map from '#maps/models/map'
 import DiscordService, { DiscordColors } from '#core/services/discord_service'
 import { inject } from '@adonisjs/core'
+import transmit from '@adonisjs/transmit/services/main'
 
 @inject()
 export default class StoreMarkerController {
@@ -47,28 +48,43 @@ export default class StoreMarkerController {
 
       const map = await Map.findOrFail(data.mapId)
 
-      await Post.create({
-        userId: user.id,
-        category: 'proposition',
-        label: data.label,
-        markerName: marker.label,
-        mapName: map.name,
-        mapSlug: map.slug,
+      const backgroundTasks = [
+        await Post.create({
+          userId: user.id,
+          category: 'proposition',
+          label: data.label,
+          markerName: marker.label,
+          mapName: map.name,
+          mapSlug: map.slug,
+        }),
+        await this.discordService
+          .createEmbed()
+          .setTitle('Nouveau marqueur ajouté')
+          .setDescription(`Un nouveau marqueur a été ajouté par **${user.userName}**`)
+          .addField('Label', data.label)
+          .addField('Map - Niveau', map.name + ' - ' + data.stage.toString())
+          .addField('Type', data.type)
+          .addField('User ID', user.id)
+          .setFooter(`ID: ${marker.id}`)
+          .setColor(DiscordColors.SUCCESS)
+          .setTimestamp()
+          .send(),
+      ]
+
+      Promise.allSettled(backgroundTasks).catch(() => {
+        // Background tasks failed silently
       })
 
-      await this.discordService
-        .createEmbed()
-        .setTitle('Nouveau marqueur ajouté')
-        .setDescription(`Un nouveau marqueur a été ajouté par **${user.userName}**`)
-        .addField('Label', data.label)
-        .addField('Map - Niveau', map.name + ' - ' + data.stage.toString())
-        .addField('Type', data.type)
-        .addField('User ID', user.id)
-        .setFooter(`ID: ${marker.id}`)
-        .setColor(DiscordColors.SUCCESS)
-        .setTimestamp()
-        .send()
-
+      transmit.broadcast('markers:create', {
+        marker: {
+          ...marker.serialize(),
+          user: marker.user.serialize(),
+          suggestions: marker.suggestions.map((suggestion) => ({
+            ...suggestion.serialize(),
+            user: suggestion.user.serialize(),
+          })),
+        },
+      })
       return response.status(201).json({
         success: true,
         marker,

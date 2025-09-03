@@ -6,6 +6,7 @@ interface FonctionItem {
   description: string
   icon: string
   link?: string
+  col?: number
   badge?: {
     label: string
     variant: 'subtle' | 'solid' | 'outline' | 'soft'
@@ -18,7 +19,7 @@ const fonctionItems: FonctionItem[] = [
     title: 'La LAN Hexagone 6',
     description:
       "L'événement compétitif incontournable à Paris, rassemblant le meilleur de la scène francophone.",
-    icon: 'lucide:gamepad-2',
+    icon: 'lucide:server',
     link: '/lan',
   },
   {
@@ -48,20 +49,9 @@ const fonctionItems: FonctionItem[] = [
       'Des guides et tutoriels complets pour maîtriser Siege X, de la configuration optimale de votre PC aux stratégies avancées.',
     icon: 'lucide:book',
     link: '/',
+    col: 2,
     badge: {
-      label: 'Bientôt Disponible',
-      variant: 'subtle',
-      color: 'warning',
-    },
-  },
-  {
-    title: 'Ranking',
-    description:
-      'Un système de classement transparent et équitable pour suivre votre progression et celle de vos amis.',
-    icon: 'lucide:book',
-    link: '/',
-    badge: {
-      label: 'Bientôt Disponible',
+      label: 'Bientôt',
       variant: 'subtle',
       color: 'warning',
     },
@@ -74,9 +64,12 @@ const fonctionItems: FonctionItem[] = [
     class="min-h-[calc(100vh-64px)] flex flex-col justify-center items-center gap-4 relative"
   >
     <img
-      src="/public/images/logo.png"
+      src="/public/images/app_logo.webp"
       class="size-16 md:size-32 xl:size-48"
       alt="Logo of Hexagone Six"
+      width="184"
+      height="192"
+      loading="eager"
     />
 
     <UBadge
@@ -123,13 +116,18 @@ const fonctionItems: FonctionItem[] = [
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 z-0">
-        <Link v-for="fonction in fonctionItems" :href="fonction.link as string">
+        <Link
+          v-for="fonction in fonctionItems"
+          :href="fonction.link as string"
+          :class="[fonction.col === 2 ? 'md:col-span-2' : 'md:col-span-1']"
+          :key="fonction.title"
+        >
           <UCard
             class="hover:bg-muted hover:scale-102 cursor-pointer transition duration-200 ease-in-out"
           >
             <template #header>
               <div class="flex items-center gap-2">
-                <UIcon name="lucide:gamepad-2" class="text-primary size-6" />
+                <UIcon :name="fonction.icon" class="text-primary size-6" />
                 <h3 class="text-xl font-semibold">{{ fonction.title }}</h3>
                 <UBadge
                   v-if="fonction.badge?.label"
@@ -167,29 +165,29 @@ const fonctionItems: FonctionItem[] = [
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 z-0">
         <ULink
-          to="https://fr.weareholy.com/"
-          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
+          to="https://fr.weareholy.com/?ref=sixquatre&utm_medium=creator&utm_source=creator"
+          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
-          <img src="/public/images/sponsors/holy.png" alt="Holy Logo" />
+          <img src="/public/images/sponsors_holy.webp" alt="Holy Logo" />
           <span class="font-medium text-lg">Holy Energy</span>
         </ULink>
 
         <ULink
-          to="https://www.msi.com/"
-          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
+          to="https://msi.gm/S04F5BA3"
+          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
-            <img src="/public/images/sponsors/msi.png" alt="Msi Logo" />
+            <img src="/public/images/sponsors_msi.webp" alt="Msi Logo" />
             <span class="font-medium text-lg">MSI</span>
           </div>
         </ULink>
 
         <ULink
           to="https://hardwaremodding.fr/"
-          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-elevated rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary"
+          class="flex flex-col items-center justify-center gap-2 p-6 h-[120px] bg-elevated/50 hover:bg-primary/15 rounded-lg ring ring-default transition duration-200 ease-in-out hover:ring-primary/25"
         >
           <div class="flex flex-col items-center gap-2">
-            <img src="/public/images/sponsors/hm.png" alt="Hardware Modding Logo" />
+            <img src="/public/images/sponsors_hm.webp" alt="Hardware Modding Logo" />
             <span class="font-medium text-lg">Hardware Modding</span>
           </div>
         </ULink>

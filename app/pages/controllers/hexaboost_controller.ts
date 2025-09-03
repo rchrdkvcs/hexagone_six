@@ -2,6 +2,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HexaboostController {
   async render({ inertia }: HttpContext) {
-    return inertia.render('hexaboost')
+    return inertia.render('hexaboost/index')
   }
 }

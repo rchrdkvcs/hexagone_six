@@ -14,7 +14,7 @@ export default class StoreMarkerImageController {
     vine.object({
       markerId: vine.string().uuid(),
       photo: vine.file({
-        size: '15mb',
+        size: '10mb',
         extnames: ['jpg', 'jpeg', 'png'],
       }),
     })
@@ -44,19 +44,25 @@ export default class StoreMarkerImageController {
 
     await marker.save()
 
-    await this.discordService
-      .createEmbed()
-      .setTitle('Nouvelle image de call')
-      .setDescription(`Une nouvelle image a été ajoutée au call **${marker.label}**`)
-      .addField('Map - Niveau', marker.map.name + ' - ' + marker.stage)
-      .addField('Call', marker.label)
-      .addField('Call ID', marker.id)
-      .addField('Téléchargée par', user.userName)
-      .addField('User ID', user.id)
-      .addField('Image URL', `[Voir l'image](http://localhost:3333${imageUrl})`)
-      .setColor(DiscordColors.SUCCESS)
-      .setTimestamp()
-      .send()
+    const backgroundTasks = [
+      await this.discordService
+        .createEmbed()
+        .setTitle('Nouvelle image de call')
+        .setDescription(`Une nouvelle image a été ajoutée au call **${marker.label}**`)
+        .addField('Map - Niveau', marker.map.name + ' - ' + marker.stage)
+        .addField('Call', marker.label)
+        .addField('Call ID', marker.id)
+        .addField('Téléchargée par', user.userName)
+        .addField('User ID', user.id)
+        .addField('Image URL', `[Voir l'image](http://localhost:3333${imageUrl})`)
+        .setColor(DiscordColors.SUCCESS)
+        .setTimestamp()
+        .send()
+    ]
+
+    Promise.allSettled(backgroundTasks).catch(() => {
+      // Background tasks failed silently
+    })
 
     return response.ok({
       message: 'Image uploaded successfully',

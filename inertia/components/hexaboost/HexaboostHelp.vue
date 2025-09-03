@@ -1,0 +1,48 @@
+<script setup lang="ts"></script>
+
+<template>
+  <section class="relative bg-default border-t border-default">
+    <span
+      class="absolute size-full inset-0 isolate bg-gradient-to-b from-muted dark:from-muted/40 to-default"
+    />
+
+    <UContainer class="w-full space-y-8 md:space-y-16 flex flex-col py-16 lg:py-24">
+      <div class="space-y-2 px-4 md:px-0 z-0">
+        <h2
+          class="text-3xl sm:text-4xl lg:text-5xl text-pretty tracking-tight font-bold text-highlighted text-center"
+        >
+          Vous avez des questions ? Des doutes ?
+        </h2>
+        <p class="text-base sm:text-lg text-muted text-center text-balance mt-6">
+          Contactez-nous sur Discord, ou consultez notre page
+          <ULink to="/aide" class="underline">aide</ULink>
+          pour en savoir plus sur Hexaboost.
+        </p>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-4 justify-center items-center z-0">
+        <ULink
+          to="https://discord.gg/ABFsPxuYZr"
+          class="w-full flex rounded-lg bg-elevated/50 ring ring-default transition ease-in-out duration-250 hover:bg-elevated hover:ring-accented p-4 gap-4 items-center"
+        >
+          <UIcon
+            name="simple-icons:discord"
+            class="text-indigo-400 size-12 rounded-lg bg-default p-2 flex items-center justify-center"
+          />
+          <span class="font-medium">Rejoignez notre serveur Discord</span>
+        </ULink>
+
+        <ULink
+          to="/aide"
+          class="w-full flex rounded-lg bg-elevated/50 ring ring-default transition ease-in-out duration-250 hover:bg-elevated hover:ring-accented p-4 gap-4 items-center"
+        >
+          <UIcon
+            name="lucide:help-circle"
+            class="text-default/100 size-12 rounded-lg bg-default p-2 flex items-center justify-center"
+          />
+          <span class="font-medium"> Consultez notre page d'aide </span>
+        </ULink>
+      </div>
+    </UContainer>
+  </section>
+</template>

@@ -1,35 +1,46 @@
 <script lang="ts" setup>
+import { InferPageProps } from '@adonisjs/inertia/types'
 import { Head } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useUser } from '~/composables/use_user'
+import { useTransmit } from '~/composables/use_transmit'
 import Maps from '~/layouts/maps.vue'
 import MarkerModal from '~/components/hexacall/maps/MarkerModal.vue'
 import PolygoneModal from '~/components/hexacall/maps/PolygoneModal.vue'
 import MapLeaflet from '~/components/hexacall/maps/MapLeaflet.vue'
 import StageNav from '~/components/hexacall/maps/StageNav.vue'
+import MapSlideover from '~/components/hexacall/maps/MapSlideover.vue'
 
-import type Map from '#maps/models/map'
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { LeafletMouseEvent } from 'leaflet'
+import type Playlist from '#playlists/models/playlist'
+import type MapsController from '#maps/controllers/maps_controller'
 
 defineOptions({
   layout: Maps,
 })
 
 const props = defineProps<{
-  map: Map
+  maps: InferPageProps<MapsController, 'index'>['maps']
+  map: InferPageProps<MapsController, 'show'>['map']
+  playlists: Playlist[]
 }>()
 
 const user = useUser()
 const currentLevel = ref(props.map.levels.find((level) => level.isDefault)?.level as number)
 
-const imageUrl = computed(() => `/images/maps/${props.map.slug}/${currentLevel.value}.jpg`)
-
+// Reactive markers array that will be updated via SSE
+const allMarkers = ref([...props.map.markers])
 const markers = computed(() => {
-  return props.map.markers.filter((marker) => marker.stage === currentLevel.value)
+  return allMarkers.value.filter((marker) => marker.stage === currentLevel.value)
 })
 
+// Real-time updates
+const { subscribe } = useTransmit()
+let unsubscribeMarkers: (() => void) | null = null
+
 const overlay = useOverlay()
+const mapModal = overlay.create(MapSlideover)
 const markerModal = overlay.create(MarkerModal)
 const polygoneModal = overlay.create(PolygoneModal)
 const newPolygone = ref<{
@@ -151,10 +162,40 @@ const handleLabelView = () => {
 }
 
 const handleStageChange = (stage: number) => {
-  console.log('handleStageChange', stage)
   currentLevel.value = stage
   newPolygone.value = null
 }
+
+const handleMapModal = () => {
+  mapModal.open({
+    maps: props.maps,
+    playlists: props.playlists,
+  })
+}
+
+// Subscribe to real-time marker updates
+onMounted(() => {
+  unsubscribeMarkers = subscribe('markers:create', (data) => {
+    if (data.marker.mapId === props.map.id) {
+      allMarkers.value.push(data.marker)
+      
+      // Show toast notification
+      const toast = useToast()
+      toast.add({
+        title: 'Nouveau marqueur',
+        description: `${data.marker.label} a été ajouté par ${data.marker.user?.userName}`,
+        icon: 'lucide:map-pin',
+        color: 'success',
+      })
+    }
+  })
+})
+
+onUnmounted(() => {
+  if (unsubscribeMarkers) {
+    unsubscribeMarkers()
+  }
+})
 </script>
 
 <template>
@@ -165,7 +206,7 @@ const handleStageChange = (stage: number) => {
     :markers="markers"
     :polygones-preview="newPolygone"
     :show-label="showLabel"
-    :image-url="imageUrl"
+    :image-url="map.images.find((url: string) => url.includes(`/${map.slug}_${currentLevel}.webp`))"
     :edit-mode="editMode"
     @mapClick="handelMapClick"
   />
@@ -174,6 +215,17 @@ const handleStageChange = (stage: number) => {
     v-if="!editMode"
     class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2"
   >
+    <UTooltip arrow text="Afficher la liste des cartes" placement="top">
+      <UButton
+        icon="lucide:map"
+        class="rounded-full backdrop-blur-lg"
+        color="neutral"
+        variant="subtle"
+        size="xl"
+        @click="handleMapModal"
+      />
+    </UTooltip>
+
     <StageNav
       :currentLevel="currentLevel"
       :levels="props.map.levels"

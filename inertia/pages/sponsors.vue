@@ -25,9 +25,11 @@
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              src="/public/images/sponsors/msi.png"
+              src="/public/images/sponsors_msi.webp"
               alt="MSI logo"
               class="max-h-full max-w-[80%] object-contain"
+              width="54"
+              height="64"
             />
           </div>
 
@@ -44,7 +46,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://msi.com/"
+            to="https://msi.gm/S04F5BA3"
             target="_blank"
             color="neutral"
             variant="subtle"
@@ -63,9 +65,11 @@
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              src="/public/images/sponsors/holy.png"
+              src="/public/images/sponsors_holy.webp"
               alt="Holy Energy logo"
               class="max-h-full max-w-[80%] object-contain"
+              width="111"
+              height="64"
             />
           </div>
 
@@ -90,7 +94,7 @@
           <UButton
             label="Visiter le site"
             icon="lucide:external-link"
-            to="https://fr.weareholy.com/"
+            to="https://fr.weareholy.com/?ref=sixquatre&utm_medium=creator&utm_source=creator"
             target="_blank"
             color="neutral"
             variant="subtle"
@@ -109,9 +113,11 @@
         <div class="flex flex-col items-center">
           <div class="h-32 flex items-center justify-center mb-6">
             <img
-              src="/public/images/sponsors/hm.png"
+              src="/public/images/sponsors_hm.webp"
               alt="Hardware Modding logo"
               class="max-h-full max-w-[80%] object-contain"
+              width="65"
+              height="60"
             />
           </div>
 

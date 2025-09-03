@@ -53,19 +53,25 @@ export default class OauthController {
 
     await auth.use('web').login(user)
 
-    await this.discordService
-      .createEmbed()
-      .setThumbnail(user.avatarUrl)
-      .setTitle('Nouvelle connexion')
-      .setDescription(`Un utilisateur s'est connecté à son compte.`)
-      .addField('Provider', user.provider)
-      .addField('Username', user.userName)
-      .addField('Email', user.email)
-      .addField('ID', user.id)
-      .setFooter('User Login Notification')
-      .setColor(DiscordColors.SUCCESS)
-      .setTimestamp()
-      .send(undefined)
+    const backgroundTasks = [
+      await this.discordService
+        .createEmbed()
+        .setThumbnail(user.avatarUrl)
+        .setTitle('Nouvelle connexion')
+        .setDescription(`Un utilisateur s'est connecté à son compte.`)
+        .addField('Provider', user.provider)
+        .addField('Username', user.userName)
+        .addField('Email', user.email)
+        .addField('ID', user.id)
+        .setFooter('User Login Notification')
+        .setColor(DiscordColors.SUCCESS)
+        .setTimestamp()
+        .send(undefined)
+    ]
+
+    Promise.allSettled(backgroundTasks).catch(() => {
+      // Background tasks failed silently
+    })
 
     const returnUrl = session.get('returnUrl', '/')
     session.forget('returnUrl')

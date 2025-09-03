@@ -4,6 +4,7 @@ import Vote from '#votes/models/vote'
 import Post from '#users/models/post'
 import DiscordService, { DiscordColors } from '#core/services/discord_service'
 import { inject } from '@adonisjs/core'
+import transmit from '@adonisjs/transmit/services/main'
 
 @inject()
 export default class UpdateSuggestionController {
@@ -29,7 +30,7 @@ export default class UpdateSuggestionController {
           .where('suggestionId', suggestionId)
           .first()
       } catch (voteError) {
-        console.error('Error checking for existing vote:', voteError.message)
+        // Error checking for existing vote - continue with null
       }
 
       const userId = auth.user ? auth.user.id : null
@@ -91,32 +92,49 @@ export default class UpdateSuggestionController {
 
       await suggestion.load('user')
 
+      const backgroundTasks = []
+
       if (userId) {
-        await Post.create({
-          userId: auth.user?.id,
-          category: 'votes',
-          label: suggestion.label,
-          markerName: marker.label,
-          mapName: map.name,
-          mapSlug: map.slug,
-          voteAction,
-        })
+        backgroundTasks.push(
+          await Post.create({
+            userId: auth.user?.id,
+            category: 'votes',
+            label: suggestion.label,
+            markerName: marker.label,
+            mapName: map.name,
+            mapSlug: map.slug,
+            voteAction,
+          })
+        )
       }
 
-      await this.discordService
-        .createEmbed()
-        .setTitle('Mise à jour de suggestion')
-        .setDescription(`La suggestion **${suggestion.label}** a été mise à jour.`)
-        .addField('User', auth.user ? auth.user.userName : 'Anonyme')
-        .addField('Suggestion', suggestion.label)
-        .addField('Action', voteAction)
-        .addField('Map - Niveau', `${map.name} - ${marker.stage}`)
-        .addField('Call actuelle', marker.label)
-        .addField('User ID', userId ? userId : userIp)
-        .setFooter(`Suggestion ID: ${suggestion.id}`)
-        .setColor(DiscordColors.SUCCESS)
-        .setTimestamp()
-        .send()
+      backgroundTasks.push(
+        await this.discordService
+          .createEmbed()
+          .setTitle('Mise à jour de suggestion')
+          .setDescription(`La suggestion **${suggestion.label}** a été mise à jour.`)
+          .addField('User', auth.user ? auth.user.userName : 'Anonyme')
+          .addField('Suggestion', suggestion.label)
+          .addField('Action', voteAction)
+          .addField('Map - Niveau', `${map.name} - ${marker.stage}`)
+          .addField('Call actuelle', marker.label)
+          .addField('User ID', userId ? userId : userIp)
+          .setFooter(`Suggestion ID: ${suggestion.id}`)
+          .setColor(DiscordColors.SUCCESS)
+          .setTimestamp()
+          .send()
+      )
+
+      Promise.allSettled(backgroundTasks).catch(() => {
+        // Background tasks failed silently
+      })
+
+      transmit.broadcast(`markers:${marker.id}:suggestions:update`, {
+        suggestion: {
+          ...suggestion.serialize(),
+          user: suggestion.user?.serialize()
+        }
+      })
 
       return response.status(200).json(suggestion)
     } catch (error) {

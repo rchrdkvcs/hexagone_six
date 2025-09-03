@@ -18,7 +18,7 @@ defineProps<{
         :alt="name"
         :src="imageSrc"
         class="w-full object-cover aspect-video transform group-hover:scale-105 transition-transform duration-500"
-        loading="lazy"
+        loading="eager"
       />
 
       <div

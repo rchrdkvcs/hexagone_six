@@ -1,7 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#users/models/user'
 import vine from '@vinejs/vine'
-import { computed } from 'vue'
 
 export default class ShowUserController {
   static validator = vine.compile(

@@ -12,21 +12,9 @@ const user = useUser()
 const navItems = ref<NavigationMenuItem[]>([
   [
     {
-      label: 'Compétition',
-      icon: 'lucide:trophy',
-      children: [
-        {
-          label: 'Lan',
-          icon: 'lucide:gamepad-2',
-          to: '/lan',
-        },
-        {
-          label: 'Ranking (bientôt)',
-          icon: 'lucide:bar-chart-2',
-          to: '/ranking',
-          disabled: true,
-        },
-      ],
+      label: 'Lan',
+      icon: 'lucide:server',
+      to: '/lan',
     },
     {
       label: 'Matériel',
@@ -80,21 +68,29 @@ const profileItems = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Profile',
-      icon: 'i-lucide-user',
+      icon: 'lucide:user',
       to: '/membres/' + user.value?.userSlug,
     },
     {
+      label: 'Publication',
+      icon: 'lucide:pen',
+      to: '/p/guides',
+      class: computed(() => {
+        return useAccess('writer') ? '' : 'hidden'
+      }),
+    },
+    {
       label: 'Administration',
-      icon: 'i-lucide-shield-check',
+      icon: 'lucide:shield-check',
       to: '/admin',
       class: computed(() => {
-        return useAccess() > 2 ? '' : 'hidden'
+        return useAccess('admin') ? '' : 'hidden'
       }),
     },
   ],
   [
     {
-      label: 'Logout',
+      label: 'Se déconnecter',
       icon: 'i-lucide-log-out',
       to: '/logout',
       color: 'error',

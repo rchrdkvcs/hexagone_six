@@ -18,42 +18,44 @@
         </p>
       </div>
 
-      <div class="flex flex-col md:grid md:grid-cols-3 gap-4 z-0">
-        <ULink
-          to="https://discord.gg/ABFsPxuYZr"
-          class="flex rounded-lg bg-elevated/50 ring ring-default transition ease-in-out duration-250 hover:bg-elevated hover:ring-accented p-4 gap-4 items-center"
-        >
-          <UIcon
-            name="simple-icons:discord"
-            class="text-indigo-400 size-12 rounded-lg bg-default p-2 flex items-center justify-center"
-          />
-          <span class="font-medium">Rejoignez notre serveur Discord</span>
-        </ULink>
-
-        <ULink
+      <!-- Bouton principal CTA -->
+      <div class="flex justify-center z-0">
+        <UButton
           to="/hexacall/cartes"
-          class="flex rounded-lg bg-primary/10 hover:bg-primary/15 ring ring-inset ring-primary/25 text-primary transition ease-in-out duration-250 p-4 gap-4 items-center"
-        >
-          <UIcon
-            name="lucide:map-pin"
-            class="text-inverted size-12 rounded-lg bg-primary p-2 flex items-center justify-center"
-          />
-          <span class="font-medium">Découvre HexaCall</span>
-        </ULink>
+          icon="lucide:map-pin"
+          label="Découvre HexaCall"
+          color="primary"
+          variant="solid"
+          size="xl"
+        />
+      </div>
 
-        <ULink
+      <USeparator label="Ou suivez-nous" class="z-0 w-2/3 mx-auto" />
+
+      <!-- Boutons de réseaux sociaux -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center z-0">
+        <UButton
+          to="https://discord.gg/ABFsPxuYZr"
+          icon="simple-icons:discord"
+          label="Discord"
+          color="neutral"
+          variant="soft"
+          target="_blank"
+          class="justify-center sm:justify-start"
+          size="lg"
+        />
+
+        <UButton
           to="https://x.com/hexagonesix"
-          class="flex rounded-lg bg-elevated/50 ring ring-default transition ease-in-out duration-250 hover:bg-elevated hover:ring-accented p-4 gap-4 items-center"
-        >
-          <UIcon
-            name="simple-icons:x"
-            class="text-default/100 size-12 rounded-lg bg-default p-2 flex items-center justify-center"
-          />
-          <span class="font-medium">Suivez-nous sur Twitter</span>
-        </ULink>
+          icon="simple-icons:x"
+          label="Twitter"
+          color="neutral"
+          variant="soft"
+          target="_blank"
+          class="justify-center sm:justify-start"
+          size="lg"
+        />
       </div>
     </UContainer>
   </section>
 </template>
-
-<style scoped></style>

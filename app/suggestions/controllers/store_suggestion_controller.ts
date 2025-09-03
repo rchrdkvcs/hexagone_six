@@ -3,6 +3,7 @@ import Suggestion from '#suggestions/models/suggestion'
 import Post from '#users/models/post'
 import DiscordService, { DiscordColors } from '#core/services/discord_service'
 import { inject } from '@adonisjs/core'
+import transmit from '@adonisjs/transmit/services/main'
 
 @inject()
 export default class StoreSuggestionController {
@@ -25,29 +26,41 @@ export default class StoreSuggestionController {
       const marker = await suggestion.related('marker').query().firstOrFail()
       const map = await marker.related('map').query().firstOrFail()
 
-      await Post.create({
-        userId: user.id,
-        category: 'suggestion',
-        label: data.label,
-        markerName: marker.label,
-        mapName: map.name,
-        mapSlug: map.slug,
+      const backgroundTasks = [
+        await Post.create({
+          userId: user.id,
+          category: 'suggestion',
+          label: data.label,
+          markerName: marker.label,
+          mapName: map.name,
+          mapSlug: map.slug,
+        }),
+        await this.discordService
+          .createEmbed()
+          .setTitle('Nouvelle suggestion')
+          .setDescription(`Une nouvelle suggestion a été créée par **${user.userName}**.`)
+          .addField('Suggestion', data.label)
+          .addField('Call', marker.label)
+          .addField('Map - Niveau', map.name + ' - ' + marker.stage)
+          .addField('User ID', user.id)
+          .setFooter(`Suggestion ID: ${suggestion.id}`)
+          .setColor(DiscordColors.SUCCESS)
+          .setTimestamp()
+          .send()
+      ]
+
+      Promise.allSettled(backgroundTasks).catch(() => {
+        // Background tasks failed silently
       })
 
-      await this.discordService
-        .createEmbed()
-        .setTitle('Nouvelle suggestion')
-        .setDescription(`Une nouvelle suggestion a été créée par **${user.userName}**.`)
-        .addField('Suggestion', data.label)
-        .addField('Call', marker.label)
-        .addField('Map - Niveau', map.name + ' - ' + marker.stage)
-        .addField('User ID', user.id)
-        .setFooter(`Suggestion ID: ${suggestion.id}`)
-        .setColor(DiscordColors.SUCCESS)
-        .setTimestamp()
-        .send()
-
       await suggestion.load('user')
+
+      transmit.broadcast(`markers:${data.markerId}:suggestions:create`, {
+        suggestion: {
+          ...suggestion.serialize(),
+          user: suggestion.user?.serialize()
+        }
+      })
 
       return response.status(201).json(suggestion)
     } catch (error) {
