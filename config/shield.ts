@@ -29,7 +29,7 @@ const shieldConfig = defineConfig({
         'wss:',
         'blob:',
       ],
-      workerSrc: ["'self'", "blob:"],
+      workerSrc: ["'self'", 'blob:'],
       frameAncestors: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
@@ -42,7 +42,7 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csrf: {
-    enabled: true,
+    enabled: false,
     exceptRoutes: ['/webhooks/*'],
     enableXsrfCookie: true,
     methods: ['POST', 'PUT', 'PATCH', 'DELETE'],

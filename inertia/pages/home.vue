@@ -48,8 +48,13 @@ const fonctionItems: FonctionItem[] = [
     description:
       'Des guides et tutoriels complets pour maîtriser Siege X, de la configuration optimale de votre PC aux stratégies avancées.',
     icon: 'lucide:book',
-    link: '/guides',
+    link: '/',
     col: 2,
+    badge: {
+      label: 'Bientôt',
+      variant: 'subtle',
+      color: 'warning',
+    },
   },
 ]
 </script>

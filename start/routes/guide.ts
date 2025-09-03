@@ -28,7 +28,9 @@ export default function guideRoutes() {
 
   // Routes de callback Stripe (nécessitent une authentification)
   router.get('/guide/payment/success', [PaymentsGuideController, 'success']).use(middleware.auth())
-  router.get('/guide/payment/cancel', [PaymentsGuideController, 'cancel']).use(middleware.silentAuth())
+  router
+    .get('/guide/payment/cancel', [PaymentsGuideController, 'cancel'])
+    .use(middleware.silentAuth())
 
   // Routes d'administration des guides (nécessitent une authentification)
   router
