@@ -62,7 +62,7 @@ export default class MapsController {
       })
 
       return {
-        ...map.serialize(),
+        ...m.serialize(),
         thumbnail: thumbnail || null,
       }
     })
