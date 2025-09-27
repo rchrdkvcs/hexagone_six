@@ -5,6 +5,11 @@ import AppFooter from '~/components/utils/AppFooter.vue'
 
 <template>
   <UApp>
+    <UBanner
+      icon="lucide:twitch"
+      title="#SaltyDuelsbyMSI actuellement sur Twitch"
+      to="https://www.twitch.tv/sixquatre"
+    />
     <AppHeader />
     <div class="min-h-screen">
       <slot />
