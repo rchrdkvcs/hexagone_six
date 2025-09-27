@@ -7,7 +7,7 @@ import AppFooter from '~/components/utils/AppFooter.vue'
   <UApp>
     <UBanner
       icon="lucide:twitch"
-      title="#SaltyDuelsbyMSI actuellement sur Twitch"
+      title="La grande finale des #SaltyDuelsbyMSI actuellement sur Twitch - Sxnzoo vs Tamime2K."
       to="https://www.twitch.tv/sixquatre"
     />
     <AppHeader />
