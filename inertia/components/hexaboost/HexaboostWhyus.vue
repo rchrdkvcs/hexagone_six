@@ -23,7 +23,7 @@ import hexaboostAfter from '/public/images/hexaboost_after.webp'
       </div>
 
       <!-- Composant de comparaison avant/après -->
-      <div class="px-4 w-full">
+      <div class="px-4 w-full gap-2 flex flex-col">
         <ImageComparison
           :before-image="hexaboostBefore"
           :after-image="hexaboostAfter"
@@ -32,6 +32,11 @@ import hexaboostAfter from '/public/images/hexaboost_after.webp'
           before-alt="Performance avant HexaBoost"
           after-alt="Performance après HexaBoost"
         />
+
+        <p class="text-muted z-10 text-sm">
+          * Attention, le premier benchmark avec un résultat de 380 Fps a été réalisé avec une
+          résolution de 2K or le second benchmark en 1080p.
+        </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 z-0">
@@ -58,5 +63,3 @@ import hexaboostAfter from '/public/images/hexaboost_after.webp'
     </UContainer>
   </section>
 </template>
-
-<style scoped></style>
